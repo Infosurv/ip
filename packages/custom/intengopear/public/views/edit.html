@@ -1,0 +1,35 @@
+<!--
+* 2) Show all answers 
+* 1) Have a form that will upload multiple answers at once.
+*
+-->
+<div class="" data-ng-controller="AnswerController">
+  <div class="content" style="display: block;">
+    <h1>Answers
+      <a href="#" id="addQuestion" ng-click="toggleQuestionForm($event)">
+        <span class="glyphicon glyphicon-plus-sign"></span>
+      </a>
+    </h1>
+  
+    <ul id="answers" class="list-group" ng-if="answers.length > 0">
+      <li ng-repeat="answer in answers" class="clearfix list-group-item">
+        <input class="answer" type="text" data-questionid="{{ answer.id }}" ng-model="answer.text"></input>
+      </li>
+    </ul>
+
+    <div id="noAnswersMessage" class="alert alert-info" ng-if="answers.length === 0">
+      <p>No answers exist yet. Let's add some.</p>
+    </div>
+
+    <div id="answersForm">
+      <p>Paste in answers. One per line.</p>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1"></span>
+        <textarea class="form-control" name="description" placeholder="Description"></textarea>
+      </div>
+      <br>
+      <button type="submit" data-surveyid="{{ survey_id }}" class="btn btn-primary pull-right" ng-click="createAnswer($event)">Submit</button>
+    </div>
+  </div>
+</div>
+

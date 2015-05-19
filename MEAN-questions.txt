@@ -1,0 +1,38 @@
+#HelloGitty Info
+https://www.dropbox.com/sh/3nr8sdv9uukqm8x/AACmV93jNayEhrzNiDQFLRgta?dl=0
+https://www.gitbook.com/@peb7268/dashboard
+https://trello.com/b/2vSOnWJd/hellogitty
+https://github.com/linnovate/hellogitty
+
+
+#Topics to cover
+Asset Aggregation
+UserKlass
+
+
+
+1. How to properly route w/o putting the shabang?
+	To get from #!/admin to an individual question view I currently do: 
+		<a ng-href="#!/{{question._id}}/edit" class="edit">
+
+	Is there a better way?
+
+
+2. How to pass data from 1 public view to another?
+	If I am on a questions view and want to edit this question's answer options and other attrs I would do this route:
+
+		/questions -> /question_id/edit
+
+	I created a view and a route in my custom_package/public/routes file.
+
+		$stateProvider.state('admin question view', {
+	      url: '/{id}/edit',
+	      templateUrl: 'intengopear/views/edit.html'
+	    });
+
+	I want to basically retrieve the details for that question and then send it to the view before it's rendered. The only way I know 
+	to do it now is to hit the view and then use an angular service to make the call to express and fetch the data, then update the view. 
+
+	Can I just hit the express route first, have it fetch the data and then redirect to an angular route w the data already present? 
+	I was thinking I can do that w res.render? If so is there anything special in my angular view I need to do to interpolate the data?
+
