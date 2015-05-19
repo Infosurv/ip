@@ -11,31 +11,14 @@ function IntengopearController ($scope, Global, Intengopear, $stateParams){
     };
 }
 
-function IpAdminController($scope, Global, $timeout, $http, $location, Intengopear, $state){
+function IpAdminController($scope, Global, Project, Intengopear, $state){
 	$scope.global 		= Global;
-	$state.go('admin.home');	
-	//if(! Global.isAdmin) $location.url('/logout');
+	$scope.data 		= Project.data;
+	$scope.questions 	= Project.questions;
 
-	$scope.questions 	= [];
-	var survey_id  		= 20;
-	
 	function init(){
-		$http.get('http://dev.intengodev.com/api/pairwise/' + survey_id + '/3').then(function(res){
-			$scope.data 		= res.data;
-		}, 
-		function(errorRes){
-			console.error('Error while fetching data: ', errorRes);
-		});
-
-		$http.get('api/questions').then(function(res){
-			$scope.questions = res.data;
-			$timeout(function(){
-				angular.element('.content').fadeIn(50);
-			}, 500);
-		}, 
-		function(errorRes){
-			console.error('Error while fetching data: ', errorRes);
-		});
+		$scope.loaded = true;
+		$state.go('admin.home');	
 	}
 
 	init();
@@ -125,49 +108,25 @@ function QuestionController($scope, Global, $http, $timeout, $location, Intengop
 	});
 }
 
-function AnswerController($scope, Global, Answer, $stateParams, $location, Intengopear){
+function AnswerController($scope, $stateParams, Global, Answer, Project, Intengopear){
 	var $ 			= window.jQuery;
 	var self 		= this;
 	self.Answer 	= Answer;
 	$scope.answers 	= Answer.query({});
-	window.answers  = $scope.answers;
 	$scope.textarea = $('textarea');
 	$scope.values 	= '';
-	$scope.loaded   = false;
-	$scope.survey_id= 20;
-
-	 function init(answers, targetToPopulate) {
-	 	if($scope.loaded) return;
-	 	console.log('init\'ing. ');
-	 	$scope.loaded   = true;
-	 	self.targetToPopulate = targetToPopulate;
-	 	self.answers = answers;
-
-	 	if(answers.length < 1) return;
-	 	angular.forEach(answers, function(val, key){
-	 		var _val 	= self.targetToPopulate.val();
-	 		var newVal 	= _val + val.text + '\n';
-
-	 		self.targetToPopulate.val(newVal);
-	 	});
-	 }  
-
-	 $scope.$watch('answers.length', function(newValue, oldValue) {
-	 	if(newValue === 0 || $scope.loaded) return;
- 		if(! $scope.loaded) init($scope.answers, $scope.textarea);
-	 });
-
-	//Internal methods not exposed to the DOM
+	
 	$scope.createAnswer = function($event){
 		$event.preventDefault();
 		var values 		= $($event.currentTarget).parent().find('textarea').val().split('\n');
-		var survey_id   = $($event.currentTarget).data('surveyid');
+		$scope.survey_id= $($event.currentTarget).data('surveyid');
 		var Answer 		= self.Answer;
 		var data 		= [];
-		console.log('data:', data);
-
+		
 		angular.forEach(values, function(val, key){
+			if(val.length === 0) return;
 			data.push(new Answer({
+				survey_id: Project.data.survey.id,
 				text: val
 			}));
 		});
@@ -179,6 +138,6 @@ function AnswerController($scope, Global, Answer, $stateParams, $location, Inten
 
 //Assign the controllers to the main module
 Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Intengopear', '$stateParams', IntengopearController]);	
-Intengopear.controller('IpAdminController', ['$scope', 'Global', '$timeout', '$http', '$location', 'Intengopear', '$state', IpAdminController ]);	
+Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	
 Intengopear.controller('QuestionController', ['$scope', 'Global', '$http', '$timeout', '$location', 'Intengopear', QuestionController ]);	
-Intengopear.controller('AnswerController', ['$scope', 'Global', 'Answer', '$stateParams', '$location', 'Intengopear', AnswerController ]);	
+Intengopear.controller('AnswerController', ['$scope', '$stateParams', 'Global', 'Answer', 'Project', 'Intengopear', AnswerController ]);	

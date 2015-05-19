@@ -4,7 +4,6 @@
  * Defining the Package
  */
 var Module = require('meanio').Module;
-
 var Intengopear = new Module('intengopear');
 
 /*

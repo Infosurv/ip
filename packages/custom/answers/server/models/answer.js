@@ -1,6 +1,6 @@
 'use strict';
 
-//Questions Model
+//Answers Model
 
 
 /**
@@ -20,7 +20,7 @@ var AnswerSchema = new Schema({
 		type: Number,
 		required: true
 	},
-	description: {
+	text: {
 		type: String,
 		required: true
 	}
