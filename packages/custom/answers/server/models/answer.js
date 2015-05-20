@@ -20,6 +20,10 @@ var AnswerSchema = new Schema({
 		type: Number,
 		required: true
 	},
+	question_id: {
+		type: Number,
+		required: true
+	},
 	text: {
 		type: String,
 		required: true
