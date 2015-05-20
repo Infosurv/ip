@@ -18,7 +18,7 @@ function IpAdminController($scope, Global, Project, Intengopear, $state){
 
 	function init(){
 		$scope.loaded = true;
-		$state.go('admin.home');	
+		$state.go('admin.questions');	
 	}
 
 	init();
@@ -112,7 +112,7 @@ function AnswerController($scope, $stateParams, Global, Answer, Project, Intengo
 	var $ 			= window.jQuery;
 	var self 		= this;
 	self.Answer 	= Answer;
-	$scope.answers 	= Answer.query({});
+	$scope.answers 	= Answer.query({id: $stateParams.id});
 	$scope.textarea = $('textarea');
 	$scope.values 	= '';
 	

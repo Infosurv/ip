@@ -8,7 +8,7 @@
 	<li ng-repeat="question in questions" class="clearfix list-group-item" ng-controller="QuestionController">
 	  <input class="question" type="text" data-questionid="{{ question.id }}" ng-model="questions[$index].description"></input>
 	  <ul class="tools clearfix">
-	  	<li><a ui-sref="admin.edit({id: question._id})" class="edit"><i class="fa fa-pencil"></i></a></li>
+	  	<li><a ui-sref="admin.questions.edit({id: question._id})" class="edit"><i class="fa fa-pencil"></i></a></li>
 	  	<li><a href="#" class="delete" ng-click="deleteQuestion($event, question._id)"><i class="fa fa-remove"></i></a></li>
 	  </ul>
 	</li>
@@ -31,4 +31,8 @@
 	</div>
 
 	<button type="submit" class="btn btn-primary pull-right" ng-click="addQuestion($event)">Submit</button>
+</div>
+
+<div ui-view>
+	Question Management will go here.
 </div>

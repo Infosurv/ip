@@ -3,8 +3,6 @@
 /* jshint -W098 */
 // The Package is past automatically as first parameter
 module.exports = function(Intengopear, app, auth, database) {
- 
-
   app.get('/intengopear/example/auth', auth.requiresLogin, function(req, res, next) {
     res.send('Only authenticated users can access this');
   });

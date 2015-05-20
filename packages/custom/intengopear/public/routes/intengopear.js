@@ -39,19 +39,19 @@ angular.module('mean.users').config(['$meanStateProvider', function($meanStatePr
       Project: 'Project'
     }
   })
-  .state('admin.home', {
+  .state('admin.questions', {
     url: '/admin',
     templateUrl: 'intengopear/views/home.html'
+  })
+  .state('admin.questions.edit', {
+    url: '/:survey_id/:id/edit',
+    templateUrl: 'intengopear/views/edit.html'
   });
 }
 ]);
 
 angular.module('mean.intengopear').config(['$meanStateProvider', function($meanStateProvider) {
-    $meanStateProvider
-    .state('admin.edit', {
-      url: '/:id/edit',
-      templateUrl: 'intengopear/views/edit.html'
-    });
+    
   }
 ]);
 

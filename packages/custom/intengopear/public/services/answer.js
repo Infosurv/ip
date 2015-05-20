@@ -2,7 +2,7 @@
 
 angular.module('mean.intengopear').factory('Answer', ['$resource', 
 	function($resource){
-		var Answer = $resource('/api/answers', {},{ 
+		var Answer = $resource('/api/answers', {id: '@id'},{ 
 			'get':    {method:'GET'},
 			'save':   {method:'POST'},
 			'query':  {method:'GET', isArray:true},
