@@ -21,7 +21,7 @@ var AnswerSchema = new Schema({
 		required: true
 	},
 	question_id: {
-		type: Number,
+		type: String,
 		required: true
 	},
 	text: {
@@ -29,5 +29,6 @@ var AnswerSchema = new Schema({
 		required: true
 	}
 });
+
 
 mongoose.model('Answer', AnswerSchema);

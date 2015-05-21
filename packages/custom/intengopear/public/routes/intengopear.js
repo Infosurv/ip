@@ -44,7 +44,7 @@ angular.module('mean.users').config(['$meanStateProvider', function($meanStatePr
     templateUrl: 'intengopear/views/home.html'
   })
   .state('admin.questions.edit', {
-    url: '/:survey_id/:id/edit',
+    url: '/:id/edit',
     templateUrl: 'intengopear/views/edit.html'
   });
 }

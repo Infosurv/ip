@@ -14,7 +14,6 @@ var util 			= require('util');
 
 exports.index 		= function(req, res, next){
 	var question_id = req.query.id;
-
 	var answers 	= Answer.find({question_id: question_id}, function(err, answers){
 		res.status(200).send(answers); 
 	}); 
@@ -22,10 +21,9 @@ exports.index 		= function(req, res, next){
 
 exports.create  	= function(req, res, next){
 	var collection  = req.body.answers;
-	//Loop through each answer here and save each one.
 	
 	Answer.create(collection, function(err, answers){
-    	if(err)return res.status(500).send('Oops, answer creation error.');
+    	if(err) return res.status(500).send('Oops, answer creation error.');
     	return res.status(200).send('Answers have been saved.');
 	});
 	

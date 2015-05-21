@@ -116,21 +116,71 @@ function AnswerController($scope, $stateParams, Global, Answer, Project, Intengo
 	$scope.textarea = $('textarea');
 	$scope.values 	= '';
 	
+	$scope.$stateParams = $stateParams;
+
+	function appendToAnswersList(data, target){
+		angular.forEach(data, function(val, key){
+			var input = $('<input />', {
+				value: val.text,
+				class: 'answer',
+				type: 'text'
+			});
+
+			input.attr('ng-model', 'answer.text');
+
+			var li = $('<li />', {
+				html: input,
+				class: 'clearfix list-group-item'
+			});
+			
+			//make an li
+			target.append(li);
+		});
+	}
+
+	//Public methods
+	$scope.toggleAnswerForm = function($event){
+		$event.preventDefault();
+		var $alert = $('#noAnswerMessage');
+
+		var button = $($event.currentTarget).find('span');
+		if(button.hasClass('glyphicon-plus-sign')) {
+			button.removeClass('glyphicon-plus-sign').addClass('glyphicon-minus-sign');
+		} else {
+			if(button.hasClass('glyphicon-minus-sign')) button.removeClass('glyphicon-minus-sign').addClass('glyphicon-plus-sign');
+		}
+
+		if($alert.is(':visible')){
+			$(alert).fadeToggle(100, function(){
+				$('#answersForm').fadeToggle(100);
+			});
+		} else {
+			$('#answersForm').fadeToggle(100);
+		}
+	};
+
 	$scope.createAnswer = function($event){
 		$event.preventDefault();
-		var values 		= $($event.currentTarget).parent().find('textarea').val().split('\n');
-		$scope.survey_id= $($event.currentTarget).data('surveyid');
-		var Answer 		= self.Answer;
-		var data 		= [];
-		
+		var values 			= $($event.currentTarget).parent().find('textarea').val().split('\n');
+		$scope.survey_id	= Project.data.survey.id;
+		$scope.question_id	= $scope.$stateParams.id;
+		var Answer 			= self.Answer;
+		var data 			= [];
+
+		/*
+		Test answer 1 for question 1
+		Test answer 2 for question 1
+		*/
 		angular.forEach(values, function(val, key){
 			if(val.length === 0) return;
 			data.push(new Answer({
 				survey_id: Project.data.survey.id,
-				text: val
+				text: val,
+				question_id: $scope.question_id
 			}));
 		});
 
+		appendToAnswersList(data, $('#answers.list-group'));
 		Answer.save({'answers': data});
 	};
 
