@@ -4,30 +4,44 @@
 var Intengopear = angular.module('mean.intengopear', []);
 
 //Controller Definitions
-function IntengopearController ($scope, Global, Intengopear, $stateParams){
-    $scope.global = Global;
+function IntengopearController ($scope, Global, Project, Intengopear, $stateParams){
+    window.app          = {};
+    app.Project         = Project;
+    app.$scope          = $scope;
+    $scope.global       = Global;
+    $scope.data 		= Project.data;
+	$scope.questions 	= Project.questions;
+    $scope.surveys      = Project.data.surveys;
+    
     $scope.package = {
       name: 'intengopear'
     };
+    
+    $scope.findSurvey = function($event){
+        var ProjectResource = app.Project.Resources.Project;
+        $event.preventDefault();
+        var survey_id   = 4;
+        var uid         = 3;
+        window.data     = app.$scope.data = app.Project.data = ProjectResource.get({survey_id: survey_id, uid: uid});
+    }
 }
 
 function IpAdminController($scope, Global, Project, Intengopear, $state){
 	$scope.global 		= Global;
-	$scope.data 		= Project.data;
-	$scope.questions 	= Project.questions;
-
+	
 	function init(){
 		$scope.loaded = true;
-		$state.go('admin.questions');	
+		//$state.go('questions');	
 	}
 
 	init();
 }
 
-function QuestionController($scope, Global, $http, $timeout, $location, Intengopear){
+function QuestionController($scope, Global, Project, $http, $timeout, $location, Intengopear){
 	var timeout			= null;
 	var saveInProgress 	= false;
-
+    $scope.data 		= Project.data;
+	
 	var saveFinished 	= function() { saveInProgress = false; };
 	var $ 				= angular.element;
 
@@ -117,6 +131,8 @@ function AnswerController($scope, $stateParams, Global, Answer, Project, Intengo
 	$scope.values 	= '';
 	
 	$scope.$stateParams = $stateParams;
+	$scope.question = Project.Resources.Question.query({'question_id' : $stateParams.id});
+	window.question = $scope.quesiton;
 
 	function appendToAnswersList(data, target){
 		angular.forEach(data, function(val, key){
@@ -187,7 +203,7 @@ function AnswerController($scope, $stateParams, Global, Answer, Project, Intengo
 }
 
 //Assign the controllers to the main module
-Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Intengopear', '$stateParams', IntengopearController]);	
+Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', 'Intengopear', '$stateParams', IntengopearController]);	
 Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	
-Intengopear.controller('QuestionController', ['$scope', 'Global', '$http', '$timeout', '$location', 'Intengopear', QuestionController ]);	
+Intengopear.controller('QuestionController', ['$scope', 'Global', 'Project', '$http', '$timeout', '$location', 'Intengopear', QuestionController ]);	
 Intengopear.controller('AnswerController', ['$scope', '$stateParams', 'Global', 'Answer', 'Project', 'Intengopear', AnswerController ]);	

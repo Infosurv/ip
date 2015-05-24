@@ -1,6 +1,12 @@
 <div class="" data-ng-controller="IntengopearController">
   <p class="alert alert-warning">You must login to proceed.</p>
   <h1>Welcome to IntengoPear</h1>
+  
+  <ul id="surveys" class="list-group">
+      <li class="clearfix list-group-item" ng-repeat="survey in data.surveys">
+          <a data-surveyid="{{survey.id}}" ng-click="findSurvey($event)">{{survey.name}}</a>
+      </li>
+  </ul>
   <div ui-view></div>
 </div>
 

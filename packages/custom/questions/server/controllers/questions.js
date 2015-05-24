@@ -10,8 +10,12 @@ var Question 		= mongoose.model('Question');
 var async 			= require('async');
 var config 			= require('meanio').loadConfig();
 var crypto 			= require('crypto');
+var util 			= require('util');
 
 exports.index 		= function(req, res, next){
+	console.log('req.query');
+	console.log(util.inspect(req.params));
+	console.log(util.inspect(req.query));
 	var questions 	= Question.find({}, function(err, questions){
 		res.status(200).send(questions); 
 	});

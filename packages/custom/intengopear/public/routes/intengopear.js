@@ -1,5 +1,21 @@
 'use strict';
 
+//Override the home routes
+//Setting up route
+angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider', function($meanStateProvider, $urlRouterProvider){
+    $meanStateProvider
+      .state('index', {
+        url: '/',
+        templateUrl: 'intengopear/views/index.html',
+        resolve: {
+          Project: 'Project'
+        }
+      });
+    }
+]);
+
+
+//Override the users routes
 angular.module('mean.users').factory('Project', ['$resource', function($resource){
  var survey_id = 20;
  var uid       = 3;
@@ -11,13 +27,13 @@ angular.module('mean.users').factory('Project', ['$resource', function($resource
   var ProjectResource   = $resource('http://dev.intengodev.com/api/pairwise/:survey_id/:uid', {survey_id:'@survey_id', uid:'@uid'},{ 
     'get':    {method:'GET'},
     'save':   {method:'POST'},
-    'query':  {method:'GET', isArray:true},
+    'query':  {method:'GET'},
     'remove': {method:'DELETE'},
     'delete': {method:'DELETE'} 
   });
-  var data              = ProjectResource.get({survey_id: 20,uid: 3});
+  var data              = ProjectResource.get({survey_id: survey_id, uid: uid});
 
-  var QuestionsResource = $resource('api/questions', {},{ 
+  var QuestionsResource = $resource('api/questions', {question_id: '@question_id' },{ 
     'get':    {method:'GET', isArray: true},
     'save':   {method:'POST'},
     'query':  {method:'GET', isArray:true},
@@ -28,22 +44,28 @@ angular.module('mean.users').factory('Project', ['$resource', function($resource
 
   Project.data          = data;
   Project.questions     = questions;
+  Project.Resources     = {
+    'Question'  : QuestionsResource,
+    'Project'   : ProjectResource
+  }
   return Project;
 }]);
 
 //Setting up route
 angular.module('mean.users').config(['$meanStateProvider', function($meanStateProvider) {
   $meanStateProvider.state('admin', {
+    url: '/admin',
     templateUrl: 'intengopear/views/admin.html',
     resolve: {
       Project: 'Project'
     }
-  })
-  .state('admin.questions', {
-    url: '/admin',
+  });
+    
+  $meanStateProvider.state('questions', {
+    url: '/questions',
     templateUrl: 'intengopear/views/home.html'
   })
-  .state('admin.questions.edit', {
+  .state('edit', {
     url: '/:id/edit',
     templateUrl: 'intengopear/views/edit.html'
   });
