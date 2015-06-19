@@ -14,7 +14,6 @@ angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider'
     }
 ]);
 
-
 //Override the users routes
 angular.module('mean.users').factory('Project', ['$resource', function($resource){
  var survey_id = 20;

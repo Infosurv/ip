@@ -4,8 +4,8 @@
 var Intengopear = angular.module('mean.intengopear', []);
 
 //Controller Definitions
-function IntengopearController ($scope, Global, Project, Intengopear, $state, $stateParams){
-	console.log('IntengopearController');
+function IntengopearController ($scope, Global, Project, Intengopear, $state, $stateParams, $location){
+	if(! Intengopear.isAuthed(Global))  $location.url('/login'); //#TODO: finish this
     window.app          = {};
     app.Project         = Project;
     app.$scope          = $scope;
@@ -209,7 +209,7 @@ function AnswerController($scope, $stateParams, Global, Answer, Project, Intengo
 }
 
 //Assign the controllers to the main module
-Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', '$stateParams', IntengopearController]);	
+Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', '$stateParams', '$location', IntengopearController]);	
 Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	
 Intengopear.controller('QuestionController', ['$scope', 'Global', 'Project', '$http', '$timeout', '$location', 'Intengopear', QuestionController ]);	
 Intengopear.controller('AnswerController', ['$scope', '$stateParams', 'Global', 'Answer', 'Project', 'Intengopear', AnswerController ]);	

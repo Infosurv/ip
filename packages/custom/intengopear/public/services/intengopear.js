@@ -1,9 +1,11 @@
 'use strict';
 
-angular.module('mean.intengopear').factory('Intengopear', [
-  function() {
+angular.module('mean.intengopear').factory('Intengopear', [function() {
     return {
-      name: 'intengopear'
+      name: 'intengopear',
+      isAuthed: function(opts){
+      	return opts.authenticated;
+      }
     };
   }
 ]);
