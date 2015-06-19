@@ -21,10 +21,12 @@ function IntengopearController ($scope, Global, Project, Intengopear, $state, $s
         var ProjectResource 		= app.Project.Resources.Project;
         $event.preventDefault();
         var survey_id 				= app.survey_id = $($event.target).data('surveyid') || 4;
+        localStorage.setItem('survey_id', survey_id);
         var uid         			= 2;
 
         $scope.data = ProjectResource.get({survey_id: survey_id, uid: uid}, function(resp){
         	app.$scope.data 		= window.app.Project.data =  resp;
+        	localStorage.setItem('survey_name', resp.survey.name);
     		$state.go('questions');
         });
     }
@@ -38,10 +40,15 @@ function QuestionController($scope, Global, Project, $http, $timeout, $location,
 	console.log('QuestionController');
 	var timeout			= null;
     $scope.data 		= Project.data;
-    var survey_id 		= app.survey_id;
+
+    //Retrieve the cached the survey name and id for reload
+    var survey_name 	= (localStorage.getItem('survey_name').length > 0) ? localStorage.getItem('survey_name') : $scope.data.survey.name;
+    var survey_id 		= (localStorage.getItem('survey_id').length > 0) ? localStorage.getItem('survey_id') : app.survey_id;
+	
+	$scope.survey_name  = survey_name;
 	$scope.questions 	= app.Project.Resources.Question.get({ survey_id: survey_id });
 	var $ 				= angular.element; //jQuery Alias
-	
+
 	//Publicly callable handlers from the dom
 	$scope.toggleQuestionForm = function($event){
 		$event.preventDefault();
