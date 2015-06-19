@@ -13,10 +13,9 @@ var crypto 			= require('crypto');
 var util 			= require('util');
 
 exports.index 		= function(req, res, next){
-	console.log('req.query');
-	console.log(util.inspect(req.params));
-	console.log(util.inspect(req.query));
-	var questions 	= Question.find({}, function(err, questions){
+	var survey_id 	= req.query.survey_id;
+	
+	var questions 	= Question.find({survey_id: survey_id}, function(err, questions){
 		res.status(200).send(questions); 
 	});
 };

@@ -18,7 +18,7 @@ angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider'
 //Override the users routes
 angular.module('mean.users').factory('Project', ['$resource', function($resource){
  var survey_id = 20;
- var uid       = 3;
+ var uid       = 2;
 
  var Project   = {
     'name' : 'ProjectService'
@@ -40,10 +40,9 @@ angular.module('mean.users').factory('Project', ['$resource', function($resource
     'remove': {method:'DELETE'},
     'delete': {method:'DELETE'} 
   });
-  var questions         = QuestionsResource.get();
 
+  
   Project.data          = data;
-  Project.questions     = questions;
   Project.Resources     = {
     'Question'  : QuestionsResource,
     'Project'   : ProjectResource
@@ -76,4 +75,3 @@ angular.module('mean.intengopear').config(['$meanStateProvider', function($meanS
     
   }
 ]);
-
