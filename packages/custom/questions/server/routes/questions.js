@@ -7,7 +7,8 @@ var questions = require('../controllers/questions');
 module.exports = function(Questions, app, auth, database) {
   app.route('/api/questions').get(questions.index);
   app.route('/api/questions').post(questions.create);
-  app.route('/api/questions/:question_id').post(questions.update);
+  app.route('/api/questions/:question_id').post(questions.update);          //Inline updating
+  app.route('/api/questions/updateQuestion/:question_id').post(questions.updateQuestion);  //Detail view saving 
   app.route('/api/questions/:question_id').delete(questions.delete);
 
   app.get('/questions/example/anyone', function(req, res, next) {

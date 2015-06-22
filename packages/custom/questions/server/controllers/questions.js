@@ -47,6 +47,17 @@ exports.update   	= function(req, res, next){
 	
 };
 
+exports.updateQuestion  = function(req, res, next){
+	var content     	= req.body;
+	var query 		 	= { _id : content._id };
+	var data 			= { survey_id: content.survey_id, delay: parseInt(content.delay) };
+	
+	Question.findOneAndUpdate(query, data, function(err, doc){
+		if (err) return res.send(500, { error: err });
+    	return res.send("succesfully saved");
+	});
+};
+
 exports.delete   	= function(req, res, next){
 	var id 			= req.params.question_id;
 

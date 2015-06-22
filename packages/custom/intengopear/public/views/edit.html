@@ -5,31 +5,43 @@
 -->
 <div class="" data-ng-controller="AnswerController">
   <div class="content" style="display: block;">
-    <h1>Answers
-      <a href="#" id="addQuestion" ng-click="toggleAnswerForm($event)">
-        <span class="glyphicon glyphicon-plus-sign"></span>
-      </a>
-    </h1>
-
-    <div id="noAnswersMessage" class="alert alert-info" ng-if="answers.length === 0">
-      <p>No answers exist yet. Let's add some.</p>
-    </div>
-
-    <div id="answersForm">
-      <p>Paste in answers. One per line.</p>
-      <div class="input-group">
+    <div class="question_edit adminBlock clearfix" ng-if="question !== undefined">
+      <h4>Edit Question</h4>
+      <div class="input-group" id="questionDelay">
         <span class="input-group-addon" id="basic-addon1"></span>
-        <textarea class="form-control" name="description" placeholder="Description"></textarea>
+        <input type="text" class="form-control" placeholder="Delay" name="delay" ng-model="delay">
       </div>
-      <br>
-      <button type="submit" data-surveyid="{{ survey_id }}" class="btn btn-primary pull-right" ng-click="createAnswer($event)">Submit</button>
+      <button type="button" class="btn btn-primary pull-right" ng-click="update($event)">Update</button>
+
     </div>
+    
+    <div class="answers adminBlock clearfix">
+      <h4>Answers
+        <a href="#" id="addQuestion" ng-click="toggleAnswerForm($event)">
+          <span class="glyphicon glyphicon-plus-sign"></span>
+        </a>
+      </h4>
+    
+      <div id="noAnswersMessage" class="alert alert-info" ng-if="answers.length === 0">
+        <p>No answers exist yet. Let's add some.</p>
+      </div>
+
+      <div id="answersForm">
+        <p>Paste in answers. One per line.</p>
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1"></span>
+          <textarea class="form-control" name="description" placeholder="Description"></textarea>
+        </div>
+        <br>
+        <button type="submit" data-surveyid="{{ survey_id }}" class="btn btn-primary pull-right" ng-click="createAnswer($event)">Submit</button>
+      </div>
+      </div>
+    
+      <ul id="answers" class="list-group" ng-if="answers.length > 0">
+        <li ng-repeat="answer in answers" class="clearfix list-group-item">
+          <input class="answer" type="text" data-questionid="{{ answer.id }}" ng-model="answer.text"></input>
+        </li>
+      </ul>
     </div>
-  
-    <ul id="answers" class="list-group" ng-if="answers.length > 0">
-      <li ng-repeat="answer in answers" class="clearfix list-group-item">
-        <input class="answer" type="text" data-questionid="{{ answer.id }}" ng-model="answer.text"></input>
-      </li>
-    </ul>
 </div>
 

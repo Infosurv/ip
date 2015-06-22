@@ -1,40 +1,42 @@
 <div ng-controller="QuestionController">
-	<h1 id="project-title">{{ survey_name }} 
-		<a href="#" id="addQuestion" ng-click="toggleQuestionForm($event)">
-			<span class="glyphicon glyphicon-plus-sign"></span>
-		</a>
-	</h1>
-	
-	<ul id="questions" class="list-group" ng-if="questions.length > 0">
-		<li ng-repeat="question in questions" class="clearfix list-group-item">
-		  <input class="question" type="text" data-questionid="{{ question.id }}" ng-model="questions[$index].description"></input>
-		  <ul class="tools clearfix">
-		  	<li><a ui-sref="edit({id: question._id})" class="edit"><i class="fa fa-pencil"></i></a></li>
-		  	<li><a href="#" class="delete" ng-click="deleteQuestion($event, question._id)"><i class="fa fa-remove"></i></a></li>
-		  </ul>
-		</li>
-	</ul>
+	<div class="adminBlock">
+		<h1 id="project-title">{{ survey_name }} 
+			<a href="#" id="addQuestion" ng-click="toggleQuestionForm($event)">
+				<span class="glyphicon glyphicon-plus-sign"></span>
+			</a>
+		</h1>
+		
+		<ul id="questions" class="list-group" ng-if="questions.length > 0">
+			<li ng-repeat="question in questions" class="clearfix list-group-item">
+			  <input class="question" type="text" data-questionid="{{ question.id }}" ng-model="questions[$index].description"></input>
+			  <ul class="tools clearfix">
+			  	<li><a ui-sref="questions.edit({id: question._id})" class="edit"><i class="fa fa-pencil"></i></a></li>
+			  	<li><a href="#" class="delete" ng-click="deleteQuestion($event, question._id)"><i class="fa fa-remove"></i></a></li>
+			  </ul>
+			</li>
+		</ul>
 
-	<div id="noQuestionsMessage" class="alert alert-info" ng-if="questions.length === 0">
-		<p>No questions exist yet. Let's add some.</p>
-	</div>
-
-	<div id="questionForm">
-		<h4>Add a question</h4>
-		<div class="input-group">
-			<span class="input-group-addon" id="basic-addon1"><i class="fa fa-question-circle"></i></span>
-			<input type="text" class="form-control" name="description" placeholder="Description" ng-model="newQuestion.description">
+		<div id="noQuestionsMessage" class="alert alert-info" ng-if="questions.length === 0">
+			<p>No questions exist yet. Let's add some.</p>
 		</div>
 
-		<div class="input-group">
-			<span class="input-group-addon" id="basic-addon1"><i class="fa fa-clock-o"></i></span>
-			<input type="text" class="form-control" placeholder="Delay" name="delay" ng-model="newQuestion.delay">
+		<div id="questionForm">
+			<h4>Add a question</h4>
+			<div class="input-group">
+				<span class="input-group-addon" id="basic-addon1"><i class="fa fa-question-circle"></i></span>
+				<input type="text" class="form-control" name="description" placeholder="Description" ng-model="newQuestion.description">
+			</div>
+
+			<div class="input-group">
+				<span class="input-group-addon" id="basic-addon1"><i class="fa fa-clock-o"></i></span>
+				<input type="text" class="form-control" placeholder="Delay" name="delay" ng-model="newQuestion.delay">
+			</div>
+
+			<button type="submit" class="btn btn-primary pull-right" ng-click="addQuestion($event)">Submit</button>
 		</div>
 
-		<button type="submit" class="btn btn-primary pull-right" ng-click="addQuestion($event)">Submit</button>
-	</div>
-
-	<div ui-view>
-		Question Management will go here.
+		<div ui-view>
+			Question Management will go here.
+		</div>
 	</div>
 </div>

@@ -100,11 +100,7 @@ footer p {
     color: red;
 }
 
-#addQuestion .glyphicon {
-    line-height: 2.7;
-    font-size: 14pt;
-    float: right;
-}
+#addQuestion .glyphicon { font-size: 14pt; }
 
 #addQuestion {
     float: right;
@@ -117,4 +113,24 @@ footer p {
 
 #questionForm .input-group {
     margin-bottom: 7px;
+}
+
+.adminBlock {
+    margin: 0 auto 50px;
+}
+
+.adminBlock h4, .adminBlock h1 {
+  line-height: 1;
+  position: relative;
+}
+.adminBlock h4 > a, .adminBlock h1 > a {
+  right: 0;
+  color: green;
+  line-height: 1;
+  top: 0;
+  position: absolute;
+}
+
+.adminBlock .btn.btn-primary.pull-right {
+    margin: 7px 0 0;
 }

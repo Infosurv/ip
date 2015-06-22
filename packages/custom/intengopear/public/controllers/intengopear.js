@@ -47,6 +47,8 @@ function QuestionController($scope, Global, Project, $http, $timeout, $location,
 	
 	$scope.survey_name  = survey_name;
 	$scope.questions 	= app.Project.Resources.Question.get({ survey_id: survey_id });
+	Project.data.survey.questions = $scope.questions;
+
 	var $ 				= angular.element; //jQuery Alias
 
 	//Publicly callable handlers from the dom
@@ -127,12 +129,24 @@ function QuestionController($scope, Global, Project, $http, $timeout, $location,
 	});
 }
 
-function AnswerController($scope, $stateParams, Global, Answer, Project, Intengopear){
+function AnswerController($scope, $stateParams, $http, Global, Answer, Project, Intengopear){
 	console.log('AnswerController');
 	var $ 			= window.jQuery;
 	var self 		= this;
 	self.Answer 	= Answer;
 	$scope.answers 	= Answer.query({id: $stateParams.id});
+	
+	$scope.questions   = Project.data.survey.questions;
+	$scope.question_id = $stateParams.id;
+	localStorage.question_id = $stateParams.id;
+	$scope.question    = {};
+
+	angular.forEach($scope.questions, function(qst, key){
+     if(qst._id == $scope.question_id) $scope.question = qst;
+	});
+
+	$scope.question.delay = $scope.delay = (typeof $scope.question.delay == 'undefined') ? 5000 : $scope.question.delay;
+	
 	$scope.textarea = $('textarea');
 	$scope.values 	= '';
 	
@@ -206,10 +220,24 @@ function AnswerController($scope, $stateParams, Global, Answer, Project, Intengo
 		Answer.save({'answers': data});
 	};
 
+	$scope.update = function($event){
+		var question_attributes = $($event.currentTarget).parent().find('input').serializeArray();
+		var question 			= {};
+		angular.forEach(question_attributes, function(attr, key){
+			question[attr.name] = attr.value;
+		});
+		question._id = localStorage.getItem('question_id');
+		question.survey_id = localStorage.getItem('survey_id');
+
+		var req = $http.post('/api/questions/updateQuestion/' + question._id, question);
+
+		return req;
+	}
+
 }
 
 //Assign the controllers to the main module
 Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', '$stateParams', '$location', IntengopearController]);	
 Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	
 Intengopear.controller('QuestionController', ['$scope', 'Global', 'Project', '$http', '$timeout', '$location', 'Intengopear', QuestionController ]);	
-Intengopear.controller('AnswerController', ['$scope', '$stateParams', 'Global', 'Answer', 'Project', 'Intengopear', AnswerController ]);	
+Intengopear.controller('AnswerController', ['$scope', '$stateParams', '$http', 'Global', 'Answer', 'Project', 'Intengopear', AnswerController ]);	

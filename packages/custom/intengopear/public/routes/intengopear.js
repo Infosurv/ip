@@ -63,7 +63,7 @@ angular.module('mean.users').config(['$meanStateProvider', function($meanStatePr
     url: '/questions',
     templateUrl: 'intengopear/views/home.html'
   })
-  .state('edit', {
+  .state('questions.edit', {
     url: '/:id/edit',
     templateUrl: 'intengopear/views/edit.html'
   });

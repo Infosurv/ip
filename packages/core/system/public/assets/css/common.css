@@ -23,8 +23,11 @@
     padding-left: 20px;
     margin-left: 0
 }
+.navbar {
+    margin-bottom: 0;
+}
 .content {
-    margin-top: 70px;
+    margin-top: 50px;
     width: 100%
 }
 footer {
