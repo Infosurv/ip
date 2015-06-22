@@ -91,7 +91,7 @@ footer p {
 #questions li ul.tools {   float: right; max-width: 10%; margin: 5px 0 0 0; padding: 0; }
 #questions li ul.tools li { float: left; margin-right: 5px; }
 
-#questions .tools  .fa-pencil { color: #777; }
+#questions .tools  .fa-pencil, #questions .tools  .fa-code { color: #777; }
 #questions .tools  .fa-pencil:hover { color: green; }
 #questions .tools  .fa-remove { color: #777; }
 #questions .tools  .fa-remove:hover { color: red; }
@@ -134,3 +134,5 @@ footer p {
 .adminBlock .btn.btn-primary.pull-right {
     margin: 7px 0 0;
 }
+
+.tpl, .sandbox { display: none; }

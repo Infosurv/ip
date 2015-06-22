@@ -10,7 +10,8 @@
 			<li ng-repeat="question in questions" class="clearfix list-group-item">
 			  <input class="question" type="text" data-questionid="{{ question.id }}" ng-model="questions[$index].description"></input>
 			  <ul class="tools clearfix">
-			  	<li><a ui-sref="questions.edit({id: question._id})" class="edit"><i class="fa fa-pencil"></i></a></li>
+			  	<li><a href="#" ng-click="copyIframe($event, question._id)" class="copy"><i class="fa fa-code"></i></a></li>
+			  	<li><a href="#" ui-sref="questions.edit({id: question._id})" class="edit"><i class="fa fa-pencil"></i></a></li>
 			  	<li><a href="#" class="delete" ng-click="deleteQuestion($event, question._id)"><i class="fa fa-remove"></i></a></li>
 			  </ul>
 			</li>
@@ -39,4 +40,9 @@
 			Question Management will go here.
 		</div>
 	</div>
+	
+	<p class="sandbox alert alert-info"></p>
+	<script type="text/template" class="tpl">
+		<iframe src="" width='500' height='500'></iframe>
+	</script>
 </div>

@@ -51,6 +51,8 @@ function QuestionController($scope, Global, Project, $http, $timeout, $location,
 
 	var $ 				= angular.element; //jQuery Alias
 
+	$scope.iframeBase 	= ''
+
 	//Publicly callable handlers from the dom
 	$scope.toggleQuestionForm = function($event){
 		$event.preventDefault();
@@ -70,6 +72,29 @@ function QuestionController($scope, Global, Project, $http, $timeout, $location,
 		} else {
 			$('#questionForm').fadeToggle(100);
 		}
+	};
+
+	$scope.copyIframe = function($event, questionId){
+		$event.preventDefault();
+		var project_id 		= localStorage.getItem('survey_id');
+		var question_id 	= questionId;
+		// var iframeBaseUrl 	= 'http://intengopear.com/' + project_id + '/' + question_id;
+		var iframeBaseUrl 	= 'http://cnn.com';
+		var html 			= $('.tpl').html().trim();
+		var iframe = document.createElement('iframe');
+		iframe.src = iframeBaseUrl;
+		debugger;
+		$('.sandbox').html('').html(iframe);
+		
+		$('.sandbox').fadeIn(100, function(){
+			//copy
+			// var range = document.createRange();
+			// var node  = document.querySelector('.sandbox iframe');
+			// range.selectNode(node);
+			// window.getSelection().addRange(range);
+			// var successful = document.execCommand('copy'); 
+			debugger;	
+		});		
 	};
 
 	$scope.addQuestion = function($event){
@@ -146,7 +171,7 @@ function AnswerController($scope, $stateParams, $http, Global, Answer, Project, 
 	});
 
 	$scope.question.delay = $scope.delay = (typeof $scope.question.delay == 'undefined') ? 5000 : $scope.question.delay;
-	
+
 	$scope.textarea = $('textarea');
 	$scope.values 	= '';
 	
