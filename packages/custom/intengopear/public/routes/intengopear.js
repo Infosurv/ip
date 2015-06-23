@@ -67,11 +67,12 @@ angular.module('mean.users').config(['$meanStateProvider', function($meanStatePr
     templateUrl: 'intengopear/views/edit.html'
   });
 
-}]);
-
-angular.module('mean.intengopear').config(['$meanStateProvider', function($meanStateProvider) {
   $meanStateProvider.state('app', {
     url: '/app',
     templateUrl: 'intengopear/views/app.html'
   });
+}]);
+
+angular.module('mean.intengopear').config(['$meanStateProvider', function($meanStateProvider) {
+  
 }]);

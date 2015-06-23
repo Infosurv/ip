@@ -5,7 +5,7 @@ var Intengopear = angular.module('mean.intengopear', []);
 
 //Controller Definitions
 function IntengopearController ($scope, Global, Project, Intengopear, $state, $stateParams, $location){
-	if(! Intengopear.isAuthed(Global))  $location.url('/login'); //#TODO: finish this
+	//if(! Intengopear.isAuthed(Global))  $location.url('/login'); //#TODO: finish this
     window.app          = {};
     app.Project         = Project;
     app.$scope          = $scope;
@@ -258,7 +258,6 @@ function AnswerController($scope, $stateParams, $http, Global, Answer, Project, 
 
 		return req;
 	}
-
 }
 
 //Assign the controllers to the main module
