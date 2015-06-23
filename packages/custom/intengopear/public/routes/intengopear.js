@@ -57,8 +57,7 @@ angular.module('mean.users').config(['$meanStateProvider', function($meanStatePr
     resolve: {
       Project: 'Project'
     }
-  });
-    
+  }); 
   $meanStateProvider.state('questions', {
     url: '/questions',
     templateUrl: 'intengopear/views/home.html'
@@ -67,10 +66,12 @@ angular.module('mean.users').config(['$meanStateProvider', function($meanStatePr
     url: '/:id/edit',
     templateUrl: 'intengopear/views/edit.html'
   });
-}
-]);
+
+}]);
 
 angular.module('mean.intengopear').config(['$meanStateProvider', function($meanStateProvider) {
-    
-  }
-]);
+  $meanStateProvider.state('app', {
+    url: '/app',
+    templateUrl: 'intengopear/views/app.html'
+  });
+}]);
