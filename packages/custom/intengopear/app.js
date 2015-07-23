@@ -5,7 +5,7 @@
  */
 var Module = require('meanio').Module;
 var Intengopear = new Module('intengopear');
-
+var util   = require('util');
 /*
  * All MEAN packages require registration
  * Dependency injection is used to define required modules

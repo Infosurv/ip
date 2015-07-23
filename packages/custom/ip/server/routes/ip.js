@@ -1,27 +1,31 @@
 'use strict';
 
+var mongoose    = require('mongoose');
+var Question    = mongoose.model('Question');
+var util        = require('util');
+
 /* jshint -W098 */
 // The Package is past automatically as first parameter
 module.exports = function(Ip, app, auth, database) {
-
-  app.get('/ip/example/anyone', function(req, res, next) {
-    res.send('Anyone can access this');
+  app.all('*', function(req, res, next) {
+  	res.header('Access-Control-Allow-Origin', '*');
+  	res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  	res.header('Access-Control-Allow-Headers', 'Content-Type');
+  	next();
   });
 
-  app.get('/ip/example/auth', auth.requiresLogin, function(req, res, next) {
-    res.send('Only authenticated users can access this');
-  });
+  app.route('/api/ip/:survey_id?/:question_id?').get(function(req, res, next) {
+    var survey_id   = req.params.survey_id;
+    var question_id = req.params.question_id;
+    var projectData = {};
+    
+    Question.find({survey_id: survey_id}, function(err, questions){
+      projectData.questions = questions;
 
-  app.get('/ip/example/admin', auth.requiresAdmin, function(req, res, next) {
-    res.send('Only users with Admin role can access this');
-  });
-
-  app.get('/ip/example/render', function(req, res, next) {
-    Ip.render('index', {
-      package: 'ip'
-    }, function(err, html) {
-      //Rendering a view from the Package server/views
-      res.send(html);
+      res.status(200).json(projectData);
     });
+  }).post(function(req, res, next){
+  	res.status(200).send('connected');
   });
+
 };

@@ -40,11 +40,19 @@ angular.module('mean.users').factory('Project', ['$resource', function($resource
     'delete': {method:'DELETE'} 
   });
 
+  var AnswerResource = $resource('api/answers', {question_id: '@question_id' },{ 
+    'get':    {method:'GET', isArray: true},
+    'save':   {method:'POST'},
+    'query':  {method:'GET', isArray:true},
+    'remove': {method:'DELETE'},
+    'delete': {method:'DELETE'} 
+  });
   
   Project.data          = data;
   Project.Resources     = {
     'Question'  : QuestionsResource,
-    'Project'   : ProjectResource
+    'Project'   : ProjectResource,
+    'Answer'    : AnswerResource  
   }
   return Project;
 }]);

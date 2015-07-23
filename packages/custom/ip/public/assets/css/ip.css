@@ -1,3 +1,30 @@
-.ip-example h1 {
-  background-color: purple
+/*.content { margin: 0; padding: 0; }*/
+h2.vote-question.row { margin: 0 auto 20px; }
+ul.votebox { list-style: none; margin: 0 5px 0 0; }
+ul.votebox li { 
+	list-style: none;
+	float: left;
+	margin: 0 5px 10px;
+	width: 48%;
 }
+
+ul.votebox li:last-child {
+	margin: 0;
+}
+
+ul.votebox li a {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 40px 50px;
+	background: #399ec5;
+}
+
+ul.votebox li.full {
+	width: 60%;
+	clear: both;
+	margin: 0 auto;
+	float: none;
+}
+
+ul.votebox li.full a { background: #66665D; padding: 10px; }
+ul.votebox li.full a:hover { background: #555; }
