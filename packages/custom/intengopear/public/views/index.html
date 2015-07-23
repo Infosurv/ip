@@ -6,7 +6,7 @@
   
   <ul id="surveys" class="list-group">
       <li class="clearfix list-group-item" ng-repeat="survey in data.surveys">
-          <a data-surveyid="{{survey.id}}" ng-click="findSurvey($event)">{{survey.name}}</a>
+          <a data-surveyid="{{survey.id}}" ui-sref="questions({'survey_id': survey.id})">{{survey.name}}</a>
       </li>
   </ul>
   <div ui-view></div>

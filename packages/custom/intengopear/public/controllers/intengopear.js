@@ -5,6 +5,8 @@ var Intengopear = angular.module('mean.intengopear', []);
 
 //Controller Definitions
 function IntengopearController ($scope, Global, Project, Intengopear, $state, $stateParams, $location){
+	console.log('IntengopearController');
+
 	//if(! Intengopear.isAuthed(Global))  $location.url('/login'); //#TODO: finish this
     window.app          = {};
     app.Project         = Project;
@@ -27,7 +29,7 @@ function IntengopearController ($scope, Global, Project, Intengopear, $state, $s
         $scope.data = ProjectResource.get({survey_id: survey_id, uid: uid}, function(resp){
         	app.$scope.data 		= window.app.Project.data =  resp;
         	localStorage.setItem('survey_name', resp.survey.name);
-    		$state.go('questions');
+    		//$state.go('questions');
         });
     }
 }
@@ -36,17 +38,26 @@ function IpAdminController($scope, Global, Project, Intengopear, $state){
 	$scope.global 		= Global;
 }
 
-function QuestionController($scope, Global, Project, $http, $timeout, $location, Intengopear){
+function QuestionController($scope, $state, $stateParams, Global, Project, $timeout, Intengopear){
 	console.log('QuestionController');
+	var survey_name, survey_id;
+
 	var timeout			= null;
     $scope.data 		= Project.data;
 
     //Retrieve the cached the survey name and id for reload
-    var survey_name 	= (localStorage.getItem('survey_name').length > 0) ? localStorage.getItem('survey_name') : $scope.data.survey.name;
-    var survey_id 		= (localStorage.getItem('survey_id').length > 0) ? localStorage.getItem('survey_id') : app.survey_id;
+    survey_id 		= (localStorage.getItem('survey_id').length > 0) ? localStorage.getItem('survey_id') : $stateParams.survey_id;
+    if(localStorage.getItem('survey_name').length > 0){
+    	survey_name 	= localStorage.getItem('survey_name')
+    } else {
+    	debugger;
+    	survey_name 	= $scope.data.survey.name;
+    }
 	
 	$scope.survey_name  = survey_name;
 	$scope.questions 	= app.Project.Resources.Question.get({ survey_id: survey_id });
+	console.log('Project.data.survey: ', Project.data.survey);
+
 	Project.data.survey.questions = $scope.questions;
 
 	var $ 				= angular.element; //jQuery Alias
@@ -263,5 +274,5 @@ function AnswerController($scope, $stateParams, $http, Global, Answer, Project, 
 //Assign the controllers to the main module
 Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', '$stateParams', '$location', IntengopearController]);	
 Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	
-Intengopear.controller('QuestionController', ['$scope', 'Global', 'Project', '$http', '$timeout', '$location', 'Intengopear', QuestionController ]);	
+Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$timeout', 'Intengopear', QuestionController ]);	
 Intengopear.controller('AnswerController', ['$scope', '$stateParams', '$http', 'Global', 'Answer', 'Project', 'Intengopear', AnswerController ]);	

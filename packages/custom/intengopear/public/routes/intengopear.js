@@ -3,8 +3,8 @@
 //Override the home routes
 //Setting up route
 angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider', function($meanStateProvider, $urlRouterProvider){
-    $meanStateProvider
-      .state('index', {
+    //http://intengopear.com/
+    $meanStateProvider.state('index', {
         url: '/',
         templateUrl: 'intengopear/views/index.html',
         resolve: {
@@ -12,6 +12,13 @@ angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider'
         }
       });
     }
+]).config(['$locationProvider',
+  function($locationProvider) {
+    $locationProvider.html5Mode({
+      enabled: false,
+      requireBase: false
+    });
+  }
 ]);
 
 //Override the users routes
@@ -66,16 +73,20 @@ angular.module('mean.users').config(['$meanStateProvider', function($meanStatePr
       Project: 'Project'
     }
   }); 
+
+  //http://intengopear.com/#/20/questions
   $meanStateProvider.state('questions', {
-    url: '/questions',
-    templateUrl: 'intengopear/views/home.html'
+    url: '/:survey_id/questions',
+    templateUrl: 'intengopear/views/home.html',
+    resolve: {
+      Project: 'Project'
+    }
   })
   .state('questions.edit', {
     url: '/:id/edit',
-    templateUrl: 'intengopear/views/edit.html'
+    templateUrl: 'intengopear/views/edit.html',
+    resolve: {
+      Project: 'Project'
+    }
   });
-}]);
-
-angular.module('mean.intengopear').config(['$meanStateProvider', function($meanStateProvider) {
-  
 }]);
