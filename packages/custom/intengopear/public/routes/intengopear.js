@@ -68,25 +68,16 @@ angular.module('mean.users').factory('Project', ['$resource', function($resource
 angular.module('mean.users').config(['$meanStateProvider', function($meanStateProvider) {
   $meanStateProvider.state('admin', {
     url: '/admin',
-    templateUrl: 'intengopear/views/admin.html',
-    resolve: {
-      Project: 'Project'
-    }
+    templateUrl: 'intengopear/views/admin.html'
   }); 
 
   //http://intengopear.com/#/20/questions
   $meanStateProvider.state('questions', {
     url: '/:survey_id/questions',
-    templateUrl: 'intengopear/views/home.html',
-    resolve: {
-      Project: 'Project'
-    }
+    templateUrl: 'intengopear/views/home.html'
   })
   .state('questions.edit', {
     url: '/:id/edit',
-    templateUrl: 'intengopear/views/edit.html',
-    resolve: {
-      Project: 'Project'
-    }
+    templateUrl: 'intengopear/views/edit.html'
   });
 }]);

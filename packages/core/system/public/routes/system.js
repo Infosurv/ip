@@ -62,7 +62,7 @@ angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider'
 ]).config(['$locationProvider',
   function($locationProvider) {
     $locationProvider.html5Mode({
-      enabled:true,
+      enabled:false,
       requireBase:false
     });
   }

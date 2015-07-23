@@ -18,20 +18,8 @@ function IntengopearController ($scope, Global, Project, Intengopear, $state, $s
     $scope.package = {
       name: 'intengopear'
     };
-    
-    $scope.findSurvey 				= function($event){
-        var ProjectResource 		= app.Project.Resources.Project;
-        $event.preventDefault();
-        var survey_id 				= app.survey_id = $($event.target).data('surveyid') || 4;
-        localStorage.setItem('survey_id', survey_id);
-        var uid         			= 2;
 
-        $scope.data = ProjectResource.get({survey_id: survey_id, uid: uid}, function(resp){
-        	app.$scope.data 		= window.app.Project.data =  resp;
-        	localStorage.setItem('survey_name', resp.survey.name);
-    		//$state.go('questions');
-        });
-    }
+    window.Project = Project;
 }
 
 function IpAdminController($scope, Global, Project, Intengopear, $state){
@@ -40,6 +28,8 @@ function IpAdminController($scope, Global, Project, Intengopear, $state){
 
 function QuestionController($scope, $state, $stateParams, Global, Project, $timeout, Intengopear){
 	console.log('QuestionController');
+	debugger;
+	
 	var survey_name, survey_id;
 
 	var timeout			= null;
@@ -50,13 +40,11 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $time
     if(localStorage.getItem('survey_name').length > 0){
     	survey_name 	= localStorage.getItem('survey_name')
     } else {
-    	debugger;
     	survey_name 	= $scope.data.survey.name;
     }
 	
 	$scope.survey_name  = survey_name;
 	$scope.questions 	= app.Project.Resources.Question.get({ survey_id: survey_id });
-	console.log('Project.data.survey: ', Project.data.survey);
 
 	Project.data.survey.questions = $scope.questions;
 
