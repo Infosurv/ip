@@ -34,23 +34,26 @@ exports.create  	= function(req, res, next){
   	});
 };
 
-exports.update   	= function(req, res, next){
-	var id 			= req.params.question_id;
-	var content     = req.body;
+// exports.update   	= function(req, res, next){
+// 	var id 			= req.params.question_id;
+// 	var content     = req.body;
 
-	Question.update({ _id : id }, {
-		description: content.description
-	}, function(err, numberAffected, resp){
-		console.log('updated question: ', id, ' with ', content, ' affected ', numberAffected, ' row.');
-	});
-	//res.status(200).send('updating question ' + id);
+// 	Question.update({ _id : id }, {
+// 		description: content.description
+// 	}, function(err, numberAffected, resp){
+// 		console.log('updated question: ', id, ' with ', content, ' affected ', numberAffected, ' row.');
+// 	});
+// 	//res.status(200).send('updating question ' + id);
 	
-};
+// };
 
-exports.updateQuestion  = function(req, res, next){
+exports.update 		  	= function(req, res, next){
 	var content     	= req.body;
 	var query 		 	= { _id : content._id };
-	var data 			= { survey_id: content.survey_id, delay: parseInt(content.delay) };
+	var data 			= { survey_id: content.survey_id, delay: parseInt(content.delay) , description: content.description };
+	console.log('updating question');
+	console.log(util.inspect(content));
+	console.log(util.inspect(query));
 	
 	Question.findOneAndUpdate(query, data, function(err, doc){
 		if (err) return res.send(500, { error: err });

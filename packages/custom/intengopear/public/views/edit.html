@@ -5,16 +5,6 @@
 -->
 <div class="" data-ng-controller="AnswerController">
   <div class="content" style="display: block;">
-    <div class="question_edit adminBlock clearfix" ng-if="question !== undefined">
-      <h4>Edit Question</h4>
-      <div class="input-group" id="questionDelay">
-        <span class="input-group-addon" id="basic-addon1"></span>
-        <input type="text" class="form-control" placeholder="Delay" name="delay" ng-model="delay">
-      </div>
-      <button type="button" class="btn btn-primary pull-right" ng-click="update($event)">Update</button>
-
-    </div>
-    
     <div class="answers adminBlock clearfix">
       <h4>Answers
         <a href="#" id="addQuestion" ng-click="toggleAnswerForm($event)">
@@ -39,7 +29,7 @@
     
       <ul id="answers" class="list-group" ng-if="answers.length > 0">
         <li ng-repeat="answer in answers" class="clearfix list-group-item">
-          <input class="answer" type="text" data-questionid="{{ answer.id }}" ng-model="answer.text"></input>
+          <input class="answer" type="text" data-questionid="{{ answer.id }}" ng-model="answer.text" ng-change="update($index)"></input>
         </li>
       </ul>
     </div>

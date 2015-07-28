@@ -2,7 +2,7 @@
 
 angular.module('mean.intengopear').factory('Intengopear', [function() {
     return {
-      name: 'intengopear',
+      name: 'Intengopear',
       isAuthed: function(opts){
       	return opts.authenticated;
       }

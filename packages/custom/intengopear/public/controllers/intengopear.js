@@ -4,37 +4,37 @@
 var Intengopear = angular.module('mean.intengopear', []);
 
 //Controller Definitions
-function IntengopearController ($scope, Global, Project, Intengopear, $state, $stateParams, $location){
+function IntengopearController ($scope, Global, Project, $state, $stateParams){
 	console.log('IntengopearController');
+	var survey_id = 20;
+	var uid       = 2;
 
 	//if(! Intengopear.isAuthed(Global))  $location.url('/login'); //#TODO: finish this
     window.app          = {};
     app.Project         = Project;
     app.$scope          = $scope;
     app.$scope.global   = Global;
-    app.$scope.data 	= Project.data;
-    app.$scope.surveys  = Project.data.surveys;
+    app.$scope.data 	= Project.data = Project.Resources.Project.get({survey_id: survey_id, uid: uid});
+
+    app.$scope.surveys  = app.$scope.data.surveys;
     
     $scope.package = {
       name: 'intengopear'
     };
-
-    window.Project = Project;
 }
 
 function IpAdminController($scope, Global, Project, Intengopear, $state){
 	$scope.global 		= Global;
 }
 
-function QuestionController($scope, $state, $stateParams, Global, Project, $timeout, Intengopear){
+function QuestionController($scope, $state, $stateParams, Global, Project, $http){
 	console.log('QuestionController');
-	debugger;
-	
 	var survey_name, survey_id;
-
-	var timeout			= null;
+	$scope.stateParams  = $stateParams;
+	Project.data 		= app.Project.data;
     $scope.data 		= Project.data;
 
+    
     //Retrieve the cached the survey name and id for reload
     survey_id 		= (localStorage.getItem('survey_id').length > 0) ? localStorage.getItem('survey_id') : $stateParams.survey_id;
     if(localStorage.getItem('survey_name').length > 0){
@@ -45,8 +45,13 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $time
 	
 	$scope.survey_name  = survey_name;
 	$scope.questions 	= app.Project.Resources.Question.get({ survey_id: survey_id });
+	window.questions    = Project.questions   = $scope.questions;
 
-	Project.data.survey.questions = $scope.questions;
+	Project.data.$promise.then(function(data){
+		console.log('QuestionController Loaded');
+		Project.data.survey.questions = $scope.questions;
+	});
+	
 
 	var $ 				= angular.element; //jQuery Alias
 
@@ -82,17 +87,11 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $time
 		var html 			= $('.tpl').html().trim();
 		var iframe = document.createElement('iframe');
 		iframe.src = iframeBaseUrl;
-		debugger;
+		
 		$('.sandbox').html('').html(iframe);
 		
 		$('.sandbox').fadeIn(100, function(){
-			//copy
-			// var range = document.createRange();
-			// var node  = document.querySelector('.sandbox iframe');
-			// range.selectNode(node);
-			// window.getSelection().addRange(range);
-			// var successful = document.execCommand('copy'); 
-			debugger;	
+			//Finish this code
 		});		
 	};
 
@@ -126,57 +125,61 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $time
 		return req;
 	}
 
-	function updateQuestion($http, $event){
-		var question = $scope.question;
-		console.log('updating question ', question._id);
+	$scope.update = function($event, idx){
+		if(typeof window.questionTimer !== 'undefined') window.clearTimeout(window.questionTimer);
+		$scope.evt = $event;
 
-		var req = $http.post('/api/questions/' + question._id, question);
+		window.questionTimer = window.setTimeout(function(){
+			var newQuestion;
 
-		return req;
+			if(typeof idx === 'undefined'){
+				angular.forEach(questions, function(question, idx){
+					if($scope.stateParams.id === question._id)  newQuestion = questions[idx];
+				});
+
+				var delay = Number($($scope.evt.currentTarget).parent().find('#questionDelay input').val());
+				newQuestion.delay = delay;
+
+			} else {
+				newQuestion = questions[idx];
+			}
+
+			return app.Project.Resources.Question.update(newQuestion);
+		}, 1000);
+		//var req = $http.post('/api/questions/' + question._id, question);
 	}
-
-	//Watcher for input: handles saving the question after 1 sec after input change
-	$scope.$watch('question.description', function(newValue, oldValue) {
-	  if(typeof newValue === 'undefined' || typeof oldValue === 'undefined') return;
-
-	  //If one time sequence has elapsed recalculate
-	  if(typeof $scope.T1 === 'number' && typeof $scope.T2 === 'number') $scope.T1 = $scope.T2; 
-
-	  //If there is no current timer then start one.
-	  if(typeof $scope.T1 !== 'number') {
-	  	$scope.T1 = (new Date().getSeconds()); //time in seconds
-	  } else {
-	  	$scope.T2 = (new Date().getSeconds()); //time in seconds for later time
-	  	var secondsPassed = ($scope.T2 - $scope.T1);
-	  	if(secondsPassed > 2) updateQuestion($http);
-	  }
-	});
 }
 
-function AnswerController($scope, $stateParams, $http, Global, Answer, Project, Intengopear){
+function AnswerController($scope, $stateParams, $http, Global){
 	console.log('AnswerController');
+
 	var $ 			= window.jQuery;
 	var self 		= this;
-	self.Answer 	= Answer;
-	$scope.answers 	= Answer.query({id: $stateParams.id});
+	self.Answer 	= app.Project.Resources.Answer;
+	var Answer 		= self.Answer;
+	$scope.answers 	= window.answers = Answer.query({id: $stateParams.id});
 	
-	$scope.questions   = Project.data.survey.questions;
-	$scope.question_id = $stateParams.id;
-	localStorage.question_id = $stateParams.id;
-	$scope.question    = {};
+	
+	app.Project.data.$promise.then(function(surveyData){
+		console.log('AnswerController loaded')
+		
+		$scope.question_id = $stateParams.id;
+		localStorage.question_id = $stateParams.id;
+		$scope.question    = {};
 
-	angular.forEach($scope.questions, function(qst, key){
-     if(qst._id == $scope.question_id) $scope.question = qst;
+		angular.forEach($scope.questions, function(qst, key){
+	     if(qst._id == $scope.question_id) $scope.question = qst;
+		});
+
+		$scope.question.delay = $scope.delay = (typeof $scope.question.delay == 'undefined') ? 5000 : $scope.question.delay;
+
+		$scope.textarea = $('textarea');
+		$scope.values 	= '';
+		
+		$scope.$stateParams = $stateParams;
+		$scope.question = app.Project.Resources.Question.query({'question_id' : $stateParams.id});
+		window.question = $scope.quesiton;
 	});
-
-	$scope.question.delay = $scope.delay = (typeof $scope.question.delay == 'undefined') ? 5000 : $scope.question.delay;
-
-	$scope.textarea = $('textarea');
-	$scope.values 	= '';
-	
-	$scope.$stateParams = $stateParams;
-	$scope.question = Project.Resources.Question.query({'question_id' : $stateParams.id});
-	window.question = $scope.quesiton;
 
 	function appendToAnswersList(data, target){
 		angular.forEach(data, function(val, key){
@@ -244,23 +247,18 @@ function AnswerController($scope, $stateParams, $http, Global, Answer, Project, 
 		Answer.save({'answers': data});
 	};
 
-	$scope.update = function($event){
-		var question_attributes = $($event.currentTarget).parent().find('input').serializeArray();
-		var question 			= {};
-		angular.forEach(question_attributes, function(attr, key){
-			question[attr.name] = attr.value;
-		});
-		question._id = localStorage.getItem('question_id');
-		question.survey_id = localStorage.getItem('survey_id');
+	$scope.update = function(idx){
+		if(typeof window.answerTimer !== 'undefined') window.clearTimeout(window.answerTimer);
 
-		var req = $http.post('/api/questions/updateQuestion/' + question._id, question);
-
-		return req;
+		window.answerTimer = window.setTimeout(function(){
+			var newAnswer  = answers[idx];
+			return Answer.update(newAnswer);
+		}, 1000);
 	}
 }
 
 //Assign the controllers to the main module
-Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', '$stateParams', '$location', IntengopearController]);	
+Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', '$state', '$stateParams', IntengopearController]);	
 Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	
-Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$timeout', 'Intengopear', QuestionController ]);	
-Intengopear.controller('AnswerController', ['$scope', '$stateParams', '$http', 'Global', 'Answer', 'Project', 'Intengopear', AnswerController ]);	
+Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$http', QuestionController ]);	
+Intengopear.controller('AnswerController', ['$scope', '$stateParams', '$http', 'Global', AnswerController ]);	

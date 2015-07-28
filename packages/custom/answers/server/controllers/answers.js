@@ -30,7 +30,19 @@ exports.create  	= function(req, res, next){
 };
 
 exports.update   	= function(req, res, next){
-	res.status(200).send('answers.update'); 
+	var newAnswer 	= req.body;
+	
+	var query 		= { _id: newAnswer._id };
+	var data 		= { text: newAnswer.text };
+
+	console.log('updating: ');
+	console.log(util.inspect(newAnswer));
+
+	Answer.findOneAndUpdate(query, data, function(err, doc){
+		if (err) return res.send(500, { error: err });
+		console.log(util.inspect(doc));
+		res.status(200).send('answer '+ newAnswer._id +' updated'); 
+	});
 };
 
 exports.delete   	= function(req, res, next){

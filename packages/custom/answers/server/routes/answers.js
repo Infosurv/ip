@@ -8,14 +8,6 @@ var util      = require('util');
 module.exports = function(Answers, app, auth, database) {
   app.route('/api/answers')
     .get(answersController.index)
-    .post(answersController.create);
-
-  app.get('/answers/example/render', function(req, res, next) {
-    Answers.render('index', {
-      package: 'answers'
-    }, function(err, html) {
-      //Rendering a view from the Package server/views
-      res.send(html);
-    });
-  });
+    .post(answersController.create)
+    .put(answersController.update);
 };

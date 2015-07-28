@@ -8,7 +8,7 @@
 		
 		<ul id="questions" class="list-group" ng-if="questions.length > 0">
 			<li ng-repeat="question in questions" class="clearfix list-group-item">
-			  <input class="question" type="text" data-questionid="{{ question.id }}" ng-model="questions[$index].description"></input>
+			  <input class="question" type="text" data-questionid="{{ question.id }}" ng-model="questions[$index].description" ng-change="update($event, $index)"></input>
 			  <ul class="tools clearfix">
 			  	<li><a href="#" ng-click="copyIframe($event, question._id)" class="copy"><i class="fa fa-code"></i></a></li>
 			  	<li><a href="#" ui-sref="questions.edit({id: question._id})" class="edit"><i class="fa fa-pencil"></i></a></li>
@@ -40,6 +40,15 @@
 			Question Management will go here.
 		</div>
 	</div>
+
+	<div class="question_edit adminBlock clearfix">
+      <h4>Edit Question</h4>
+      <div class="input-group" id="questionDelay">
+        <span class="input-group-addon" id="basic-addon1"></span>
+        <input type="text" class="form-control" placeholder="Delay" name="delay" ng-model="delay">
+      </div>
+      <button type="button" class="btn btn-primary pull-right" ng-click="update($event)">Update</button>
+    </div>
 	
 	<p class="sandbox alert alert-info"></p>
 	<script type="text/template" class="tpl">
