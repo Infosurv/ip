@@ -28,28 +28,27 @@ function IpAdminController($scope, Global, Project, Intengopear, $state){
 }
 
 function QuestionController($scope, $state, $stateParams, Global, Project, $http){
-	console.log('QuestionController');
-	var survey_name, survey_id;
+	var survey_name, survey_id = $stateParams.survey_id;
 	$scope.stateParams  = $stateParams;
 	Project.data 		= app.Project.data;
     $scope.data 		= Project.data;
 
-    
-    //Retrieve the cached the survey name and id for reload
-    survey_id 		= (localStorage.getItem('survey_id').length > 0) ? localStorage.getItem('survey_id') : $stateParams.survey_id;
-    if(localStorage.getItem('survey_name').length > 0){
-    	survey_name 	= localStorage.getItem('survey_name')
-    } else {
-    	survey_name 	= $scope.data.survey.name;
-    }
-	
-	$scope.survey_name  = survey_name;
-	$scope.questions 	= app.Project.Resources.Question.get({ survey_id: survey_id });
-	window.questions    = Project.questions   = $scope.questions;
+    if(typeof survey_id !== 'undefined') localStorage.setItem('survey_id', survey_id);
 
 	Project.data.$promise.then(function(data){
 		console.log('QuestionController Loaded');
+		//Retrieve the cached the survey name and id for reload
+	    survey_id 		= (localStorage.getItem('survey_id')   !== null && localStorage.getItem('survey_id')   !== 'undefined' && localStorage.getItem('survey_id').length > 0) ? localStorage.getItem('survey_id') : $stateParams.survey_id;
+	    survey_name 	= (localStorage.getItem('survey_name') !== null && localStorage.getItem('survey_name') !== 'undefined' && localStorage.getItem('survey_name').length > 0) ? localStorage.getItem('survey_name') : $scope.data.survey.name;
+	    	
+		$scope.survey_name  = survey_name;
+		$scope.questions 	= app.Project.Resources.Question.get({ survey_id: survey_id });
+		window.questions    = Project.questions   = $scope.questions;
+
 		Project.data.survey.questions = $scope.questions;
+		if(typeof $stateParams.id !== 'undefined'){
+    		$scope.question = findById(questions, $scope.stateParams.id);
+    	}
 	});
 	
 
@@ -116,13 +115,14 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 		});
 	};
 
-	//Internal methods not exposed to the DOM
-	function createQuestion($http, question, survey_id){
-		question.survey_id = survey_id;
-		console.log('createQuestion', question);
-		var req = $http.post('/api/questions', question);
+	function findById(collection, id){
+		var item;
 
-		return req;
+		angular.forEach(collection, function(elem, idx){
+			if(id === elem._id) item = collection[idx];
+		});
+
+		return item;
 	}
 
 	$scope.update = function($event, idx){
@@ -133,10 +133,7 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 			var newQuestion;
 
 			if(typeof idx === 'undefined'){
-				angular.forEach(questions, function(question, idx){
-					if($scope.stateParams.id === question._id)  newQuestion = questions[idx];
-				});
-
+				newQuestion = findById(questions, $scope.stateParams.id);
 				var delay = Number($($scope.evt.currentTarget).parent().find('#questionDelay input').val());
 				newQuestion.delay = delay;
 
@@ -147,6 +144,15 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 			return app.Project.Resources.Question.update(newQuestion);
 		}, 1000);
 		//var req = $http.post('/api/questions/' + question._id, question);
+	}
+
+	//Internal methods not exposed to the DOM
+	function createQuestion($http, question, survey_id){
+		question.survey_id = survey_id;
+		console.log('createQuestion', question);
+		var req = $http.post('/api/questions', question);
+
+		return req;
 	}
 }
 

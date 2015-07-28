@@ -34,23 +34,11 @@ exports.create  	= function(req, res, next){
   	});
 };
 
-// exports.update   	= function(req, res, next){
-// 	var id 			= req.params.question_id;
-// 	var content     = req.body;
-
-// 	Question.update({ _id : id }, {
-// 		description: content.description
-// 	}, function(err, numberAffected, resp){
-// 		console.log('updated question: ', id, ' with ', content, ' affected ', numberAffected, ' row.');
-// 	});
-// 	//res.status(200).send('updating question ' + id);
-	
-// };
-
 exports.update 		  	= function(req, res, next){
 	var content     	= req.body;
 	var query 		 	= { _id : content._id };
 	var data 			= { survey_id: content.survey_id, delay: parseInt(content.delay) , description: content.description };
+	
 	console.log('updating question');
 	console.log(util.inspect(content));
 	console.log(util.inspect(query));
@@ -69,11 +57,4 @@ exports.delete   	= function(req, res, next){
 		console.log('resp: ', resp);
 	});
 	res.status(200).send('Question: ' + id + ' has been deleted.');
-
-
-	// var question 	= Question.find({ id: req.body.id });
-	// console.log(question.collection.length);
-
-	// res.status(200);
-	// res.send('updating question');
 };

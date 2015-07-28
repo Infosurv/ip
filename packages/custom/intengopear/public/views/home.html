@@ -35,20 +35,20 @@
 
 			<button type="submit" class="btn btn-primary pull-right" ng-click="addQuestion($event)">Submit</button>
 		</div>
-
-		<div ui-view>
-			Question Management will go here.
-		</div>
 	</div>
 
 	<div class="question_edit adminBlock clearfix">
       <h4>Edit Question</h4>
       <div class="input-group" id="questionDelay">
         <span class="input-group-addon" id="basic-addon1"></span>
-        <input type="text" class="form-control" placeholder="Delay" name="delay" ng-model="delay">
+        <input type="text" class="form-control" placeholder="Delay" name="delay" ng-model="question.delay">
       </div>
       <button type="button" class="btn btn-primary pull-right" ng-click="update($event)">Update</button>
     </div>
+
+    <div ui-view>
+		Question Management will go here.
+	</div>
 	
 	<p class="sandbox alert alert-info"></p>
 	<script type="text/template" class="tpl">
