@@ -27,6 +27,10 @@ var QuestionSchema = new Schema({
 	delay: {
 		type: Schema.Types.Mixed,
 		required: false
+	},
+	secondaryDelay: {
+		type: Schema.Types.Mixed,
+		required: false
 	}
 });
 

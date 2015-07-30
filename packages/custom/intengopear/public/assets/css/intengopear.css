@@ -1,3 +1,5 @@
+.input-group { margin: 0 0 10px 0; }
+
 .clearfix:before,
 .clearfix:after {
   content: "";

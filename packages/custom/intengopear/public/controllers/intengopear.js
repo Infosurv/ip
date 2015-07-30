@@ -64,6 +64,7 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 			  if(typeof $stateParams.id == 'undefined' || typeof newValue === 'undefined') return;
 			  $scope.question = findById(questions, $scope.stateParams.id);
 			  $scope.question.delay = $scope.delay = (typeof $scope.question.delay == 'undefined') ? 5000 : $scope.question.delay;  
+			   $scope.question.secondaryDelay = $scope.secondaryDelay = (typeof $scope.question.secondaryDelay == 'undefined') ? 2500 : $scope.question.secondaryDelay;  
 			});
 		});
 	});
@@ -140,9 +141,11 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 
 			if(typeof idx === 'undefined'){
 				newQuestion = findById(questions, $scope.stateParams.id);
-				var delay = Number($($scope.evt.currentTarget).parent().find('#questionDelay input').val());
-				newQuestion.delay = delay;
+				var delay = Number(newQuestion.delay);
+				var secondaryDelay = Number(newQuestion.secondaryDelay);
 
+				newQuestion.secondaryDelay = secondaryDelay;
+				newQuestion.delay = delay;
 			} else {
 				newQuestion = questions[idx];
 			}

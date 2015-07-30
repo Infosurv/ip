@@ -37,11 +37,7 @@ exports.create  	= function(req, res, next){
 exports.update 		  	= function(req, res, next){
 	var content     	= req.body;
 	var query 		 	= { _id : content._id };
-	var data 			= { survey_id: content.survey_id, delay: parseInt(content.delay) , description: content.description };
-	
-	console.log('updating question');
-	console.log(util.inspect(content));
-	console.log(util.inspect(query));
+	var data 			= { survey_id: content.survey_id, delay: parseInt(content.delay), secondaryDelay: parseInt(content.secondaryDelay), description: content.description };
 	
 	Question.findOneAndUpdate(query, data, function(err, doc){
 		if (err) return res.send(500, { error: err });
@@ -58,3 +54,4 @@ exports.delete   	= function(req, res, next){
 	});
 	res.status(200).send('Question: ' + id + ' has been deleted.');
 };
+
