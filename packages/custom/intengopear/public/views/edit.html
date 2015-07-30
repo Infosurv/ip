@@ -29,6 +29,10 @@
       <ul id="answers" class="list-group" ng-if="answers.length > 0">
         <li ng-repeat="answer in answers" class="clearfix list-group-item">
           <input class="answer" type="text" data-questionid="{{ answer.id }}" ng-model="answer.text" ng-change="update($index)"></input>
+
+          <ul class="tools clearfix">
+            <li><a href="#" class="delete" ng-click="deleteAnswer($event, $index)"><i class="fa fa-remove"></i></a></li>
+          </ul>
         </li>
       </ul>
     </div>

@@ -46,5 +46,14 @@ exports.update   	= function(req, res, next){
 };
 
 exports.delete   	= function(req, res, next){
-	res.status(200).send('answers.delete'); 
+	// console.log(util.inspect(req.query));
+	var id 			= req.query._id;
+	console.log(util.inspect(id));
+
+	var question 	= Answer.remove({ _id: id }, function(err, resp){
+		console.log('err: ', err);
+		console.log('resp: ', resp);
+	});
+	res.status(200).send('Question: ' + id + ' has been deleted.');
 };
+

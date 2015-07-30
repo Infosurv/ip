@@ -9,5 +9,6 @@ module.exports = function(Answers, app, auth, database) {
   app.route('/api/answers')
     .get(answersController.index)
     .post(answersController.create)
-    .put(answersController.update);
+    .put(answersController.update)
+    .delete(answersController.delete);
 };

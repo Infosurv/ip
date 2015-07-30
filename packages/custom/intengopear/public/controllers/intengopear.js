@@ -239,6 +239,14 @@ function AnswerController($scope, $stateParams, $http, Global){
 		Answer.save({'answers': data});
 	};
 
+	$scope.deleteAnswer = function($event, answer_id){
+		$event.preventDefault();
+		$($event.target).parent().parent().parent().parent().fadeOut(100, function(){
+			$(this).remove();
+			Answer.remove(answers[answer_id]);
+		});
+	}
+
 	$scope.update = function(idx){
 		if(typeof window.answerTimer !== 'undefined') window.clearTimeout(window.answerTimer);
 
