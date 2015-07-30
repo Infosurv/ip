@@ -25,13 +25,13 @@
         <br>
         <button type="submit" data-surveyid="{{ survey_id }}" class="btn btn-primary pull-right" ng-click="createAnswer($event)">Submit</button>
       </div>
-      </div>
-    
+
       <ul id="answers" class="list-group" ng-if="answers.length > 0">
         <li ng-repeat="answer in answers" class="clearfix list-group-item">
           <input class="answer" type="text" data-questionid="{{ answer.id }}" ng-model="answer.text" ng-change="update($index)"></input>
         </li>
       </ul>
     </div>
+  </div>
 </div>
 

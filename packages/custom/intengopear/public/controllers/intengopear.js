@@ -1,5 +1,16 @@
 'use strict';
 
+//Global methods - maybe need to scope these to an app object or something
+function findById(collection, id){
+	var item;
+
+	angular.forEach(collection, function(elem, idx){
+		if(id === elem._id) item = collection[idx];
+	});
+
+	return item;
+}
+
 //Define the module
 var Intengopear = angular.module('mean.intengopear', []);
 
@@ -30,28 +41,33 @@ function IpAdminController($scope, Global, Project, Intengopear, $state){
 function QuestionController($scope, $state, $stateParams, Global, Project, $http){
 	var survey_name, survey_id = $stateParams.survey_id;
 	$scope.stateParams  = $stateParams;
+
 	Project.data 		= app.Project.data;
     $scope.data 		= Project.data;
 
     if(typeof survey_id !== 'undefined') localStorage.setItem('survey_id', survey_id);
 
 	Project.data.$promise.then(function(data){
+		$scope.question    	= {};
 		console.log('QuestionController Loaded');
 		//Retrieve the cached the survey name and id for reload
 	    survey_id 		= (localStorage.getItem('survey_id')   !== null && localStorage.getItem('survey_id')   !== 'undefined' && localStorage.getItem('survey_id').length > 0) ? localStorage.getItem('survey_id') : $stateParams.survey_id;
 	    survey_name 	= (localStorage.getItem('survey_name') !== null && localStorage.getItem('survey_name') !== 'undefined' && localStorage.getItem('survey_name').length > 0) ? localStorage.getItem('survey_name') : $scope.data.survey.name;
-	    	
-		$scope.survey_name  = survey_name;
-		$scope.questions 	= app.Project.Resources.Question.get({ survey_id: survey_id });
-		window.questions    = Project.questions   = $scope.questions;
 
-		Project.data.survey.questions = $scope.questions;
-		if(typeof $stateParams.id !== 'undefined'){
-    		$scope.question = findById(questions, $scope.stateParams.id);
-    	}
+		$scope.survey_name  = survey_name;
+		app.Project.Resources.Question.get({ survey_id: survey_id }).$promise.then(function(questions){
+		   $scope.questions = window.questions = Project.questions = questions;
+		   Project.data.survey.questions = $scope.questions;
+
+		    //Populates the values of the question to edit
+			$scope.$watch('stateParams.id', function(newValue, oldValue){
+			  if(typeof $stateParams.id == 'undefined' || typeof newValue === 'undefined') return;
+			  $scope.question = findById(questions, $scope.stateParams.id);
+			  $scope.question.delay = $scope.delay = (typeof $scope.question.delay == 'undefined') ? 5000 : $scope.question.delay;  
+			});
+		});
 	});
 	
-
 	var $ 				= angular.element; //jQuery Alias
 
 	$scope.iframeBase 	= ''
@@ -115,16 +131,6 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 		});
 	};
 
-	function findById(collection, id){
-		var item;
-
-		angular.forEach(collection, function(elem, idx){
-			if(id === elem._id) item = collection[idx];
-		});
-
-		return item;
-	}
-
 	$scope.update = function($event, idx){
 		if(typeof window.questionTimer !== 'undefined') window.clearTimeout(window.questionTimer);
 		$scope.evt = $event;
@@ -159,34 +165,13 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 function AnswerController($scope, $stateParams, $http, Global){
 	console.log('AnswerController');
 
-	var $ 			= window.jQuery;
-	var self 		= this;
-	self.Answer 	= app.Project.Resources.Answer;
-	var Answer 		= self.Answer;
-	$scope.answers 	= window.answers = Answer.query({id: $stateParams.id});
+	var $ 				= window.jQuery;
+	var self 			= this;
+	self.Answer 		= app.Project.Resources.Answer;
+	var Answer 			= self.Answer;
+	$scope.answers 		= window.answers = Answer.query({id: $stateParams.id});
+	$scope.stateParams 	= $stateParams;
 	
-	
-	app.Project.data.$promise.then(function(surveyData){
-		console.log('AnswerController loaded')
-		
-		$scope.question_id = $stateParams.id;
-		localStorage.question_id = $stateParams.id;
-		$scope.question    = {};
-
-		angular.forEach($scope.questions, function(qst, key){
-	     if(qst._id == $scope.question_id) $scope.question = qst;
-		});
-
-		$scope.question.delay = $scope.delay = (typeof $scope.question.delay == 'undefined') ? 5000 : $scope.question.delay;
-
-		$scope.textarea = $('textarea');
-		$scope.values 	= '';
-		
-		$scope.$stateParams = $stateParams;
-		$scope.question = app.Project.Resources.Question.query({'question_id' : $stateParams.id});
-		window.question = $scope.quesiton;
-	});
-
 	function appendToAnswersList(data, target){
 		angular.forEach(data, function(val, key){
 			var input = $('<input />', {
@@ -230,9 +215,10 @@ function AnswerController($scope, $stateParams, $http, Global){
 
 	$scope.createAnswer = function($event){
 		$event.preventDefault();
+
 		var values 			= $($event.currentTarget).parent().find('textarea').val().split('\n');
-		$scope.survey_id	= Project.data.survey.id;
-		$scope.question_id	= $scope.$stateParams.id;
+		$scope.survey_id	= app.Project.data.survey.id;
+		$scope.question_id	= $scope.stateParams.id;
 		var Answer 			= self.Answer;
 		var data 			= [];
 
@@ -243,7 +229,7 @@ function AnswerController($scope, $stateParams, $http, Global){
 		angular.forEach(values, function(val, key){
 			if(val.length === 0) return;
 			data.push(new Answer({
-				survey_id: Project.data.survey.id,
+				survey_id: app.Project.data.survey.id,
 				text: val,
 				question_id: $scope.question_id
 			}));

@@ -30,14 +30,15 @@
 
 			<div class="input-group">
 				<span class="input-group-addon" id="basic-addon1"><i class="fa fa-clock-o"></i></span>
-				<input type="text" class="form-control" placeholder="Delay" name="delay" ng-model="newQuestion.delay">
+				<input type="text" class="form-control" placeholder="Minumum Evaluation Time" name="delay" ng-model="newQuestion.delay">
+				<input type="text" class="form-control" placeholder="Interval Evaluation Time" name="interval" ng-model="newQuestion.intervalEvalTime">
 			</div>
 
 			<button type="submit" class="btn btn-primary pull-right" ng-click="addQuestion($event)">Submit</button>
 		</div>
 	</div>
 
-	<div class="question_edit adminBlock clearfix">
+	<div class="question_edit adminBlock clearfix" ng-if="stateParams.id.length > 0">
       <h4>Edit Question</h4>
       <div class="input-group" id="questionDelay">
         <span class="input-group-addon" id="basic-addon1"></span>
@@ -45,10 +46,8 @@
       </div>
       <button type="button" class="btn btn-primary pull-right" ng-click="update($event)">Update</button>
     </div>
-
-    <div ui-view>
-		Question Management will go here.
-	</div>
+	
+    <div ui-view><!-- Question Management --></div>
 	
 	<p class="sandbox alert alert-info"></p>
 	<script type="text/template" class="tpl">
