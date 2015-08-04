@@ -11,6 +11,8 @@ var util   = require('util');
  * Dependency injection is used to define required modules
  */
 Intengopear.register(function(system, app, auth, database) {
+  console.log('intengopear module');
+  
   //Override the system layout
   app.set('views', __dirname + '/server/views');
 

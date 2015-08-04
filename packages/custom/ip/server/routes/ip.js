@@ -1,8 +1,7 @@
 'use strict';
 
-var mongoose    = require('mongoose');
-var Question    = mongoose.model('Question');
 var util        = require('util');
+var IpController= require('../controllers/Ip');
 
 /* jshint -W098 */
 // The Package is past automatically as first parameter
@@ -14,24 +13,11 @@ module.exports = function(Ip, app, auth, database) {
   	next();
   });
 
-  app.route('/api/ip/:survey_id?/:question_id?').get(function(req, res, next) {
-    var survey_id   = req.params.survey_id;
-    var question_id = req.params.question_id;
-    var projectData = {};
-    
-    Question.find({survey_id: survey_id}, function(err, questions){
-      projectData.questions   = questions;
+  app.route('/api/ip/ext/:survey_id?/:question_id?')
+  .get(IpController.index)
+  .post(IpController.push);
 
-      projectData.iFrameData  = {
-        src: 'http://intengopear.com/#/ip',
-        survey_id: survey_id,
-        question_id: question_id
-      }
-
-      res.status(200).json(projectData);
-    });
-  }).post(function(req, res, next){
-  	res.status(200).send('connected');
-  });
-
+  app.route('/api/ip/:survey_id/:question_id')
+  .get(IpController.find)
+  .post(IpController.push);
 };

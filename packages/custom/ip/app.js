@@ -12,7 +12,7 @@ var Ip = new Module('ip');
  * Dependency injection is used to define required modules
  */
 Ip.register(function(app, auth, database) {
-
+  console.log('ip module');
   app.set('views', __dirname + '/server/views');
 
   //We enable routing. By default the Package Object is passed to the routes

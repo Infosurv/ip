@@ -10,7 +10,7 @@
 			<li ng-repeat="question in questions" class="clearfix list-group-item">
 			  <input class="question" type="text" data-questionid="{{ question.id }}" ng-model="questions[$index].description" ng-change="update($event, $index)"></input>
 			  <ul class="tools clearfix">
-			  	<li><a href="#" ng-click="copyIframe($event, question._id)" class="copy"><i class="fa fa-code"></i></a></li>
+			  	<li><a href="/#/ip/{{stateParams.survey_id}}/{{question._id}}" class="copy"><i class="fa fa-code"></i></a></li>
 			  	<li><a href="#" ui-sref="questions.edit({id: question._id})" class="edit"><i class="fa fa-pencil"></i></a></li>
 			  	<li><a href="#" class="delete" ng-click="deleteQuestion($event, question._id)"><i class="fa fa-remove"></i></a></li>
 			  </ul>
@@ -31,7 +31,11 @@
 			<div class="input-group">
 				<span class="input-group-addon" id="basic-addon1"><i class="fa fa-clock-o"></i></span>
 				<input type="text" class="form-control" placeholder="Minumum Evaluation Time" name="delay" ng-model="newQuestion.delay">
-				<input type="text" class="form-control" placeholder="Interval Evaluation Time" name="interval" ng-model="newQuestion.intervalEvalTime">
+			</div>
+
+			<div class="input-group">
+				<span class="input-group-addon" id="basic-addon1"><i class="fa fa-clock-o"></i></span>
+				<input type="text" class="form-control" placeholder="Secondary Delay" name="secondaryDelay" ng-model="newQuestion.secondaryDelay">
 			</div>
 
 			<button type="submit" class="btn btn-primary pull-right" ng-click="addQuestion($event)">Submit</button>

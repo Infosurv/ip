@@ -18,46 +18,6 @@ angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider'
   }
 ]);
 
-//Override the users routes
-angular.module('mean.users').factory('Project', ['$resource', function($resource){
- var Project   = {
-    'name' : 'ProjectService'
-  }
-
-  var ProjectResource   = $resource('http://dev.intengodev.com/api/pairwise/:survey_id/:uid', {survey_id:'@survey_id', uid:'@uid'},{ 
-    'get':    {method:'GET'},
-    'save':   {method:'POST'},
-    'query':  {method:'GET'},
-    'remove': {method:'DELETE'},
-    'delete': {method:'DELETE'} 
-  });
-  
-
-  var QuestionsResource = $resource('api/questions', {question_id: '@question_id' },{ 
-    'get':    {method:'GET', isArray: true},
-    'save':   {method:'POST'},
-    'update': {method: 'PUT'},
-    'query':  {method:'GET', isArray:true},
-    'remove': {method:'DELETE'},
-    'delete': {method:'DELETE'} 
-  });
-
-  var AnswerResource = $resource('api/answers', {question_id: '@question_id' },{ 
-    'get':    {method:'GET', isArray: true},
-    'update': {method: 'PUT'},
-    'save':   {method:'POST'},
-    'query':  {method:'GET', isArray:true},
-    'remove': {method:'DELETE'},
-    'delete': {method:'DELETE'} 
-  });
-  
-  Project.Resources     = {
-    'Question'  : QuestionsResource,
-    'Project'   : ProjectResource,
-    'Answer'    : AnswerResource  
-  }
-  return Project;
-}]);
 
 //Setting up route
 angular.module('mean.users').config(['$meanStateProvider', function($meanStateProvider) {

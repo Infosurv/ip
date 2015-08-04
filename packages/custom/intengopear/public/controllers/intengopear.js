@@ -46,6 +46,17 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
     $scope.data 		= Project.data;
 
     if(typeof survey_id !== 'undefined') localStorage.setItem('survey_id', survey_id);
+    if(window.location.href.indexOf('new') >= 0){ 
+    	var open = window.location.href.split('?')[1];
+    	if(open == 'new=true') {
+    		jQuery('document').ready(function(){
+    			window.setTimeout(function(){
+		    		var $elem = jQuery('#addQuestion');
+		    		$elem.click();
+	    		}, 1000);
+    		});
+    	}
+    }
 
 	Project.data.$promise.then(function(data){
 		$scope.question    	= {};
@@ -260,8 +271,58 @@ function AnswerController($scope, $stateParams, $http, Global){
 	}
 }
 
+function IpController($scope, $stateParams, Ip){
+	var IpResource  = Ip.http;
+	var ipResource  = IpResource.query({ survey_id: $stateParams.survey_id, question_id:$stateParams.question_id }).$promise;
+	var Project 	= app.Project;
+
+	$scope.App 		= {};
+	$scope.Ip 		= Ip;
+
+	$scope.pluckOne = function(collection){
+		var answer; 
+		var itemIdx = Math.floor(Math.random()*collection.length);
+
+		answer = collection[itemIdx];
+		collection.splice(itemIdx, 1)
+		//$scope.collection = collection;
+
+		return answer;
+	}
+
+	$scope.init  	= function (){
+		$scope.answer1 = $scope.pluckOne($scope.answers);
+		console.log($scope.answer1);
+		$scope.answer2 = $scope.pluckOne($scope.answers);
+	}
+
+	//Get the values from the url first if present, else get it from localStorage,
+    var survey_id 	= (localStorage.getItem('survey_id')) ? localStorage.getItem('survey_id') : survey_id;
+    var question_id = (localStorage.getItem('question_id')) ? localStorage.getItem('question_id') : question_id;
+
+ 	$scope.App.data			= Project.Resources.Project.get({ survey_id: survey_id, uid: 2 });
+ 	$scope.App.data.$promise.then(function(resp){
+ 		resp.questions		= Project.Resources.Question.get({question_id: question_id});
+		resp.answers		= Project.Resources.Answer.get({question_id: question_id});
+		resp.question_id 	= question_id; 
+ 	});
+
+ 	var IpResource = Ip.http;
+	var ipResource = IpResource.query({ survey_id: $stateParams.survey_id, question_id:$stateParams.question_id }).$promise;
+	
+	//Onclick getRandom answers and pop the selection off of the scope's answers
+	ipResource.then(function(resp){
+		$scope.question = resp.question;
+		$scope.answers  = resp.answers;
+		$scope.init();
+	});
+
+	window.App 		= $scope.App;
+}	
+
 //Assign the controllers to the main module
 Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', '$state', '$stateParams', IntengopearController]);	
-Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	
 Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$http', QuestionController ]);	
 Intengopear.controller('AnswerController', ['$scope', '$stateParams', '$http', 'Global', AnswerController ]);	
+Intengopear.controller('IpController', ['$scope', '$stateParams', 'Ip', IpController ]);	
+Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	

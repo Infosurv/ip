@@ -1,10 +1,18 @@
 'use strict';
 
-angular.module('mean.ip').factory('Ip', ['$http', function($http) {
+angular.module('mean.ip').factory('Ip', ['$resource', '$stateParams', function($resource, $stateParams) {
+
+	var IpResource   = $resource('http://intengopear.com/api/ip/:survey_id/:question_id', {survey_id:'@survey_id', question_id:'@question_id'},{ 
+    'get':    {method:'GET'},
+    'save':   {method:'POST'},
+    'query':  {method:'GET'},
+    'remove': {method:'DELETE'},
+    'delete': {method:'DELETE'} 
+  	});
 	
 	return {
-		http: $http,
 		name: 'ip',
+		http: IpResource,
 		postDataPacket: function($event){
 			var dataPacket = this.recordSelection($event);
 			this.http.post('http://intengopear.com/api/ip', dataPacket).success(function(resp, status, headers, config){

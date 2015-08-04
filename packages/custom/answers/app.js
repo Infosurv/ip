@@ -12,6 +12,7 @@ var Answers = new Module('answers');
  * Dependency injection is used to define required modules
  */
 Answers.register(function(app, auth, database) {
+  console.log('answers module');
 
   //We enable routing. By default the Package Object is passed to the routes
   Answers.routes(app, auth, database);
