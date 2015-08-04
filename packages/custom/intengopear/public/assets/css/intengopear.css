@@ -1,5 +1,8 @@
 .input-group { margin: 0 0 10px 0; }
 
+.optionGroup { margin: 0 0 15px; padding: 0; }
+.inputOption { list-style: none; }
+
 .clearfix:before,
 .clearfix:after {
   content: "";

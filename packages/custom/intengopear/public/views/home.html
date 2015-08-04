@@ -33,6 +33,14 @@
 				<input type="text" class="form-control" placeholder="Minumum Evaluation Time" name="delay" ng-model="newQuestion.delay">
 			</div>
 
+			<div id="indecisionOptionsForm">
+		        <p>Paste in indecision options. One per line.</p>
+		        <div class="input-group">
+		          <span class="input-group-addon" id="basic-addon1"></span>
+		          <textarea class="form-control" name="indecision_options" placeholder="Indecision Options" ng-model="newQuestion.indecision_options"></textarea>
+		        </div>
+	      </div>
+
 			<div class="input-group">
 				<span class="input-group-addon" id="basic-addon1"><i class="fa fa-clock-o"></i></span>
 				<input type="text" class="form-control" placeholder="Secondary Delay" name="secondaryDelay" ng-model="newQuestion.secondaryDelay">
@@ -42,8 +50,18 @@
 		</div>
 	</div>
 
-	<div class="question_edit adminBlock clearfix" ng-if="stateParams.id.length > 0">
+	<div class="question_edit adminBlock clearfix" ng-if="stateParams.id.length > 0 && question._id">
       <h4>Edit Question</h4>
+      	<p>Indecision Options</p>
+      	<ul class="optionGroup">
+      		<li class="inputOption">
+      			<div class="input-group" id="questionDelay">
+			        <span class="input-group-addon" id="basic-addon1"></span>
+			        <textarea rows="4" type="text" class="form-control" placeholder="indecision options" ng-model="question.indecision_options"></textarea>
+		        </div>
+	        </li>
+        </ul>
+
       <div class="input-group" id="questionDelay">
         <span class="input-group-addon" id="basic-addon1"></span>
         <input type="text" class="form-control" placeholder="Delay" name="delay" ng-model="question.delay">
@@ -53,6 +71,8 @@
         <span class="input-group-addon" id="basic-addon2"></span>
         <input type="text" class="form-control" placeholder="Secondary Delay" name="secondaryDelay" ng-model="question.secondaryDelay">
       </div>
+	  
+	  <!-- indecision options here -->
 
       <button type="button" class="btn btn-primary pull-right" ng-click="update($event)">Update</button>
     </div>

@@ -44,7 +44,7 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 
 	Project.data 		= app.Project.data;
     $scope.data 		= Project.data;
-
+    
     if(typeof survey_id !== 'undefined') localStorage.setItem('survey_id', survey_id);
     if(window.location.href.indexOf('new') >= 0){ 
     	var open = window.location.href.split('?')[1];
@@ -74,8 +74,11 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 			$scope.$watch('stateParams.id', function(newValue, oldValue){
 			  if(typeof $stateParams.id == 'undefined' || typeof newValue === 'undefined') return;
 			  $scope.question = findById(questions, $scope.stateParams.id);
-			  $scope.question.delay = $scope.delay = (typeof $scope.question.delay == 'undefined') ? 5000 : $scope.question.delay;  
-			   $scope.question.secondaryDelay = $scope.secondaryDelay = (typeof $scope.question.secondaryDelay == 'undefined') ? 2500 : $scope.question.secondaryDelay;  
+
+			  if(typeof $scope.question.indecision_options == 'string') $scope.question.indecision_options = $scope.question.indecision_options.split(",").join("\n").trim();
+			  
+			  $scope.question.delay 				= $scope.delay = (typeof $scope.question.delay == 'undefined') ? 5000 : $scope.question.delay;  
+			  $scope.question.secondaryDelay 		= $scope.secondaryDelay = (typeof $scope.question.secondaryDelay == 'undefined') ? 2500 : $scope.question.secondaryDelay;  
 			});
 		});
 	});
@@ -152,8 +155,8 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 
 			if(typeof idx === 'undefined'){
 				newQuestion = findById(questions, $scope.stateParams.id);
-				var delay = Number(newQuestion.delay);
-				var secondaryDelay = Number(newQuestion.secondaryDelay);
+				var delay 				= Number(newQuestion.delay);
+				var secondaryDelay 		= Number(newQuestion.secondaryDelay);
 
 				newQuestion.secondaryDelay = secondaryDelay;
 				newQuestion.delay = delay;
@@ -169,9 +172,7 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 	//Internal methods not exposed to the DOM
 	function createQuestion($http, question, survey_id){
 		question.survey_id = survey_id;
-		console.log('createQuestion', question);
 		var req = $http.post('/api/questions', question);
-
 		return req;
 	}
 }

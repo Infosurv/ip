@@ -20,9 +20,13 @@ var QuestionSchema = new Schema({
 		type: Number,
 		required: true
 	},
-	description: {
+	indecision_options: {
 		type: String,
 		required: false
+	},
+	description: {
+		type: String,
+		required: true
 	},
 	delay: {
 		type: Schema.Types.Mixed,
