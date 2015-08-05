@@ -1,5 +1,54 @@
 .input-group { margin: 0 0 10px 0; }
 
+.tpl { display: none; }
+
+#indecisionOptions {
+    position: absolute;
+    z-index: 1050;
+    top: -100%;
+    left: 30%;
+    list-style: none;
+    background-color: #eee;
+    padding: 15px 20px 3px;
+    margin: 0 auto;
+    width: 40%;
+    border-radius: 4px;
+    border: 1px solid #fff;
+    box-shadow: 2px 2px 2px #000;
+}
+
+#indecisionOptions li {
+   margin: 0 0 15px;
+}
+
+#indecisionOptions li a {
+    text-decoration: none;
+    display: block;
+    background-color: #337ab7;
+    color: #fff;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border: 1px solid #144976;
+    -webkit-font-smoothing: antialiased;
+    text-transform: capitalize;
+}
+
+#indecisionOptions li a:hover {
+  background-color: #328BD7;
+}
+
+.shade {
+  position: absolute;
+  bottom: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 1040;
+  opacity: .85;
+}
+
 .optionGroup { margin: 0 0 15px; padding: 0; }
 .inputOption { list-style: none; }
 

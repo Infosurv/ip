@@ -15,9 +15,9 @@ module.exports = function(Ip, app, auth, database) {
 
   app.route('/api/ip/ext/:survey_id?/:question_id?')
   .get(IpController.index)
-  .post(IpController.push);
+  .post(IpController.storeResponse);
 
   app.route('/api/ip/:survey_id/:question_id')
   .get(IpController.find)
-  .post(IpController.push);
+  .post(IpController.storeResponse);
 };

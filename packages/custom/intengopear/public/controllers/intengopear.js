@@ -276,9 +276,10 @@ function IpController($scope, $stateParams, Ip){
 	var IpResource  = Ip.http;
 	var ipResource  = IpResource.query({ survey_id: $stateParams.survey_id, question_id:$stateParams.question_id }).$promise;
 	var Project 	= app.Project;
+	$scope.animationSpeed = 350;
 
 	$scope.App 		= {};
-	$scope.Ip 		= Ip;
+	$scope.Ip 		= IpResource;
 
 	$scope.pluckOne = function(collection){
 		var answer; 
@@ -292,10 +293,83 @@ function IpController($scope, $stateParams, Ip){
 	}
 
 	$scope.init  	= function (){
+		var startTime  = new Date().getTime();
 		$scope.answer1 = $scope.pluckOne($scope.answers);
-		console.log($scope.answer1);
+		$scope.answer1.startTime = startTime;
+
 		$scope.answer2 = $scope.pluckOne($scope.answers);
+		$scope.answer2.startTime = startTime;
 	}
+
+	$scope.toggleIndecisionOptions = function($event){
+		if(typeof $event  !== 'undefined') $event.preventDefault();
+		
+		if($('.shade').length > 0){
+			$('#indecisionOptions').animate({
+			   top: '-100%'
+			}, $scope.animationSpeed, function(){
+				$('.shade').animate({
+					'bottom': '-100%'
+				}, $scope.animationSpeed, function(){
+					$(this).remove();
+				});
+			});
+			return;
+		}
+
+		$('body').append($('<div />', {
+			class: "shade"
+		}));
+
+		$('.shade').animate({
+			'bottom': '0%'
+		}, ($scope.animationSpeed - 150), 'swing', $scope.showIndecisionOptions);
+	}
+
+	$scope.showIndecisionOptions = function(){
+		window.setTimeout(function(){
+			var $indecision_options = $('#indecisionOptions');
+			$indecision_options.show();
+			$indecision_options.animate({
+				top: '30%'
+			}, $scope.animationSpeed);
+		}, 250);
+	}
+
+	$scope.recordSelection 	= function($event){
+		var data 			= $($event.target).data();
+		$scope.selection    = $.extend({}, data);
+		$scope.selection.endTime = new Date().getTime();
+		debugger;
+		delete $scope.selection.$binding;
+	}
+
+	function postSelection(selection){
+		return $scope.Ip.save(selection).$promise;
+	}
+
+	//Capture's record the value and then transition to next state of question
+	$scope.captureAnswerSelection     = function($event){
+		$event.preventDefault();
+		$scope.recordSelection($event);
+		
+		postSelection($scope.selection).then(function(resp){
+			//repopulate question
+			console.log('repopulating question');
+		});
+	}
+
+	$scope.captureIndecisionSelection = function($event){
+		$event.preventDefault();
+		$scope.recordSelection($event);
+
+		postSelection($scope.selection).then(function(resp){
+			$scope.toggleIndecisionOptions();
+			//repopulate question
+			console.log('repopulating question');
+		});
+	}
+
 
 	//Get the values from the url first if present, else get it from localStorage,
     var survey_id 	= (localStorage.getItem('survey_id')) ? localStorage.getItem('survey_id') : survey_id;
@@ -316,6 +390,7 @@ function IpController($scope, $stateParams, Ip){
 		$scope.question = resp.question;
 		$scope.answers  = resp.answers;
 		$scope.init();
+		$scope.indecision_options = $scope.question.indecision_options.split("\n");
 	});
 
 	window.App 		= $scope.App;

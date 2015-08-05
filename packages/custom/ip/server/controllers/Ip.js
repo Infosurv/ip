@@ -6,10 +6,12 @@ require('../../../questions/server/models/question');
 
 var Answer    		= mongoose.model('Answer');
 var Question    	= mongoose.model('Question');
-var async 			= require('async');
-var config 			= require('meanio').loadConfig();
-var crypto 			= require('crypto');
-var util 			= require('util');
+var Response      = mongoose.model('Response');
+
+var async 			  = require('async');
+var config 			  = require('meanio').loadConfig();
+var crypto 			  = require('crypto');
+var util 			    = require('util');
 
 //Sends back iFrame data 
 exports.index 	= function(req, res, next) {
@@ -38,12 +40,30 @@ exports.find = function(req, res, next){
 		projectData.question = question;
 
 		Answer.find({'question_id': question_id}, function(err, answers){
-      	  projectData.answers = answers;
-	      res.status(200).json(projectData);
-	    });      
-    });
+        projectData.answers = answers;
+        res.status(200).json(projectData);
+	  });      
+  });
 }
 
-exports.push 		= function(req, res, next){
-	res.status(200).send('connected');
+exports.storeResponse = function(req, res, next){
+  var response  = new Response(req.body);
+  console.log('Creating response', response);
+
+  response.save(function(err){
+      if(err){
+        console.log(err);
+        return res.status(500).send('Oops, response creation error.');
+      }
+
+      return res.status(200).json(response);
+    });
+  // Question.findOne({_id: question_id}, function(err, question){
+  //   projectData.question = question;
+
+  //   Answer.find({'question_id': question_id}, function(err, answers){
+  //       projectData.answers = answers;
+  //       res.status(200).json(projectData);
+  //   });      
+  // });
 }
