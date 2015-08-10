@@ -30,7 +30,12 @@
 
 			<div class="input-group">
 				<span class="input-group-addon" id="basic-addon1"><i class="fa fa-clock-o"></i></span>
-				<input type="text" class="form-control" placeholder="Minumum Evaluation Time" name="delay" ng-model="newQuestion.delay">
+				<input type="text" class="form-control" placeholder="Minumum Evaluation Time ( In Minutes )" name="delay" ng-model="newQuestion.delay">
+			</div>
+
+			<div class="input-group">
+				<span class="input-group-addon" id="basic-addon1"><i class="fa fa-clock-o"></i></span>
+				<input type="text" class="form-control" placeholder="Secondary Delay" name="secondaryDelay" ng-model="newQuestion.secondaryDelay">
 			</div>
 
 			<div id="indecisionOptionsForm">
@@ -39,12 +44,7 @@
 		          <span class="input-group-addon" id="basic-addon1"></span>
 		          <textarea class="form-control" name="indecision_options" placeholder="Indecision Options" ng-model="newQuestion.indecision_options"></textarea>
 		        </div>
-	      </div>
-
-			<div class="input-group">
-				<span class="input-group-addon" id="basic-addon1"><i class="fa fa-clock-o"></i></span>
-				<input type="text" class="form-control" placeholder="Secondary Delay" name="secondaryDelay" ng-model="newQuestion.secondaryDelay">
-			</div>
+	      	</div>
 
 			<button type="submit" class="btn btn-primary pull-right" ng-click="addQuestion($event)">Submit</button>
 		</div>
@@ -64,12 +64,12 @@
 
       <div class="input-group" id="questionDelay">
         <span class="input-group-addon" id="basic-addon1"></span>
-        <input type="text" class="form-control" placeholder="Delay" name="delay" ng-model="question.delay">
+        <input type="text" class="form-control" placeholder="Delay ( In Minutes )" name="delay" ng-model="question.delay">
       </div>
 
       <div class="input-group" id="questionSecondaryDelay">
         <span class="input-group-addon" id="basic-addon2"></span>
-        <input type="text" class="form-control" placeholder="Secondary Delay" name="secondaryDelay" ng-model="question.secondaryDelay">
+        <input type="text" class="form-control" placeholder="Secondary Delay ( In Minutes )" name="secondaryDelay" ng-model="question.secondaryDelay">
       </div>
 	  
 	  <!-- indecision options here -->

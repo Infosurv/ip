@@ -2,19 +2,19 @@
 	<h2 class="vote-question row">{{ question.description }}</h2>
 	<ul class="votebox answers row-fluid">
 		<li class="leftside" ng-if='answer1.text'>
-			<a id="btn1" href="#" class="btn btn-primary leftside" data-start_time="{{answer1.startTime}}" data-question_id="{{question._id}}" data-answer_id="{{answer1._id}}" data-survey_id="{{question.survey_id}}" ng-click="captureAnswerSelection($event)">
+			<a id="btn1" href="#" class="btn btn-primary leftside" data-user_id="{{user_id}}" data-start_time="{{answer1.startTime}}" data-question_id="{{question._id}}" data-answer_id="{{answer1._id}}" data-survey_id="{{question.survey_id}}" ng-click="captureAnswerSelection($event)">
 				{{ answer1.text }}
 			</a>
 		</li>
 
 		<li id="btn2" class="rightside" ng-if='answer2.text'>
-			<a class="btn btn-primary rightside" data-start_time="{{answer2.startTime}}" data-question_id="{{question._id}}" data-answer_id="{{answer2._id}}" data-survey_id="{{question.survey_id}}" data-user_id="" ng-click="captureAnswerSelection($event)">
+			<a class="btn btn-primary rightside" data-user_id="{{user_id}}" data-start_time="{{answer2.startTime}}" data-question_id="{{question._id}}" data-answer_id="{{answer2._id}}" data-survey_id="{{question.survey_id}}" data-user_id="" ng-click="captureAnswerSelection($event)">
 				{{ answer2.text }}
 			</a>
 		</li>
 
 		<li class="full">
-			<a class="btn btn-primary rightside" data-question_id="{{question._id}}" data-answer_id="" data-survey_id="{{question.survey_id}}" data-user_id="" ng-click="toggleIndecisionOptions($event)">
+			<a class="btn btn-primary rightside" data-question_id="{{question._id}}" data-answer_id="" data-survey_id="{{question.survey_id}}" data-user_id="{{user_id}}" ng-click="toggleIndecisionOptions($event)">
 				I cant decide
 			</a>
 		</li>
@@ -22,7 +22,18 @@
 	
 	<ul id="indecisionOptions" class="tpl" style="display: none;">
 		<li ng-repeat='opt in indecision_options'>
-			<a href="#" data-indecision_option_id="{{$index}}" data-question_id="{{question._id}}" data-survey_id="{{question.survey_id}}" ng-click="captureIndecisionSelection($event)">{{ opt }}</a>
+			<a href="#" data-user_id="{{user_id}}" data-indecision_option_id="{{$index}}" data-question_id="{{question._id}}" data-survey_id="{{question.survey_id}}" ng-click="captureIndecisionSelection($event)">{{ opt }}</a>
 		</li>
 	</ul>
+
+
+	<div id="confirmation" class="panel panel-info">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">What would you like to do now?</h3>
+	  </div>
+	  <div class="panel-body">
+	    <a href="#" ng-click="advance($event)"> I don’t care for fun, let’s wrap this up</a>
+	    <a href="#" ng-click="advance($event)">This is fun! I’d like to see more</a>
+	  </div>
+	</div>
 </div>

@@ -23,7 +23,7 @@ var ResponseSchema = new Schema({
 	},
 	user_id: {
 		type: Number,
-		required: true
+		required: false
 	},
 	question_id: {
 		type: String,
@@ -33,7 +33,7 @@ var ResponseSchema = new Schema({
 		type: String,
 		required: false
 	},
-	indecision_options: {
+	indecision_option_id: {
 		type: String,
 		required: false
 	},

@@ -273,6 +273,11 @@ function AnswerController($scope, $stateParams, $http, Global){
 }
 
 function IpController($scope, $stateParams, Ip){
+	//TODO: Test this post message functionality
+	window.addEventListener('message',function(evt){
+		 $scope.augmentScope(evt);
+	}, false);
+
 	var IpResource  = Ip.http;
 	var ipResource  = IpResource.query({ survey_id: $stateParams.survey_id, question_id:$stateParams.question_id }).$promise;
 	var Project 	= app.Project;
@@ -292,6 +297,12 @@ function IpController($scope, $stateParams, Ip){
 		return answer;
 	}
 
+	$scope.augmentScope = function(evt) {
+		if(event.origin.indexOf('intengo') < 0) return;
+		var user_id = evt.data;
+		$scope.user_id = user_id;
+	}
+
 	$scope.init  	= function (){
 		var startTime  = new Date().getTime();
 		$scope.answer1 = $scope.pluckOne($scope.answers);
@@ -299,31 +310,49 @@ function IpController($scope, $stateParams, Ip){
 
 		$scope.answer2 = $scope.pluckOne($scope.answers);
 		$scope.answer2.startTime = startTime;
+
+		//Translate minutes to milliseconds
+		var ttr = (($scope.question.delay * 60) * 1000);
+		console.log(ttr);
+		startPrimaryTimer(ttr);
 	}
 
-	$scope.toggleIndecisionOptions = function($event){
-		if(typeof $event  !== 'undefined') $event.preventDefault();
-		
-		if($('.shade').length > 0){
-			$('#indecisionOptions').animate({
-			   top: '-100%'
-			}, $scope.animationSpeed, function(){
-				$('.shade').animate({
-					'bottom': '-100%'
-				}, $scope.animationSpeed, function(){
-					$(this).remove();
-				});
-			});
-			return;
-		}
-
+	$scope.showShade = function(callback){
 		$('body').append($('<div />', {
 			class: "shade"
 		}));
 
 		$('.shade').animate({
 			'bottom': '0%'
-		}, ($scope.animationSpeed - 150), 'swing', $scope.showIndecisionOptions);
+		}, ($scope.animationSpeed - 150), 'swing', callback);
+	}
+
+	$scope.hideShade = function(callback){
+		$('.shade').animate({
+			'bottom': '-100%'
+		}, $scope.animationSpeed, function(){
+			$(this).remove();
+			if(typeof callback !== 'undefined') callback();
+		});
+	}
+
+	$scope.dismissModal = function($modal, callback){
+		$modal.animate({
+		   top: '-100%'
+		}, $scope.animationSpeed, function(){
+			$scope.hideShade(callback);
+		});
+	}
+
+	$scope.toggleIndecisionOptions = function($event){
+		if(typeof $event  !== 'undefined') $event.preventDefault();
+		
+		if($('.shade').length > 0){
+			$scope.dismissModal($('#indecisionOptions'));
+			return;
+		}
+
+		$scope.showShade($scope.showIndecisionOptions);
 	}
 
 	$scope.showIndecisionOptions = function(){
@@ -333,19 +362,23 @@ function IpController($scope, $stateParams, Ip){
 			$indecision_options.animate({
 				top: '30%'
 			}, $scope.animationSpeed);
-		}, 250);
+		}, 150);
 	}
 
 	$scope.recordSelection 	= function($event){
 		var data 			= $($event.target).data();
 		$scope.selection    = $.extend({}, data);
-		$scope.selection.endTime = new Date().getTime();
-		debugger;
+		$scope.selection.end_time = new Date().getTime();
+		
 		delete $scope.selection.$binding;
 	}
 
-	function postSelection(selection){
-		return $scope.Ip.save(selection).$promise;
+	$scope.repopulateQuestion = function(){
+		$('.votebox.answers').fadeOut(100, function(){
+			$scope.answer1 = $scope.pluckOne($scope.answers);
+			$scope.answer2 = $scope.pluckOne($scope.answers);
+			$(this).fadeIn(100);
+		});
 	}
 
 	//Capture's record the value and then transition to next state of question
@@ -354,8 +387,8 @@ function IpController($scope, $stateParams, Ip){
 		$scope.recordSelection($event);
 		
 		postSelection($scope.selection).then(function(resp){
-			//repopulate question
-			console.log('repopulating question');
+			console.log('repopulating question', resp);
+			$scope.repopulateQuestion();
 		});
 	}
 
@@ -367,6 +400,31 @@ function IpController($scope, $stateParams, Ip){
 			$scope.toggleIndecisionOptions();
 			//repopulate question
 			console.log('repopulating question');
+		});
+	}
+
+	function postSelection(selection){
+		return $scope.Ip.save(selection).$promise;
+	}
+
+	function startPrimaryTimer(timeToRun){
+		$scope.timers = $scope.timers || {};
+		$scope.timers.primaryTimer = window.setTimeout(function(){
+			$scope.showShade(function(){
+				$('#confirmation').show().animate({
+					top: '275px'
+				});
+
+			});
+		}, timeToRun);
+	}
+
+	$scope.advance = function($event){
+		$event.preventDefault();
+		$scope.dismissModal($('#confirmation'), function(){
+			if($event.target.innerHTML.toLowerCase() == "yes") return console.log('going to next answer pair');
+			if($event.target.innerHTML.toLowerCase() == "no") return console.log('going to new location');
+
 		});
 	}
 
