@@ -49,6 +49,11 @@ ul.votebox li a {
 	background: #399ec5;
 }
 
+ul.votebox li a img {
+	display: block;
+	max-width: 100%;
+}
+
 ul.votebox li.full {
 	width: 60%;
 	clear: both;

@@ -1,5 +1,11 @@
 'use strict';
 
+/* TODOS:
+increment a win number for each answer on selection
+increment a loss number for each answer on selection
+add a loser id to the response object
+*/
+
 //Global methods - maybe need to scope these to an app object or something
 function findById(collection, id){
 	var item;
@@ -272,7 +278,7 @@ function AnswerController($scope, $stateParams, $http, Global){
 	}
 }
 
-function IpController($scope, $stateParams, Ip){
+function IpController($scope, $stateParams, Ip, $sce){
 	//TODO: Test this post message functionality
 	window.addEventListener('message',function(evt){
 		 $scope.augmentScope(evt);
@@ -309,9 +315,11 @@ function IpController($scope, $stateParams, Ip){
 	$scope.init  	= function (){
 		var startTime  = new Date().getTime();
 		$scope.answer1 = $scope.pluckOne($scope.answers);
+		$scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
 		$scope.answer1.startTime = startTime;
 
 		$scope.answer2 = $scope.pluckOne($scope.answers);
+		$scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
 		$scope.answer2.startTime = startTime;
 
 		$scope.pair    = [$scope.answer1, $scope.answer2];
@@ -383,7 +391,11 @@ function IpController($scope, $stateParams, Ip){
 	$scope.repopulateQuestion = function(){
 		$('.votebox.answers').fadeOut(100, function(){
 			$scope.answer1 	= $scope.pluckOne($scope.answers);
+			$scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
+
 			$scope.answer2 	= $scope.pluckOne($scope.answers);
+			$scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
+
 			$scope.pair 	= [$scope.answer1, $scope.answer2];
 			$scope.$apply();
 
@@ -492,5 +504,5 @@ function IpController($scope, $stateParams, Ip){
 Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', '$state', '$stateParams', IntengopearController]);	
 Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$http', QuestionController ]);	
 Intengopear.controller('AnswerController', ['$scope', '$stateParams', '$http', 'Global', AnswerController ]);	
-Intengopear.controller('IpController', ['$scope', '$stateParams', 'Ip', IpController ]);	
+Intengopear.controller('IpController', ['$scope', '$stateParams', 'Ip', '$sce', IpController ]);	
 Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	

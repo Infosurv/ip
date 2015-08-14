@@ -57,21 +57,19 @@ exports.storeResponse   = function(req, res, next){
     if (err) return res.send(500, { error: err });  
     Answer.findOneAndUpdate({_id: losing_answer_id}, losses_data, function(err, answer){
       if (err) return res.send(500, { error: err });  
-      res.status(200).send('Answers tally updated'); 
-    });
-  });
-
-  console.log(losing_answer_id);
-  return;
-
-  response.save(function(err){
+      
+      response.save(function(err){
       if(err){
         console.log(err);
         return res.status(500).send('Oops, response creation error.');
       }
-
-      return res.status(200).json(response);
+        console.log('updating responses and answer tally\'s');
+        return res.status(200).json(response);
+      });    
     });
+  });
+
+  
   // Question.findOne({_id: question_id}, function(err, question){
   //   projectData.question = question;
 
