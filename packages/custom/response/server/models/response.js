@@ -33,6 +33,10 @@ var ResponseSchema = new Schema({
 		type: String,
 		required: false
 	},
+	losing_answer_id: {
+		type: String,
+		required: false
+	},
 	indecision_option_id: {
 		type: String,
 		required: false

@@ -1,5 +1,5 @@
 /*.content { margin: 0; padding: 0; }*/
-#confirmation { 
+#confirmation, #secondaryConfirmation { 
 	display: none; 
     position: absolute;
     z-index: 9999;
@@ -8,8 +8,8 @@
     top: -100%;
 }
 
-#confirmation .panel-body > a:hover { text-decoration: none; }
-#confirmation .panel-body > a {
+#confirmation .panel-body > a:hover, #secondaryConfirmation .panel-body > a:hover { text-decoration: none; }
+#confirmation .panel-body > a, #secondaryConfirmation .panel-body > a {
 	display: block;
     width: 30%;
     background-color: #337ab7;
@@ -22,9 +22,9 @@
     text-align: center;
 }
 
-#confirmation .panel-body > a:first-child { margin-left: 20%; }
+#confirmation .panel-body > a:first-child, #secondaryConfirmation .panel-body > a:first-child { margin-left: 20%; }
 
-#confirmation .panel-body > a:last-child {
+#confirmation .panel-body > a:last-child, #secondaryConfirmation .panel-body > a:last-child {
 	margin-right: 0;
 	background-color: #90ca55;
 }

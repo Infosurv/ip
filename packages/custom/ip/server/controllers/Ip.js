@@ -46,9 +46,23 @@ exports.find = function(req, res, next){
   });
 }
 
-exports.storeResponse = function(req, res, next){
-  var response  = new Response(req.body);
-  console.log('Creating response', response);
+exports.storeResponse   = function(req, res, next){
+  var response          = new Response(req.body);
+  var winning_answer_id = req.body.answer_id;
+  var losing_answer_id  = req.body.losing_answer_id;
+  var wins_data         = {$inc: {wins: 1}};
+  var losses_data       = {$inc: {losses: 1}};
+
+  Answer.findOneAndUpdate({_id: winning_answer_id}, wins_data, function(err, answer){
+    if (err) return res.send(500, { error: err });  
+    Answer.findOneAndUpdate({_id: losing_answer_id}, losses_data, function(err, answer){
+      if (err) return res.send(500, { error: err });  
+      res.status(200).send('Answers tally updated'); 
+    });
+  });
+
+  console.log(losing_answer_id);
+  return;
 
   response.save(function(err){
       if(err){

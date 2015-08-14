@@ -27,6 +27,16 @@ var AnswerSchema = new Schema({
 	text: {
 		type: String,
 		required: true
+	},
+	wins: {
+		type: Number,
+		required: false,
+		default: 0
+	},
+	losses: {
+		type: String,
+		required: false,
+		default: 0
 	}
 });
 

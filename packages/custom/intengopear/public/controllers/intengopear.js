@@ -299,8 +299,11 @@ function IpController($scope, $stateParams, Ip){
 
 	$scope.augmentScope = function(evt) {
 		if(event.origin.indexOf('intengo') < 0) return;
-		var user_id = evt.data;
-		$scope.user_id = user_id;
+		var user_id 	= evt.data.user_id;
+		var next_page 	= evt.data.next_page;
+		
+		$scope.user_id 	 = user_id;
+		$scope.next_page = next_page;
 	}
 
 	$scope.init  	= function (){
@@ -311,9 +314,11 @@ function IpController($scope, $stateParams, Ip){
 		$scope.answer2 = $scope.pluckOne($scope.answers);
 		$scope.answer2.startTime = startTime;
 
+		$scope.pair    = [$scope.answer1, $scope.answer2];
+
 		//Translate minutes to milliseconds
 		var ttr = (($scope.question.delay * 60) * 1000);
-		console.log(ttr);
+		if(typeof app.dev == 'undefined' || app.dev == true) ttr = (1000 * 30);
 		startPrimaryTimer(ttr);
 	}
 
@@ -367,7 +372,9 @@ function IpController($scope, $stateParams, Ip){
 
 	$scope.recordSelection 	= function($event){
 		var data 			= $($event.target).data();
+		var losingId 		= ($($event.target).parent().next().find('a').data('answer_id').length > 0) ? $($event.target).parent().next().find('a').data('answer_id') : $($event.target).parent().prev().find('a').data('answer_id');
 		$scope.selection    = $.extend({}, data);
+		$scope.selection.losing_answer_id = losingId; 
 		$scope.selection.end_time = new Date().getTime();
 		
 		delete $scope.selection.$binding;
@@ -375,8 +382,11 @@ function IpController($scope, $stateParams, Ip){
 
 	$scope.repopulateQuestion = function(){
 		$('.votebox.answers').fadeOut(100, function(){
-			$scope.answer1 = $scope.pluckOne($scope.answers);
-			$scope.answer2 = $scope.pluckOne($scope.answers);
+			$scope.answer1 	= $scope.pluckOne($scope.answers);
+			$scope.answer2 	= $scope.pluckOne($scope.answers);
+			$scope.pair 	= [$scope.answer1, $scope.answer2];
+			$scope.$apply();
+
 			$(this).fadeIn(100);
 		});
 	}
@@ -412,7 +422,19 @@ function IpController($scope, $stateParams, Ip){
 		$scope.timers.primaryTimer = window.setTimeout(function(){
 			$scope.showShade(function(){
 				$('#confirmation').show().animate({
-					top: '275px'
+					top: '25%'
+				});
+
+			});
+		}, timeToRun);
+	}
+
+	function startSecondaryTimer(timeToRun){
+		$scope.timers = $scope.timers || {};
+		$scope.timers.secondaryTimer = window.setTimeout(function(){
+			$scope.showShade(function(){
+				$('#secondaryConfirmation').show().animate({
+					top: '25%'
 				});
 
 			});
@@ -421,9 +443,21 @@ function IpController($scope, $stateParams, Ip){
 
 	$scope.advance = function($event){
 		$event.preventDefault();
-		$scope.dismissModal($('#confirmation'), function(){
-			if($event.target.innerHTML.toLowerCase() == "yes") return console.log('going to next answer pair');
-			if($event.target.innerHTML.toLowerCase() == "no") return console.log('going to new location');
+		var text   = $event.target.innerHTML.toLowerCase().trim();
+		var modal  = $($event.target).parent().parent();
+
+		$scope.dismissModal(modal, function(){
+			if(text == "this is fun! i’d like to see more") {
+				$scope.repopulateQuestion();
+
+				var ttr = (($scope.question.secondaryDelay * 60) * 1000);
+				if(typeof app.dev == 'undefined' || app.dev == true) ttr = (1000 * 30);
+				if(typeof $scope.timers.secondaryTimer == 'undefined') startSecondaryTimer(ttr)
+			}
+			if(text == "i don’t care for fun, let’s wrap this up") {
+				console.log('going to new location', $scope.next_page);
+				window.parent.postMessage({'hash': $scope.next_page}, '*');
+			}
 
 		});
 	}
