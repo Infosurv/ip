@@ -323,11 +323,6 @@ function IpController($scope, $stateParams, Ip, $sce){
 		$scope.answer2.startTime = startTime;
 
 		$scope.pair    = [$scope.answer1, $scope.answer2];
-
-		//Translate minutes to milliseconds
-		var ttr = (($scope.question.delay * 60) * 1000);
-		if(typeof app.dev == 'undefined' || app.dev == true) ttr = (1000 * 30);
-		startPrimaryTimer(ttr);
 	}
 
 	$scope.showShade = function(callback){
@@ -379,22 +374,29 @@ function IpController($scope, $stateParams, Ip, $sce){
 	}
 
 	$scope.recordSelection 	= function($event){
-		var data 			= $($event.target).data();
-		var losingId 		= ($($event.target).parent().next().find('a').data('answer_id').length > 0) ? $($event.target).parent().next().find('a').data('answer_id') : $($event.target).parent().prev().find('a').data('answer_id');
+		var target 			= $event.currentTarget;
+		var data 			= $(target).data();
+
 		$scope.selection    = $.extend({}, data);
-		$scope.selection.losing_answer_id = losingId; 
+
+		var $next 			= $(target).parent().next().find('a').data('answer_id');
+		if(typeof $next !== 'undefined'){
+			var losingId 		= ($next.length > 0) ? $($event.target).parent().next().find('a').data('answer_id') : $($event.target).parent().prev().find('a').data('answer_id');
+			$scope.selection.losing_answer_id = losingId; 
+		}
+
 		$scope.selection.end_time = new Date().getTime();
-		
+
 		delete $scope.selection.$binding;
 	}
 
 	$scope.repopulateQuestion = function(){
 		$('.votebox.answers').fadeOut(100, function(){
 			$scope.answer1 	= $scope.pluckOne($scope.answers);
-			$scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
-
 			$scope.answer2 	= $scope.pluckOne($scope.answers);
-			$scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
+
+			if(typeof $scope.answer1 !== 'undefined') $scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
+			if(typeof $scope.answer2 !== 'undefined') $scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
 
 			$scope.pair 	= [$scope.answer1, $scope.answer2];
 			$scope.$apply();
@@ -406,10 +408,22 @@ function IpController($scope, $stateParams, Ip, $sce){
 	//Capture's record the value and then transition to next state of question
 	$scope.captureAnswerSelection     = function($event){
 		$event.preventDefault();
-		$scope.recordSelection($event);
+		
+		if(typeof $scope.timers == 'undefined'){
+			var ttr = (($scope.question.delay * 60) * 1000); 		//Translate minutes to milliseconds
+			if(typeof app.dev == 'undefined' || app.dev == true) ttr = (1000 * 10);
+			startPrimaryTimer(ttr);
+		}
+
+		if($scope.answers.length > 0){
+			$scope.recordSelection($event);
+		} else {
+			window.parent.postMessage({'hash': $scope.next_page}, '*');
+			return;
+		}
 		
 		postSelection($scope.selection).then(function(resp){
-			console.log('repopulating question', resp);
+			// console.log('repopulating question', resp);
 			$scope.repopulateQuestion();
 		});
 	}
@@ -460,8 +474,7 @@ function IpController($scope, $stateParams, Ip, $sce){
 
 		$scope.dismissModal(modal, function(){
 			if(text == "this is fun! i’d like to see more") {
-				$scope.repopulateQuestion();
-
+				//$scope.repopulateQuestion();
 				var ttr = (($scope.question.secondaryDelay * 60) * 1000);
 				if(typeof app.dev == 'undefined' || app.dev == true) ttr = (1000 * 30);
 				if(typeof $scope.timers.secondaryTimer == 'undefined') startSecondaryTimer(ttr)
