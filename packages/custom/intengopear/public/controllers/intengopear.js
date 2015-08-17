@@ -415,14 +415,14 @@ function IpController($scope, $stateParams, Ip, $sce){
 			startPrimaryTimer(ttr);
 		}
 
-		if($scope.answers.length > 0){
-			$scope.recordSelection($event);
-		} else {
-			window.parent.postMessage({'hash': $scope.next_page}, '*');
-			return;
-		}
-		
+		$scope.recordSelection($event);
+
 		postSelection($scope.selection).then(function(resp){
+			if($scope.answers.length === 0){
+				window.parent.postMessage({'hash': $scope.next_page}, '*');
+				return;
+			}
+
 			// console.log('repopulating question', resp);
 			$scope.repopulateQuestion();
 		});
