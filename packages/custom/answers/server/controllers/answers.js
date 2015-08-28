@@ -24,7 +24,7 @@ exports.create  	= function(req, res, next){
 	
 	Answer.create(collection, function(err, answers){
     	if(err) return res.status(500).send('Oops, answer creation error.');
-    	return res.status(200).send('Answers have been saved.');
+    	return res.status(200).send({status: 'saved'});
 	});
 	
 };

@@ -3,3 +3,10 @@
 	overflow: hidden;
 	margin-bottom: 15px;
 }
+
+#msg {
+	display: none;
+	position: absolute;
+	top: 15px;
+	width: 77%;
+}

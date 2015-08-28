@@ -262,7 +262,19 @@ function AnswerController($scope, $stateParams, $http, Global){
 		});
 
 		appendToAnswersList(data, $('#answers.list-group'));
-		Answer.save({'answers': data});
+		var savedAnswers = Answer.save({'answers': data}).$promise.then(function(res){
+			var r = res;
+			if(r.status == 'saved'){
+				$('#msg').find('p').text('Answers Added').parent().fadeIn(100, function(){
+					$('#answersForm textarea:first').val('');
+					setTimeout(function(){
+						$('#msg').fadeOut(100, function(){
+							$(this).find('p').text('');
+						});
+					}, 1500);
+				});
+			}
+		});
 	};
 
 	$scope.deleteAnswer = function($event, answer_id){
