@@ -47,10 +47,10 @@ function IpAdminController($scope, Global, Project, Intengopear, $state){
 function QuestionController($scope, $state, $stateParams, Global, Project, $http){
 	var survey_name, survey_id = $stateParams.survey_id;
 	$scope.stateParams  = $stateParams;
-
 	Project.data 		= app.Project.data;
     $scope.data 		= Project.data;
-    
+    $scope.question_id  = $stateParams.id;
+
     if(typeof survey_id !== 'undefined') localStorage.setItem('survey_id', survey_id);
     if(window.location.href.indexOf('new') >= 0){ 
     	var open = window.location.href.split('?')[1];
@@ -66,7 +66,7 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 
 	Project.data.$promise.then(function(data){
 		$scope.question    	= {};
-		console.log('QuestionController Loaded');
+
 		//Retrieve the cached the survey name and id for reload
 	    survey_id 		= (localStorage.getItem('survey_id')   !== null && localStorage.getItem('survey_id')   !== 'undefined' && localStorage.getItem('survey_id').length > 0) ? localStorage.getItem('survey_id') : $stateParams.survey_id;
 	    survey_name 	= (localStorage.getItem('survey_name') !== null && localStorage.getItem('survey_name') !== 'undefined' && localStorage.getItem('survey_name').length > 0) ? localStorage.getItem('survey_name') : $scope.data.survey.name;
@@ -92,6 +92,11 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 	var $ 				= angular.element; //jQuery Alias
 
 	$scope.iframeBase 	= ''
+
+	$scope.selectQuestion = function(evt){
+		$('#questions .selected').removeClass('selected');
+		$(evt.currentTarget).parent().parent().parent().addClass('selected');
+	}
 
 	//Publicly callable handlers from the dom
 	$scope.toggleQuestionForm = function($event){
@@ -313,16 +318,18 @@ function IpController($scope, $stateParams, Ip, $sce){
 	}
 
 	$scope.init  	= function (){
-		var startTime  = new Date().getTime();
-		$scope.answer1 = $scope.pluckOne($scope.answers);
+		var startTime  		= new Date().getTime();
+		$scope.answer1 		= $scope.pluckOne($scope.answers);
 		$scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
 		$scope.answer1.startTime = startTime;
+		$scope.answer1.placement = 'left';
 
-		$scope.answer2 = $scope.pluckOne($scope.answers);
+		$scope.answer2 		= $scope.pluckOne($scope.answers);
 		$scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
 		$scope.answer2.startTime = startTime;
+		$scope.answer2.placement = 'right';
 
-		$scope.pair    = [$scope.answer1, $scope.answer2];
+		$scope.pair    		= [$scope.answer1, $scope.answer2];
 	}
 
 	$scope.showShade = function(callback){
@@ -393,7 +400,10 @@ function IpController($scope, $stateParams, Ip, $sce){
 	$scope.repopulateQuestion = function(){
 		$('.votebox.answers').fadeOut(100, function(){
 			$scope.answer1 	= $scope.pluckOne($scope.answers);
+			$scope.answer1.placement = 'left';
+
 			$scope.answer2 	= $scope.pluckOne($scope.answers);
+			$scope.answer1.placement = 'right';
 
 			if(typeof $scope.answer1 !== 'undefined') $scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
 			if(typeof $scope.answer2 !== 'undefined') $scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
@@ -494,6 +504,7 @@ function IpController($scope, $stateParams, Ip, $sce){
 
  	$scope.App.data			= Project.Resources.Project.get({ survey_id: survey_id, uid: 2 });
  	$scope.App.data.$promise.then(function(resp){
+
  		resp.questions		= Project.Resources.Question.get({question_id: question_id});
 		resp.answers		= Project.Resources.Answer.get({question_id: question_id});
 		resp.question_id 	= question_id; 

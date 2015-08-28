@@ -13,11 +13,19 @@ module.exports = function(Ip, app, auth, database) {
   	next();
   });
 
+  //External Routes
+  //Get specific data about a question
+  app.route('/api/ip/ext/export/questions/:question_id')
+  .get(IpController.exportResults);
+
+  //Get all the standard data for a project
+  //The index method requires a question_id
   app.route('/api/ip/ext/:survey_id?/:question_id?')
   .get(IpController.index)
   .post(IpController.storeResponse);
 
-  app.route('/api/ip/:survey_id/:question_id')
+  //Internal Routes
+  app.route('/api/ip/:survey_id?/:question_id?')
   .get(IpController.find)
   .post(IpController.storeResponse);
 };

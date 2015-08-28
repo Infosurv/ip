@@ -7,11 +7,11 @@
 		</h1>
 		
 		<ul id="questions" class="list-group" ng-if="questions.length > 0">
-			<li ng-repeat="question in questions" class="clearfix list-group-item">
+			<li ng-repeat="question in questions" class="clearfix list-group-item question" ng-class="question._id === question_id ? 'selected' : 'testfalse'">
 			  <input class="question" type="text" data-questionid="{{ question.id }}" ng-model="questions[$index].description" ng-change="update($event, $index)"></input>
 			  <ul class="tools clearfix">
 			  	<li><a href="/#/ip/{{stateParams.survey_id}}/{{question._id}}" class="copy"><i class="fa fa-code"></i></a></li>
-			  	<li><a href="#" ui-sref="questions.edit({id: question._id})" class="edit"><i class="fa fa-pencil"></i></a></li>
+			  	<li><a href="#" ng-click="selectQuestion($event)" ui-sref="questions.edit({id: question._id})" class="edit"><i class="fa fa-pencil"></i></a></li>
 			  	<li><a href="#" class="delete" ng-click="deleteQuestion($event, question._id)"><i class="fa fa-remove"></i></a></li>
 			  </ul>
 			</li>
@@ -61,6 +61,12 @@
 		        </div>
 	        </li>
         </ul>
+
+      <div class="input-group" id="questionStyles">
+        <span class="input-group-addon" id="basic-addon1"></span>
+        <textarea type="text" class="form-control" placeholder="Style string" name="styles" ng-model="question.styles">
+        </textarea>
+      </div>
 
       <div class="input-group" id="questionDelay">
         <span class="input-group-addon" id="basic-addon1"></span>

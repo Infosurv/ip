@@ -179,7 +179,7 @@ footer p {
 }
 .adminBlock h4 > a, .adminBlock h1 > a {
   right: 0;
-  color: green;
+  color: #87CF2D;
   line-height: 1;
   top: 0;
   position: absolute;
@@ -190,3 +190,20 @@ footer p {
 }
 
 .tpl, .sandbox { display: none; }
+
+#questions .question { 
+  transition: background-color 300ms ease-in;
+}
+
+#questions .question.selected {
+  background-color: #87CF2D;
+}
+
+#questions .question.selected input {
+    background: #5B8B1E;
+    color: #fff;
+}
+
+#questions .question.selected .tools .fa-pencil, #questions .question.selected .tools .fa-code, #questions .question.selected .tools .fa-remove {
+  color: #fff;
+}

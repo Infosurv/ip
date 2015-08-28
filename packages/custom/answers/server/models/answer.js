@@ -34,7 +34,22 @@ var AnswerSchema = new Schema({
 		default: 0
 	},
 	losses: {
-		type: String,
+		type: Number,
+		required: false,
+		default: 0
+	},
+	ties: {
+		type: Number,
+		required: false,
+		default: 0	
+	},
+	left: {
+		type: Number,
+		required: false,
+		default: 0
+	},
+	right: {
+		type: Number,
 		required: false,
 		default: 0
 	}

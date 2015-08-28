@@ -1,8 +1,8 @@
-<div class="pairwise-wrapper" ng-controller="IpController">
+<div class="pairwise-wrapper" ng-controller="IpController" style="{{question.styles}}">
 	<h2 class="vote-question row">{{ question.description }}</h2>
 	<ul class="votebox answers row-fluid">
 		<li class="leftside" ng-if='pair.length > 0' ng-repeat="item in pair">
-			<a ng-if="item._id" id="btn{{$index}}" href="#" class="btn btn-primary leftside" data-user_id="{{user_id}}" data-start_time="{{item.startTime}}" data-question_id="{{question._id}}" data-answer_id="{{item._id}}" data-survey_id="{{question.survey_id}}" ng-click="captureAnswerSelection($event)" ng-bind-html="item.text">
+			<a ng-if="item._id" id="btn{{$index}}" href="#" class="btn btn-primary leftside" data-user_id="{{user_id}}" data-start_time="{{item.startTime}}" data-question_id="{{question._id}}" data-answer_id="{{item._id}}" data-survey_id="{{question.survey_id}}" ng-click="captureAnswerSelection($event)" ng-bind-html="item.text" data-placement="{{ item.placement }}">
 			</a>
 		</li>
 
@@ -16,7 +16,7 @@
 	
 	<ul id="indecisionOptions" class="tpl" style="display: none;">
 		<li ng-repeat='opt in indecision_options'>
-			<a href="#" data-user_id="{{user_id}}" data-indecision_option_id="{{$index}}" data-question_id="{{question._id}}" data-survey_id="{{question.survey_id}}" ng-click="captureIndecisionSelection($event)">{{ opt }}</a>
+			<a href="#" data-user_id="{{user_id}}" data-indecision_option_id="{{$index}}" data-question_id="{{question._id}}" data-survey_id="{{question.survey_id}}" ng-click="captureIndecisionSelection($event)" data-answer1_id="{{answer1._id}}" data-answer2_id="{{answer2._id}}">{{ opt }}</a>
 		</li>
 	</ul>
 

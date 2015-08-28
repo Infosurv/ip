@@ -1,3 +1,4 @@
+body { background-color: initial; }
 /*.content { margin: 0; padding: 0; }*/
 #confirmation, #secondaryConfirmation { 
 	display: none; 
@@ -63,3 +64,5 @@ ul.votebox li.full {
 
 ul.votebox li.full a { background: #66665D; padding: 10px; }
 ul.votebox li.full a:hover { background: #555; }
+
+.navbar { display: none; }

@@ -48,6 +48,10 @@ var ResponseSchema = new Schema({
 	end_time: {
 		type: Number,
 		required: false
+	},
+	placement: {
+		type: String,
+		required: false
 	}
 });
 
