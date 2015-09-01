@@ -51,14 +51,14 @@ exports.find = function(req, res, next){
 }
 
 /*
-Q1 A1 <img src="http://lorempixel.com/400/200/nature/">
-Q1 A2 <img src="http://lorempixel.com/400/200/nature/">
-Q1 A3 <img src="http://lorempixel.com/400/200/nature/">
-Q1 A4 <img src="http://lorempixel.com/400/200/nature/">
-Q1 A5 <img src="http://lorempixel.com/400/200/nature/">
-Q1 A6 <img src="http://lorempixel.com/400/200/nature/">
-Q1 A7 <img src="http://lorempixel.com/400/200/nature/">
-Q1 A8 <img src="http://lorempixel.com/400/200/nature/">
+Q2 A1 <img src="http://lorempixel.com/400/200/nature/">
+Q2 A2 <img src="http://lorempixel.com/400/200/nature/">
+Q2 A3 <img src="http://lorempixel.com/400/200/nature/">
+Q2 A4 <img src="http://lorempixel.com/400/200/nature/">
+Q2 A5 <img src="http://lorempixel.com/400/200/nature/">
+Q2 A6 <img src="http://lorempixel.com/400/200/nature/">
+Q2 A7 <img src="http://lorempixel.com/400/200/nature/">
+Q2 A8 <img src="http://lorempixel.com/400/200/nature/">
 */
 
 exports.storeResponse   = function(req, res, next){
@@ -67,14 +67,14 @@ exports.storeResponse   = function(req, res, next){
   var response          = new Response(req.body);
   var winning_answer_id = (typeof req.body.answer_id !== 'undefined') ?  req.body.answer_id : req.body.answer1_id;
   var losing_answer_id  = (typeof req.body.losing_answer_id !== 'undefined') ? req.body.losing_answer_id : req.body.answer2_id;
+  var placement         = req.body.placement;
   var indecision_option = req.body.indecision_option_id;
   var isTie             = (typeof indecision_option !== 'undefined');
-  var placement         = req.body.placement;
   var wins_data;
 
-  console.log('question_id1 , placement 1');
-  console.log(util.inspect(winning_answer_id));
-  console.log(util.inspect(placement));
+  console.log('placement1');
+  console.log(winning_answer_id);
+  console.log(placement);
   console.log("\n");
 
   if(! isTie) {
@@ -88,6 +88,9 @@ exports.storeResponse   = function(req, res, next){
   }
   //If there is no tie
   Answer.findOneAndUpdate({_id: winning_answer_id}, wins_data, function(err, answer){
+    losing_answer_id  = (typeof req.body.losing_answer_id !== 'undefined') ? req.body.losing_answer_id : req.body.answer2_id;
+    placement         = req.body.placement;
+
     if (err) return res.send(500, { error: err });  
 
     var query_obj, losses_data;
@@ -97,11 +100,16 @@ exports.storeResponse   = function(req, res, next){
       query_obj[placement]= 1;
       losses_data         = {$inc: query_obj};
 
-      console.log('question_id2 , placement 2');
-      console.log(util.inspect(losing_answer_id));
-      console.log(util.inspect(placement));
+      console.log('laid');
+      console.log(losing_answer_id);
+      console.log('placement2');
+      console.log(placement);
       console.log("\n");
+
+      console.log(util.inspect(req.body));
+
     } else {
+      //If it's a tie
       query_obj           = {ties: 1};
       placement           = (placement == 'left') ? 'right' : 'left'; //Since it only records placement for the selected response then this grabs the alternate placement
       query_obj[placement]= 1;

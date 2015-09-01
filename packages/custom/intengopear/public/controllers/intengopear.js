@@ -314,9 +314,8 @@ function IpController($scope, $stateParams, Ip, $sce){
 		var itemIdx = Math.floor(Math.random()*collection.length);
 
 		answer = collection[itemIdx];
-		collection.splice(itemIdx, 1)
+		//collection.splice(itemIdx, 1)
 		//$scope.collection = collection;
-
 		return answer;
 	}
 
@@ -398,11 +397,17 @@ function IpController($scope, $stateParams, Ip, $sce){
 
 		$scope.selection    = $.extend({}, data);
 
-		var $next 			= $(target).parent().next().find('a').data('answer_id');
-		if(typeof $next !== 'undefined'){
-			var losingId 		= ($next.length > 0) ? $($event.target).parent().next().find('a').data('answer_id') : $($event.target).parent().prev().find('a').data('answer_id');
-			$scope.selection.losing_answer_id = losingId; 
+		//Get the alternate li element
+		var $next 			= $(target).parent().next();
+		var $link 			= $next.find('a');
+		var answer_id 		= $link.data('answer_id');
+
+		if(typeof answer_id == 'undefined' || answer_id.length == 0) {
+			$next 			= $(target).parent().prev();
+			$link 			= $next.find('a');
+			answer_id 		= $link.data('answer_id');
 		}
+		$scope.selection.losing_answer_id = answer_id;
 
 		$scope.selection.end_time = new Date().getTime();
 
@@ -415,10 +420,11 @@ function IpController($scope, $stateParams, Ip, $sce){
 			$scope.answer1.placement = 'left';
 
 			$scope.answer2 	= $scope.pluckOne($scope.answers);
-			$scope.answer1.placement = 'right';
+			$scope.answer2.placement = 'right';
 
-			if(typeof $scope.answer1 !== 'undefined') $scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
-			if(typeof $scope.answer2 !== 'undefined') $scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
+			console.log($scope.answer1.text);
+			if(typeof $scope.answer1 !== 'undefined' && typeof $scope.answer1.text !== 'object') $scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
+			if(typeof $scope.answer2 !== 'undefined' && typeof $scope.answer2.text !== 'object') $scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
 
 			$scope.pair 	= [$scope.answer1, $scope.answer2];
 			$scope.$apply();
@@ -442,11 +448,22 @@ function IpController($scope, $stateParams, Ip, $sce){
 		postSelection($scope.selection).then(function(resp){
 			if($scope.answers.length === 0){
 				window.parent.postMessage({'hash': $scope.next_page}, '*');
+				//$scope.cancelTimers();
 				return;
+			} else {
+				// console.log('repopulating question', resp);
+				$scope.repopulateQuestion();
 			}
+		});
+	}
 
-			// console.log('repopulating question', resp);
-			$scope.repopulateQuestion();
+	$scope.cancelTimers = function(){
+		$('.votebox li').fadeOut(100, function(){
+			$(this).remove();
+			angular.forEach($scope.timers, function(timerId, timerName, list){
+				window.clearTimeout(timerId);
+				delete $scope.timers[timerName];
+			});
 		});
 	}
 
@@ -499,7 +516,8 @@ function IpController($scope, $stateParams, Ip, $sce){
 				//$scope.repopulateQuestion();
 				var ttr = (($scope.question.secondaryDelay * 60) * 1000);
 				if(typeof app.dev == 'undefined' || app.dev == true) ttr = (1000 * 30);
-				if(typeof $scope.timers.secondaryTimer == 'undefined') startSecondaryTimer(ttr)
+				//if(typeof $scope.timers.secondaryTimer == 'undefined') 
+				startSecondaryTimer(ttr);
 			}
 			if(text == "i don’t care for fun, let’s wrap this up") {
 				console.log('going to new location', $scope.next_page);
