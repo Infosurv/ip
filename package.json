@@ -18,6 +18,9 @@
     "postinstall": "node tools/scripts/postinstall.js"
   },
   "dependencies": {
+    "gulp": "latest",
+    "bower": "latest",
+    "mean-cli": "latest",
     "assetmanager": "latest",
     "async": "latest",
     "body-parser": "latest",
