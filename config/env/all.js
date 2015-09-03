@@ -1,5 +1,9 @@
 'use strict';
 
+console.log('all.js');
+console.log('MONGOHQ_URL: ');
+console.log(process.env.MONGOHQ_URL);
+
 var path = require('path'),
   rootPath = path.normalize(__dirname + '/../..');
 
