@@ -2,15 +2,15 @@
   "name": "mean",
   "version": "0.5.0",
   "dependencies": {
+    "bower": {
+      "version":"^1.5.2",
+      "resolved": "https://registry.npmjs.org/bower/-/bower-1.5.2.tgz"
+    },
     "assetmanager": {
       "version": "1.1.2",
       "from": "assetmanager@latest",
       "resolved": "https://registry.npmjs.org/assetmanager/-/assetmanager-1.1.2.tgz",
       "dependencies": {
-       "bower": {
-          "version":"^1.5.2",
-          "resolved": "https://registry.npmjs.org/bower/-/bower-1.5.2.tgz"
-        },
         "grunt": {
           "version": "0.4.5",
           "from": "grunt@>=0.4.5 <0.5.0",
