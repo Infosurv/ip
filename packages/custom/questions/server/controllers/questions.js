@@ -10,7 +10,6 @@ var Question 		= mongoose.model('Question');
 var async 			= require('async');
 var config 			= require('meanio').loadConfig();
 var crypto 			= require('crypto');
-var util 			= require('util');
 
 exports.index 		= function(req, res, next){
 	var survey_id 	= req.query.survey_id;

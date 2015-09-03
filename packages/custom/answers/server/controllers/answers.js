@@ -10,7 +10,6 @@ var Answer 			= mongoose.model('Answer');
 var async 			= require('async');
 var config 			= require('meanio').loadConfig();
 var crypto 			= require('crypto');
-var util 			= require('util');
 
 exports.index 		= function(req, res, next){
 	var question_id = req.query.id;
@@ -35,20 +34,14 @@ exports.update   	= function(req, res, next){
 	var query 		= { _id: newAnswer._id };
 	var data 		= { text: newAnswer.text };
 
-	console.log('updating: ');
-	console.log(util.inspect(newAnswer));
-
 	Answer.findOneAndUpdate(query, data, function(err, doc){
 		if (err) return res.send(500, { error: err });
-		console.log(util.inspect(doc));
 		res.status(200).send('answer '+ newAnswer._id +' updated'); 
 	});
 };
 
 exports.delete   	= function(req, res, next){
-	// console.log(util.inspect(req.query));
 	var id 			= req.query._id;
-	console.log(util.inspect(id));
 
 	var question 	= Answer.remove({ _id: id }, function(err, resp){
 		console.log('err: ', err);

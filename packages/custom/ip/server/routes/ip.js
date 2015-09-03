@@ -1,6 +1,5 @@
 'use strict';
 
-var util        = require('util');
 var IpController= require('../controllers/Ip');
 
 /* jshint -W098 */

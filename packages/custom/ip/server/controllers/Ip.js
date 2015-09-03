@@ -11,7 +11,6 @@ var Response      = mongoose.model('Response');
 var async 			  = require('async');
 var config 			  = require('meanio').loadConfig();
 var crypto 			  = require('crypto');
-var util 			    = require('util');
 
 //Sends back iFrame data 
 exports.index 	= function(req, res, next) {
@@ -62,7 +61,6 @@ Q2 A8 <img src="http://lorempixel.com/400/200/nature/">
 */
 
 exports.storeResponse   = function(req, res, next){
-  //console.log(util.inspect(req.body));
 
   var response          = new Response(req.body);
   var winning_answer_id = (typeof req.body.answer_id !== 'undefined') ?  req.body.answer_id : req.body.answer1_id;
@@ -100,13 +98,13 @@ exports.storeResponse   = function(req, res, next){
       query_obj[placement]= 1;
       losses_data         = {$inc: query_obj};
 
-      console.log('laid');
-      console.log(losing_answer_id);
-      console.log('placement2');
-      console.log(placement);
-      console.log("\n");
+      // console.log('laid');
+      // console.log(losing_answer_id);
+      // console.log('placement2');
+      // console.log(placement);
+      // console.log("\n");
 
-      console.log(util.inspect(req.body));
+      // console.log(util.inspect(req.body));
 
     } else {
       //If it's a tie
