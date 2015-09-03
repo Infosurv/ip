@@ -1,12 +1,12 @@
 'use strict';
 
-console.log('mongo uri: ');
-console.log(process.env.MONGOLAB_URI);
+// console.log('mongo uri: ');
+// console.log(process.env.MONGOLAB_URI);
 //mongo ds041603.mongolab.com:41603/heroku_mmv2n23z -u heroku_mmv2n23z -p test1234
 
 module.exports = {
   //db: 'mongodb://' + (process.env.DB_PORT_27017_TCP_ADDR || 'localhost') + '/mean-prod',
-  db: 'mongodb://app:test1234@ds041603.mongolab.com:41603/heroku_mmv2n23z'
+  db: 'mongodb://app:test1234@ds041603.mongolab.com:41603/heroku_mmv2n23z',
   /**
    * Database options that will be passed directly to mongoose.connect
    * Below are some examples.
