@@ -9,7 +9,7 @@
       "dependencies": {
        "bower": {
           "version":"^1.5.2",
-          "resolved": "https://registry.npmjs.org/bower/-/bower-1.5.2.tgz",
+          "resolved": "https://registry.npmjs.org/bower/-/bower-1.5.2.tgz"
         },
         "grunt": {
           "version": "0.4.5",
