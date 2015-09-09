@@ -5,6 +5,10 @@
     "custom-meanio": {
       "resolved": "peb7268/custom-meanio"
     },
+    "connect-timeout": {
+      "version" : "1.7.0",
+      "resolved": "https://registry.npmjs.org/connect-timeout/-/connect-timeout-1.7.0.tgz"
+    },
     "newrelic": {
       "version": "1.22.0",
       "resolved": "https://registry.npmjs.org/newrelic/-/newrelic-1.22.0.tgz"
