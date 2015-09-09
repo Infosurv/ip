@@ -19,12 +19,11 @@ if ((cluster.isMaster) &&
   (process.execArgv.indexOf('--debug') < 0) &&
   (process.env.NODE_ENV!=='test') && (process.env.NODE_ENV!=='development') &&
   (process.execArgv.indexOf('--singleProcess')<0)) {
-//if (cluster.isMaster) {
-
-    console.log('for real!');
     // Count the machine's CPUs
     var cpuCount = require('os').cpus().length;
-
+    var cpuMsg   = 'Production is running with ' + cpuCount + '\'s';
+    console.log(cpuMsg);
+    
     // Create a worker for each CPU
     for (var i = 0; i < cpuCount; i += 1) {
         console.log ('forking ',i);
