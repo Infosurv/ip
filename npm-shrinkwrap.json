@@ -2,6 +2,10 @@
   "name": "mean",
   "version": "0.5.0",
   "dependencies": {
+    "newrelic": {
+      "version": "1.22.0",
+      "resolved": "https://registry.npmjs.org/newrelic/-/newrelic-1.22.0.tgz"
+    },
     "mean-cli": {
       "version":"0.10.14",
       "resolved": "https://registry.npmjs.org/mean-cli/-/mean-cli-0.10.14.tgz"
