@@ -2,6 +2,9 @@
   "name": "mean",
   "version": "0.5.0",
   "dependencies": {
+    "custom-meanio": {
+      "resolved": "peb7268/custom-meanio"
+    },
     "newrelic": {
       "version": "1.22.0",
       "resolved": "https://registry.npmjs.org/newrelic/-/newrelic-1.22.0.tgz"
