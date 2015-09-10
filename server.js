@@ -15,12 +15,14 @@ var cluster = require('cluster');
 
 // Code to run if we're in the master process or if we are not in debug mode/ running tests
 
-if ((cluster.isMaster) &&
+if((cluster.isMaster) &&
   (process.execArgv.indexOf('--debug') < 0) &&
-  (process.env.NODE_ENV!=='test') && (process.env.NODE_ENV!=='development') &&
-  (process.execArgv.indexOf('--singleProcess')<0)) {
+  (process.env.NODE_ENV !== 'test') && (process.env.NODE_ENV !== 'development') &&
+  (process.execArgv.indexOf('--singleProcess') < 0)){
+
     // Count the machine's CPUs
-    var cpuCount = require('os').cpus().length;
+    //var cpuCount = require('os').cpus().length; //On Heroku, only have access to 1 cpu even though it has more so scale by WEB_CONCURRENCY instead like below.
+    var cpuCount = process.env.WEB_CONCURRENCY || 1; //For heroku, tells how many cpus we actually have access to.
     var cpuMsg   = 'Production is running with ' + cpuCount + '\'s';
     console.log(cpuMsg);
     
@@ -35,7 +37,6 @@ if ((cluster.isMaster) &&
         // Replace the dead worker, we're not sentimental
         console.log('Worker ' + worker.id + ' died :(');
         cluster.fork();
-
     });
 
 // Code to run if we're in a worker process
