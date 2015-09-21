@@ -1,12 +1,6 @@
 'use strict';
 
-/*
-var cl = console.log;
-console.log = function(){
-  console.trace();
-  cl.apply(console,arguments);
-};
-*/
+var newrelic = require('newrelic');
 
 // Requires meanio .
 var mean = require('meanio');
