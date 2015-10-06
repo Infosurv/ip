@@ -4,7 +4,6 @@ var mongoose    	= require('mongoose');
 require('../../../answers/server/models/answer');
 require('../../../questions/server/models/question');
 
-var util          = require('util');
 var Answer    		= mongoose.model('Answer');
 var Question    	= mongoose.model('Question');
 var Response      = mongoose.model('Response');
@@ -21,7 +20,6 @@ function resolvePlacement(req){
   if(typeof placement == 'undefined') placement = 'right';
   
   console.log('placement resolved to: ' + placement);
-  console.log(util.inspect(req.body));
 
   return placement;
 }
@@ -108,14 +106,12 @@ exports.storeResponse   = function(req, res, next){
   
   var params            = (! isTie) ? composeAnswerData(req) : composeTieData(req);
   console.log('params: ');
-  console.log(util.inspect(params));
 
   wins_data             = {$inc: params.query_obj};
   placement             = params.placement;
   
   console.log('Saving question response:');  
   console.log('Answer 1: ');
-  console.log(util.inspect(wins_data));  
   console.log("\n");
     
   //If there is no tie
@@ -140,7 +136,6 @@ exports.storeResponse   = function(req, res, next){
     }
 
     console.log('Answer 2: ');
-    console.log(util.inspect(losses_data));
     console.log("\n");
     
     Answer.findOneAndUpdate({_id: losing_answer_id}, losses_data, function(err, losing_answer){
