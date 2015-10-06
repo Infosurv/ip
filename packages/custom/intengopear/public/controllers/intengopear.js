@@ -394,8 +394,14 @@ function IpController($scope, $stateParams, Ip, $sce){
 	$scope.recordSelection 	= function($event){
 		var target 			= $event.currentTarget;
 		var data 			= $(target).data();
-
 		$scope.selection    = $.extend({}, data);
+
+		//If placement isnt set then capture it manually 
+		if(typeof $scope.selection.placement == 'undefined'){
+			$scope.selection.placement = {};
+			$scope.selection.placement[$('.votebox.answers li:first a').data('answer_id')]   = 'left';
+			$scope.selection.placement[$('.votebox.answers li:eq("1") a').data('answer_id')] = 'right';
+		}
 
 		//Get the alternate li element
 		var $next 			= $(target).parent().next();
@@ -422,7 +428,6 @@ function IpController($scope, $stateParams, Ip, $sce){
 			$scope.answer2 	= $scope.pluckOne($scope.answers);
 			$scope.answer2.placement = 'right';
 
-			console.log($scope.answer1.text);
 			if(typeof $scope.answer1 !== 'undefined' && typeof $scope.answer1.text !== 'object') $scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
 			if(typeof $scope.answer2 !== 'undefined' && typeof $scope.answer2.text !== 'object') $scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
 
@@ -457,16 +462,6 @@ function IpController($scope, $stateParams, Ip, $sce){
 		});
 	}
 
-	$scope.cancelTimers = function(){
-		$('.votebox li').fadeOut(100, function(){
-			$(this).remove();
-			angular.forEach($scope.timers, function(timerId, timerName, list){
-				window.clearTimeout(timerId);
-				delete $scope.timers[timerName];
-			});
-		});
-	}
-
 	$scope.captureIndecisionSelection = function($event){
 		$event.preventDefault();
 		$scope.recordSelection($event);
@@ -474,7 +469,17 @@ function IpController($scope, $stateParams, Ip, $sce){
 		postSelection($scope.selection).then(function(resp){
 			$scope.toggleIndecisionOptions();
 			//repopulate question
-			console.log('repopulating question');
+			$scope.repopulateQuestion();
+		});
+	},
+
+	$scope.cancelTimers = function(){
+		$('.votebox li').fadeOut(100, function(){
+			$(this).remove();
+			angular.forEach($scope.timers, function(timerId, timerName, list){
+				window.clearTimeout(timerId);
+				delete $scope.timers[timerName];
+			});
 		});
 	}
 
@@ -534,7 +539,6 @@ function IpController($scope, $stateParams, Ip, $sce){
 
  	$scope.App.data			= Project.Resources.Project.get({ survey_id: survey_id, uid: 2 });
  	$scope.App.data.$promise.then(function(resp){
-
  		resp.questions		= Project.Resources.Question.get({question_id: question_id});
 		resp.answers		= Project.Resources.Answer.get({question_id: question_id});
 		resp.question_id 	= question_id; 
@@ -548,7 +552,8 @@ function IpController($scope, $stateParams, Ip, $sce){
 		$scope.question = resp.question;
 		$scope.answers  = resp.answers;
 		$scope.init();
-		$scope.indecision_options = $scope.question.indecision_options.split("\n");
+
+		$scope.indecision_options = (typeof $scope.question.indecision_options !== 'undefined') ? $scope.question.indecision_options.split("\n") : [];
 	});
 
 	window.App 		= $scope.App;

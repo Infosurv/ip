@@ -4,6 +4,7 @@ var mongoose    	= require('mongoose');
 require('../../../answers/server/models/answer');
 require('../../../questions/server/models/question');
 
+var util          = require('util');
 var Answer    		= mongoose.model('Answer');
 var Question    	= mongoose.model('Question');
 var Response      = mongoose.model('Response');
@@ -11,6 +12,55 @@ var Response      = mongoose.model('Response');
 var async 			  = require('async');
 var config 			  = require('meanio').loadConfig();
 var crypto 			  = require('crypto');
+
+function resolvePlacement(req){
+  var isTie     = typeof req.body.indecision_option_id !== 'undefined', placement;
+
+  if(isTie) placement   = req.body.placement[req.body.answer1_id];
+  if(! isTie) placement = req.body.placement;
+  if(typeof placement == 'undefined') placement = 'right';
+  
+  console.log('placement resolved to: ' + placement);
+  console.log(util.inspect(req.body));
+
+  return placement;
+}
+
+function resolveReqParams(req){
+  var params               = {};
+  params.winning_answer_id = (typeof req.body.answer_id !== 'undefined') ?  req.body.answer_id : req.body.answer1_id;
+  params.losing_answer_id  = (typeof req.body.losing_answer_id !== 'undefined') ? req.body.losing_answer_id : req.body.answer2_id;
+  params.indecision_option = req.body.indecision_option_id;
+  params.isTie             = (typeof params.indecision_option !== 'undefined');
+  params.placement         = resolvePlacement(req);
+
+  return params;
+}
+
+function composeTieData(req){
+  console.log('Composing Tie Data');
+
+  var params          = resolveReqParams(req);
+  params.query_obj    = {ties: 1 };
+
+  //var placement = params.placement[params.winning_answer_id];
+  params.query_obj[params.placement] = 1;
+
+  console.log('');
+  console.log("\n");
+
+  return params;
+}
+
+function composeAnswerData(req){
+  console.log('Composing Answer Data');
+  var params          = resolveReqParams(req);
+  params.query_obj    = {wins: 1};
+  params.query_obj[params.placement] = 1;
+
+  return params;
+}
+
 
 //Sends back iFrame data 
 exports.index 	= function(req, res, next) {
@@ -49,63 +99,38 @@ exports.find = function(req, res, next){
   });
 }
 
-/*
-Q2 A1 <img src="http://lorempixel.com/400/200/nature/">
-Q2 A2 <img src="http://lorempixel.com/400/200/nature/">
-Q2 A3 <img src="http://lorempixel.com/400/200/nature/">
-Q2 A4 <img src="http://lorempixel.com/400/200/nature/">
-Q2 A5 <img src="http://lorempixel.com/400/200/nature/">
-Q2 A6 <img src="http://lorempixel.com/400/200/nature/">
-Q2 A7 <img src="http://lorempixel.com/400/200/nature/">
-Q2 A8 <img src="http://lorempixel.com/400/200/nature/">
-*/
-
 exports.storeResponse   = function(req, res, next){
+  //TODO: Run more manual tie checks in the morn
 
   var response          = new Response(req.body);
-  var winning_answer_id = (typeof req.body.answer_id !== 'undefined') ?  req.body.answer_id : req.body.answer1_id;
-  var losing_answer_id  = (typeof req.body.losing_answer_id !== 'undefined') ? req.body.losing_answer_id : req.body.answer2_id;
-  var placement         = req.body.placement;
-  var indecision_option = req.body.indecision_option_id;
-  var isTie             = (typeof indecision_option !== 'undefined');
-  var wins_data;
+  var isTie             = (typeof req.body.indecision_option_id !== 'undefined');
+  var wins_data, placement, losing_answer_id, losses_data;
+  
+  var params            = (! isTie) ? composeAnswerData(req) : composeTieData(req);
+  console.log('params: ');
+  console.log(util.inspect(params));
 
-  console.log('placement1');
-  console.log(winning_answer_id);
-  console.log(placement);
+  wins_data             = {$inc: params.query_obj};
+  placement             = params.placement;
+  
+  console.log('Saving question response:');  
+  console.log('Answer 1: ');
+  console.log(util.inspect(wins_data));  
   console.log("\n");
-
-  if(! isTie) {
-    var query_obj       = {wins: 1};
-    query_obj[placement]= 1;
-    wins_data           = {$inc: query_obj};
-  } else {
-    var query_obj       = {ties: 1 };
-    query_obj[placement]= 1;
-    wins_data           = {$inc: query_obj};
-  }
+    
   //If there is no tie
-  Answer.findOneAndUpdate({_id: winning_answer_id}, wins_data, function(err, answer){
+  Answer.findOneAndUpdate({_id: params.winning_answer_id}, wins_data, function(err, answer){
     losing_answer_id  = (typeof req.body.losing_answer_id !== 'undefined') ? req.body.losing_answer_id : req.body.answer2_id;
-    placement         = req.body.placement;
-
+    var placement     = params.placement;
+    
     if (err) return res.send(500, { error: err });  
 
     var query_obj, losses_data;
-    if(! isTie) {
+    if(! params.isTie) {
       query_obj           = {losses: 1};
       placement           = (placement == 'left') ? 'right' : 'left'; //Since it only records placement for the selected response then this grabs the alternate placement
       query_obj[placement]= 1;
       losses_data         = {$inc: query_obj};
-
-      // console.log('laid');
-      // console.log(losing_answer_id);
-      // console.log('placement2');
-      // console.log(placement);
-      // console.log("\n");
-
-      // console.log(util.inspect(req.body));
-
     } else {
       //If it's a tie
       query_obj           = {ties: 1};
@@ -113,6 +138,11 @@ exports.storeResponse   = function(req, res, next){
       query_obj[placement]= 1;
       losses_data         = {$inc: query_obj};
     }
+
+    console.log('Answer 2: ');
+    console.log(util.inspect(losses_data));
+    console.log("\n");
+    
     Answer.findOneAndUpdate({_id: losing_answer_id}, losses_data, function(err, losing_answer){
       if (err) return res.send(500, { error: err });  
       
