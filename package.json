@@ -22,6 +22,7 @@
     "async": "latest",
     "body-parser": "latest",
     "bower": "^1.5.2",
+    "bson": "^0.4.15",
     "compression": "latest",
     "connect-flash": "latest",
     "connect-timeout": "^1.7.0",
