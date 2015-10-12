@@ -1,5 +1,7 @@
 'use strict';
 
+console.log('mean users package loading');
+
 /*
  * Defining the Package
  */

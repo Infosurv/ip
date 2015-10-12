@@ -48,6 +48,8 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
     }
 
     MeanUserKlass.prototype.onIdentity = function(response) {
+      console.log('Identity check: ', response);
+
       this.loginError = 0;
       this.loggedin = true;
       this.registerError = 0;
@@ -57,10 +59,11 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
         this.isAdmin = false;
       } else if(angular.isDefined(response.token)) {
         localStorage.setItem('JWT', response.token);
+        app.$scope.global.authenticated = true;
         var encodedProfile = decodeURI(b64_to_utf8(response.token.split('.')[1]));
         var payload = JSON.parse(encodedProfile);
         this.user = payload;
-        var destination = payload.redirect;
+        var destination = (typeof payload.redirect !== 'undefined') ? payload.redirect : this.redirect;
         if (this.user.roles.indexOf('admin') !== -1) this.isAdmin = true;
         $rootScope.$emit('loggedin');
         if (destination) {
@@ -89,7 +92,9 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
 
     MeanUserKlass.prototype.login = function (user) {
       // this is an ugly hack due to mean-admin needs
-      var destination = $location.path().indexOf('/login') === -1 ? $location.absUrl() : false;
+      var destination = $location.path().indexOf('/login') === -1 ? $location.absUrl() : '/home';
+      console.log('destination: ', destination);
+      this.redirect = destination;
       $http.post('/api/login', {
           email: user.email,
           password: user.password,

@@ -21,12 +21,14 @@ function findById(collection, id){
 var Intengopear = angular.module('mean.intengopear', []);
 
 //Controller Definitions
-function IntengopearController ($scope, Global, Project, $state, $stateParams){
-	console.log('IntengopearController');
+function IntengopearController ($scope, Global, Project, $state, $stateParams, users){
+	//When logging in use the MeanUser authentication "filter" method to redirect if not authed.
+	console.log('IntengopearController:auth check');
+	if(typeof app !== 'undefined' && app.$scope.global.authenticated == false) window.location = '//intengopear.com/#/auth/login';
+
 	var survey_id = 20;
 	var uid       = 2;
 
-	//if(! Intengopear.isAuthed(Global))  $location.url('/login'); //#TODO: finish this
     window.app          = {};
     app.Project         = Project;
     app.$scope          = $scope;

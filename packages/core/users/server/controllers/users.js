@@ -24,6 +24,7 @@ exports.authCallback = function(req, res) {
  */
 exports.signin = function(req, res) {
   if (req.isAuthenticated()) {
+    console.log('req is authenticated');
     return res.redirect('/');
   }
   res.redirect('/login');

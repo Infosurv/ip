@@ -50,7 +50,7 @@ angular.module('mean.system').provider('$meanState', ['$stateProvider', '$viewPa
 angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider',
   function($meanStateProvider, $urlRouterProvider) {
     // For unmatched routes:
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/auth/login');
 
     $meanStateProvider
       .state('Log Out', {

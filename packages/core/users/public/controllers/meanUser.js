@@ -14,8 +14,7 @@ angular.module('mean.users')
         });
     }
   ])
-  .controller('LoginCtrl', ['$rootScope', 'MeanUser',
-    function($rootScope, MeanUser) {
+  .controller('LoginCtrl', ['$rootScope', 'MeanUser', function($rootScope, MeanUser) {
       var vm = this;
 
       // This object will be filled by the form
@@ -40,8 +39,10 @@ angular.module('mean.users')
         vm.loginError = MeanUser.loginError;
       });
 
-      // Register the login() function
+      //When you submit the login form
+      //Wrapper for the meanUser service login method.
       vm.login = function() {
+        console.log('users/app.js MeanUser:login');
         MeanUser.login(this.user);
       };
     }

@@ -12,15 +12,19 @@ angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwt
 
     // Check if the user is not connected
     var checkLoggedOut = function($q, $timeout, $http, $location) {
+      console.log('checkLoggedOut');
+
       // Initialize a new promise
       var deferred = $q.defer();
 
       // Make an AJAX call to check if the user is logged in
       $http.get('/api/loggedin').success(function(user) {
+        console.log('Authenticated status: ', user);
+        
         // Authenticated
         if (user !== '0') {
           $timeout(deferred.reject);
-          $location.url('/login');
+          $location.url('/home');
         }
 
         // Not Authenticated
@@ -64,6 +68,18 @@ angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwt
         resolve: {
           loggedin: checkLoggedOut
         }
+      })
+      .state('admin', {
+        url: '/admin',
+        templateUrl: 'intengopear/views/admin.html'
+      })
+      .state('questions', {
+        url: '/:survey_id/questions',
+        templateUrl: 'intengopear/views/home.html'
+      })
+      .state('questions.edit', {
+        url: '/:id/edit',
+        templateUrl: 'intengopear/views/edit.html'
       });
   }
 ]);
