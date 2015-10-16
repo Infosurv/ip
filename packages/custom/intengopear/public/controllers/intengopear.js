@@ -1,12 +1,5 @@
 'use strict';
 
-//Assign the controllers to the main module
-Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', '$state', '$stateParams', 'loggedin', IntengopearController]);	
-Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$http', QuestionController ]);	
-Intengopear.controller('AnswerController', ['$scope', '$stateParams', '$http', 'Global', AnswerController ]);	
-Intengopear.controller('IpController', ['$scope', '$stateParams', 'Ip', '$sce', IpController ]);	
-Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	
-
 //Global methods - maybe need to scope these to an app object or something
 function findById(collection, id){
 	var item;
@@ -20,6 +13,14 @@ function findById(collection, id){
 
 //Define the module
 var Intengopear = angular.module('mean.intengopear');
+
+//Assign the controllers to the main module
+Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', '$state', '$stateParams', 'loggedin', IntengopearController]);	
+Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$http', QuestionController ]);	
+Intengopear.controller('AnswerController', ['$scope', '$stateParams', '$http', 'Global', AnswerController ]);	
+Intengopear.controller('IpController', ['$scope', '$stateParams', 'Ip', '$sce', IpController ]);	
+Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	
+
 
 //Controller Definitions
 function IntengopearController ($scope, Global, Project, $state, $stateParams, loggedin){

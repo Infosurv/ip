@@ -1163,3 +1163,5 @@
 {"v":0,"level":40,"name":"newrelic","hostname":"PAULs-MacBook-Pro.local","pid":41728,"time":"2015-10-16T15:34:59.338Z","msg":"Unrecognized version NaN of Express detected; not instrumenting","component":"express"}
 {"v":0,"level":30,"name":"newrelic","hostname":"PAULs-MacBook-Pro.local","pid":41728,"time":"2015-10-16T15:35:01.867Z","msg":"Reporting to: https://rpm.newrelic.com/accounts/887629/applications/8818506","component":"new_relic_response"}
 {"v":0,"level":30,"name":"newrelic","hostname":"PAULs-MacBook-Pro.local","pid":41728,"time":"2015-10-16T15:35:01.868Z","msg":"Connected to collector-148.newrelic.com:443 with agent run ID 38572449263940906.","component":"collector_api"}
+{"v":0,"level":30,"name":"newrelic","hostname":"PAULs-MacBook-Pro.local","pid":41822,"time":"2015-10-16T15:35:42.996Z","msg":"Starting New Relic for Node.js connection process."}
+{"v":0,"level":40,"name":"newrelic","hostname":"PAULs-MacBook-Pro.local","pid":41822,"time":"2015-10-16T15:35:44.145Z","msg":"Unrecognized version NaN of Express detected; not instrumenting","component":"express"}
