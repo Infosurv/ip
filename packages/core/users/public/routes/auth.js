@@ -8,7 +8,7 @@ function usersModule($meanStateProvider, $httpProvider, jwtInterceptorProvider) 
 
     $httpProvider.interceptors.push('jwtInterceptor');
 
-    // Check if the user is not connected
+    // Check if the user is not connected - should be called toLogOut
     var checkLoggedOut = function($q, $timeout, $http, $location) {
       console.log('auth:checkLoggedOut');
 
@@ -19,14 +19,10 @@ function usersModule($meanStateProvider, $httpProvider, jwtInterceptorProvider) 
       $http.get('/api/loggedin').success(function(user) {
         console.log('Authenticated status: ', user);
         
-        // Authenticated
+        // Authenticated - theyre not logged out, so reject. A resolved means they are logged out.
         if (user !== '0') {
-          console.log('user authenticated');
           $timeout(deferred.reject);
-          //$location.url('/home');
         } else {
-          console.log('user not authenticated');
-          $location.url('/auth/login');
           // Not Authenticated
           $timeout(deferred.resolve);
         }
