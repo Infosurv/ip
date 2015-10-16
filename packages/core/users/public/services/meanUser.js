@@ -59,7 +59,7 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
         this.isAdmin = false;
       } else if(angular.isDefined(response.token)) {
         localStorage.setItem('JWT', response.token);
-        app.$scope.global.authenticated = true;
+        //app.$scope.global.authenticated = true;
         var encodedProfile = decodeURI(b64_to_utf8(response.token.split('.')[1]));
         var payload = JSON.parse(encodedProfile);
         this.user = payload;

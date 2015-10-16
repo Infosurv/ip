@@ -1,5 +1,6 @@
 'use strict';
 
+console.log('user routes');
 
 function usersModule($meanStateProvider, $httpProvider, jwtInterceptorProvider) {    
     jwtInterceptorProvider.tokenGetter = function() {
@@ -30,7 +31,6 @@ function usersModule($meanStateProvider, $httpProvider, jwtInterceptorProvider) 
 
       return deferred.promise;
     };
-
 
     // states for my app
     $meanStateProvider
@@ -66,14 +66,6 @@ function usersModule($meanStateProvider, $httpProvider, jwtInterceptorProvider) 
           loggedin: checkLoggedOut
         }
       })
-      .state('home', {
-        url: '/home',
-        templateUrl: 'intengopear/views/index.html',
-        controller: 'IntengopearController',
-        resolve: {
-          loggedin: checkLoggedOut
-        }
-      })
       .state('admin', {
         url: '/admin',
         templateUrl: 'intengopear/views/admin.html'
@@ -86,7 +78,7 @@ function usersModule($meanStateProvider, $httpProvider, jwtInterceptorProvider) 
         url: '/:id/edit',
         templateUrl: 'intengopear/views/edit.html'
       });
-  }
+}
 
 //Setting up route
 angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwtInterceptorProvider', usersModule]);
