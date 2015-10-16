@@ -1,9 +1,7 @@
 'use strict';
 
-//Setting up route
-angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwtInterceptorProvider',
-  function($meanStateProvider, $httpProvider, jwtInterceptorProvider) {    
-        
+
+function usersModule($meanStateProvider, $httpProvider, jwtInterceptorProvider) {    
     jwtInterceptorProvider.tokenGetter = function() {
       return localStorage.getItem('JWT');
     };
@@ -12,7 +10,7 @@ angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwt
 
     // Check if the user is not connected
     var checkLoggedOut = function($q, $timeout, $http, $location) {
-      console.log('checkLoggedOut');
+      console.log('auth:checkLoggedOut');
 
       // Initialize a new promise
       var deferred = $q.defer();
@@ -23,12 +21,15 @@ angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwt
         
         // Authenticated
         if (user !== '0') {
+          console.log('user authenticated');
           $timeout(deferred.reject);
-          $location.url('/home');
+          //$location.url('/home');
+        } else {
+          console.log('user not authenticated');
+          $location.url('/auth/login');
+          // Not Authenticated
+          $timeout(deferred.resolve);
         }
-
-        // Not Authenticated
-        else $timeout(deferred.resolve);
       });
 
       return deferred.promise;
@@ -69,6 +70,13 @@ angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwt
           loggedin: checkLoggedOut
         }
       })
+      .state('home', {
+        url: '/home',
+        templateUrl: 'intengopear/views/index.html',
+        resolve: {
+          loggedin: checkLoggedOut
+        }
+      })
       .state('admin', {
         url: '/admin',
         templateUrl: 'intengopear/views/admin.html'
@@ -82,4 +90,6 @@ angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwt
         templateUrl: 'intengopear/views/edit.html'
       });
   }
-]);
+
+//Setting up route
+angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwtInterceptorProvider', usersModule]);

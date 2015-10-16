@@ -1,32 +1,18 @@
 'use strict';
 
 //Override the home routes
-//Setting up route
-angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider', function($meanStateProvider, $urlRouterProvider){
+// //Setting up route
+// angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider', function($meanStateProvider, $urlRouterProvider){
 
-var checkLoggedOut = function(){
-  console.log('Checking global auth status: ');
-  if(app.$scope.global.authenticated == false) window.location = '//intengopear.com/#/auth/login';
-  return false;
-}
 
-$meanStateProvider.state('index', {
-    url: '/home',
-    templateUrl: 'intengopear/views/index.html',
-    resolve: {
-      loggedin: checkLoggedOut
-    }
-  });
-}
-
-]).config(['$locationProvider',
-  function($locationProvider) {
-    $locationProvider.html5Mode({
-      enabled: false,
-      requireBase: false
-    });
-  }
-]);
+// ]).config(['$locationProvider',
+//   function($locationProvider) {
+//     $locationProvider.html5Mode({
+//       enabled: false,
+//       requireBase: false
+//     });
+//   }
+// ]);
 
 
 //Setting up route
