@@ -1,10 +1,11 @@
 'use strict';
 
-/* TODOS:
-increment a win number for each answer on selection
-increment a loss number for each answer on selection
-add a loser id to the response object
-*/
+//Assign the controllers to the main module
+Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', '$state', '$stateParams', 'loggedin', IntengopearController]);	
+Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$http', QuestionController ]);	
+Intengopear.controller('AnswerController', ['$scope', '$stateParams', '$http', 'Global', AnswerController ]);	
+Intengopear.controller('IpController', ['$scope', '$stateParams', 'Ip', '$sce', IpController ]);	
+Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	
 
 //Global methods - maybe need to scope these to an app object or something
 function findById(collection, id){
@@ -558,10 +559,3 @@ function IpController($scope, $stateParams, Ip, $sce){
 
 	window.App 		= $scope.App;
 }	
-
-//Assign the controllers to the main module
-Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', '$state', '$stateParams', 'loggedin', IntengopearController]);	
-Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$http', QuestionController ]);	
-Intengopear.controller('AnswerController', ['$scope', '$stateParams', '$http', 'Global', AnswerController ]);	
-Intengopear.controller('IpController', ['$scope', '$stateParams', 'Ip', '$sce', IpController ]);	
-Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	

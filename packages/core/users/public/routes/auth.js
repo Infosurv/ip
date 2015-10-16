@@ -69,6 +69,7 @@ function usersModule($meanStateProvider, $httpProvider, jwtInterceptorProvider) 
       .state('home', {
         url: '/home',
         templateUrl: 'intengopear/views/index.html',
+        controller: 'IntengopearController',
         resolve: {
           loggedin: checkLoggedOut
         }
