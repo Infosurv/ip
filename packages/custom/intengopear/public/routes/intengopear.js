@@ -13,7 +13,7 @@ function IntengoPearModule($meanStateProvider, $httpProvider, jwtInterceptorProv
 
     // Check if the user is not connected - should be called toLogOut
     var isLoggedIn = function($q, $timeout, $http, $location) {
-      console.log('auth:isLoggedIn');
+      console.log('intengopear:isLoggedIn');
 
       // Initialize a new promise
       var deferred = $q.defer();
@@ -21,21 +21,11 @@ function IntengoPearModule($meanStateProvider, $httpProvider, jwtInterceptorProv
       // Make an AJAX call to check if the user is logged in
       $http.get('/api/loggedin').success(function(user) {
         console.log('Authenticated status: ', user);
-        
-        // Authenticated - theyre not logged out, so reject. A resolved means they are logged out.
-        if (user !== '0') {
-          console.log('user is authed');
-          //window.location.href = 'http://intengopear.com/#/home';
-          $timeout(deferred.reject);
-        } else {
-          console.log('Not authed');
-          // Not Authenticated
-          //window.location.href = 'http://intengopear.com/#/auth/login';
-          $timeout(deferred.resolve);
-        }
+        deferred.resolve(user);
       });
 
       return deferred.promise;
+
     };
 
     // states for my app

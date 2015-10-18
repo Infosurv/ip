@@ -10,9 +10,17 @@ Intengopear.controller('IntengopearController', ['$scope', 'Global', 'Project', 
 function IntengopearController ($scope, Global, Project, $state, $stateParams, loggedin){
     console.log('Intengopear Controller');
 	console.log('loggedin: ', loggedin);
-
+    //TODO: Convert to state.go
+    if(loggedin == '0') {
+        console.log('here', loggedin);
+        window.location.href = 'http://intengopear.com/#/auth/login';
+        return;
+    }
+    
 	var survey_id = 20;
 	var uid       = 2;
+
+
     
 
     window.app          = (typeof window.app !== 'undefined') ? window.app : {};
