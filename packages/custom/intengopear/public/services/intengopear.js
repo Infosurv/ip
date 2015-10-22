@@ -13,7 +13,19 @@ angular.module('mean.intengopear').factory('Intengopear', [function() {
 angular.module('mean.intengopear').factory('Project', ['$resource', function($resource){
  var Project   = {
     'name' : 'ProjectService'
-  }
+  };
+
+  Project.init = function($scope, Global){
+    var survey_id = 20;
+    var uid       = 2;
+
+    window.app          = (typeof window.app !== 'undefined') ? window.app : {};
+    app.Project         = Project;
+
+    app.$scope          = $scope;
+    app.$scope.global   = Global;
+    app.$scope.data     = Project.data = Project.Resources.Project.get({survey_id: survey_id, uid: uid});
+  };
 
   var ProjectResource   = $resource('http://dev.intengodev.com/api/pairwise/:survey_id/:uid', {survey_id:'@survey_id', uid:'@uid'},{ 
     'get':    {method:'GET'},
@@ -47,5 +59,6 @@ angular.module('mean.intengopear').factory('Project', ['$resource', function($re
     'Project'   : ProjectResource,
     'Answer'    : AnswerResource  
   }
+
   return Project;
 }]);

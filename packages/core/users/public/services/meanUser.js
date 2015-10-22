@@ -48,8 +48,6 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
     }
 
     MeanUserKlass.prototype.onIdentity = function(response) {
-      console.log('Identity check: ', response);
-
       this.loginError = 0;
       this.loggedin = true;
       this.registerError = 0;

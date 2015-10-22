@@ -2,15 +2,16 @@
 
 var Intengopear = angular.module('mean.intengopear');
 
-Intengopear.controller('IpController', ['$scope', '$stateParams', 'Ip', '$sce', IpController ]);	
+Intengopear.controller('IpController', ['$scope', 'Project', 'Global', '$stateParams', 'Ip', '$sce', IpController ]);	
 Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	
 
 function IpAdminController($scope, Global, Project, Intengopear, $state){
 	$scope.global 		= Global;
 }
 
-function IpController($scope, $stateParams, Ip, $sce){
-	//TODO: Test this post message functionality
+function IpController($scope, Project, Global, $stateParams, Ip, $sce){
+	Project.init($scope, Global);
+
 	window.addEventListener('message',function(evt){
 		 $scope.augmentScope(evt);
 	}, false);

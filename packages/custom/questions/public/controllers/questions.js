@@ -1,21 +1,12 @@
 'use strict';
 
-console.log('Questions Controller');
-
 var Intengopear = angular.module('mean.intengopear');
 
-Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$http', QuestionController ]);	
+Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$http', QuestionController]);	
 
 function QuestionController($scope, $state, $stateParams, Global, Project, $http){
-	var survey_id = 20;
-	var uid       = 2;
-	
-	window.app          = (typeof window.app !== 'undefined') ? window.app : {};
-    app.Project         = Project;
-    app.$scope          = $scope;
-    app.$scope.global   = Global;
-    app.$scope.data 	= Project.data = Project.Resources.Project.get({survey_id: survey_id, uid: uid});
-
+	Project.init($scope, Global);
+    
 	var survey_name, survey_id = $stateParams.survey_id;
 	$scope.stateParams  = $stateParams;
 	Project.data 		= app.Project.data;
