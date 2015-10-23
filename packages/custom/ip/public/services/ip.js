@@ -2,7 +2,7 @@
 
 angular.module('mean.ip').factory('Ip', ['$resource', '$stateParams', function($resource, $stateParams) {
 
-	var IpResource   = $resource('http://intengopear.com/api/ip/:survey_id/:question_id', {survey_id:'@survey_id', question_id:'@question_id'},{ 
+	var IpResource   = $resource('http://ideas.intengoresearch.com/api/ip/:survey_id/:question_id', {survey_id:'@survey_id', question_id:'@question_id'},{ 
     'get':    {method:'GET'},
     'save':   {method:'POST'},
     'query':  {method:'GET'},
@@ -15,7 +15,7 @@ angular.module('mean.ip').factory('Ip', ['$resource', '$stateParams', function($
 		http: IpResource,
 		postDataPacket: function($event){
 			var dataPacket = this.recordSelection($event);
-			this.http.post('http://intengopear.com/api/ip', dataPacket).success(function(resp, status, headers, config){
+			this.http.post('http://ideas.intengoresearch.com/api/ip', dataPacket).success(function(resp, status, headers, config){
 				console.log('success: ', resp);
 			}).error(function(resp, status, headers, config){
 				console.error('error: ', resp);
