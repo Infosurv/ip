@@ -21,14 +21,3 @@ function IntengopearController ($rootScope, $scope, Global, Project, $state, $st
       name: 'intengopear'
     };
 }
-
-//Global methods - maybe need to scope these to an app object or something
-function findById(collection, id){
-	var item;
-
-	angular.forEach(collection, function(elem, idx){
-		if(id === elem._id) item = collection[idx];
-	});
-
-	return item;
-}

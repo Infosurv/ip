@@ -25,6 +25,16 @@ angular.module('mean.intengopear').factory('Project', ['$resource', function($re
     app.$scope          = $scope;
     app.$scope.global   = Global;
     app.$scope.data     = Project.data = Project.Resources.Project.get({survey_id: survey_id, uid: uid});
+
+    window.findById = function(collection, id){
+      var item;
+
+      angular.forEach(collection, function(elem, idx){
+        if(id === elem._id) item = collection[idx];
+      });
+
+      return item;
+    }
   };
 
   var ProjectResource   = $resource('http://dev.intengodev.com/api/pairwise/:survey_id/:uid', {survey_id:'@survey_id', uid:'@uid'},{ 
