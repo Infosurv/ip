@@ -1,5 +1,7 @@
 'use strict';
 
+angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwtInterceptorProvider', usersModule]);
+
 function usersModule($meanStateProvider, $httpProvider, jwtInterceptorProvider) {    
     jwtInterceptorProvider.tokenGetter = function() {
       return localStorage.getItem('JWT');
@@ -61,6 +63,3 @@ function usersModule($meanStateProvider, $httpProvider, jwtInterceptorProvider) 
         templateUrl: 'intengopear/views/admin.html'
       });
 }
-
-//Setting up route
-angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwtInterceptorProvider', usersModule]);
