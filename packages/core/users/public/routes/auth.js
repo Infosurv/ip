@@ -17,7 +17,7 @@ function usersModule($meanStateProvider, $httpProvider, jwtInterceptorProvider) 
       // Make an AJAX call to check if the user is logged in
       $http.get('/api/loggedin').success(function(user) {
         deferred.resolve(user);
-        if(user !== '0') window.location = 'http://intengopear.com/#/home';
+        if(user !== '0') window.location = 'http://'+ window.location.hostname +'/#/home';
       });
 
       return deferred.promise;
