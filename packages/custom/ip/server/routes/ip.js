@@ -17,8 +17,11 @@ module.exports = function(Ip, app, auth, database) {
   app.route('/api/ip/ext/export/questions/:question_id')
   .get(IpController.exportResults);
 
-  //Get all the standard data for a project
-  //The index method requires a question_id
+  app.route('/api/ip/ext/export/votes/:question_id')
+  .get(IpController.exportVotes);
+
+  //Get all the standard data for a project for the intengoresearch dashboard
+  //The index method requires a survey_id only
   app.route('/api/ip/ext/:survey_id?/:question_id?')
   .get(IpController.index)
   .post(IpController.storeResponse);

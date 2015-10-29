@@ -168,3 +168,20 @@ exports.exportResults   = function(req, res, next){
     });      
   });
 }
+
+exports.exportVotes   = function(req, res, next){
+  res.send('export results');
+  return;
+  
+  var question_id = req.params.question_id;
+  var projectData = {};
+  
+  Question.findOne({_id: question_id}, function(err, question){
+    projectData.question = question;
+
+    Answer.find({'question_id': question_id}, function(err, answers){
+        projectData.answers = answers;
+        res.status(200).json(projectData);
+    });      
+  });
+}
