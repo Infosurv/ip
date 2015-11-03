@@ -44,16 +44,20 @@ function IpController($scope, Project, Global, $stateParams, Ip, $sce){
 	}
 
 	$scope.init  	= function (){
+		console.log('1');
 		var startTime  		= new Date().getTime();
 		$scope.answer1 		= $scope.pluckOne($scope.answers);
 		$scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
 		$scope.answer1.startTime = startTime;
 		$scope.answer1.placement = 'left';
 
+		console.log('2');
 		$scope.answer2 		= $scope.pluckOne($scope.answers);
 		$scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
 		$scope.answer2.startTime = startTime;
 		$scope.answer2.placement = 'right';
+		console.log('3');
+
 
 		$scope.pair    		= [$scope.answer1, $scope.answer2];
 	}

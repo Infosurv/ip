@@ -26,7 +26,10 @@ module.exports = function(Ip, app, auth, database) {
   .get(IpController.index)
   .post(IpController.storeResponse);
 
-  //Internal Routes
+  /* Internal Routes
+  ** Get: 
+  ** Post: 
+  */
   app.route('/api/ip/:survey_id?/:question_id?')
   .get(IpController.find)
   .post(IpController.storeResponse);

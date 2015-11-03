@@ -11,6 +11,13 @@ var Response      = mongoose.model('Response');
 var async 			  = require('async');
 var config 			  = require('meanio').loadConfig();
 var crypto 			  = require('crypto');
+var util          = require('util');
+
+function getHost(){
+  var host = (window.location.host.indexOf('dev') > -1 || window.location.host.indexOf('pear') > -1) ? 'http://intengopear.com' : 'http://ideas.intengoresearch.com';
+  console.log('host: ', host);
+  return host;
+}
 
 function resolvePlacement(req){
   var isTie     = typeof req.body.indecision_option_id !== 'undefined', placement;
@@ -73,7 +80,7 @@ exports.index 	= function(req, res, next) {
       projectData.questions   = questions;
 
       projectData.iFrameData  = {
-        src: 'http://ideas.intengoresearch.com/#/ip',
+        src: getHost() + '/#/ip',
         survey_id: survey_id,
         question_id: question_id
       }
@@ -169,10 +176,7 @@ exports.exportResults   = function(req, res, next){
   });
 }
 
-exports.exportVotes   = function(req, res, next){
-  res.send('export results');
-  return;
-  
+exports.exportVotes   = function(req, res, next){  
   var question_id = req.params.question_id;
   var projectData = {};
   
@@ -181,7 +185,12 @@ exports.exportVotes   = function(req, res, next){
 
     Answer.find({'question_id': question_id}, function(err, answers){
         projectData.answers = answers;
-        res.status(200).json(projectData);
+
+        Response.find({'survey_id': question.survey_id}, function(err, responses){
+          projectData.responses = responses;
+          res.status(200).json(projectData);
+          return;
+        });
     });      
   });
 }
