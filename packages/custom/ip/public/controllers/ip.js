@@ -43,21 +43,27 @@ function IpController($scope, Project, Global, $stateParams, Ip, $sce){
 		$scope.next_page = next_page;
 	}
 
+	$scope.getStartTime = function(){
+		return new Date().getTime();
+	}
+
 	$scope.init  	= function (){
-		console.log('1');
-		var startTime  		= new Date().getTime();
+		console.log('IpController:init');
+
+		var startTime  		= $scope.getStartTime();
 		$scope.answer1 		= $scope.pluckOne($scope.answers);
 		$scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
 		$scope.answer1.startTime = startTime;
+		
+		console.log('A1 startTime', startTime);
 		$scope.answer1.placement = 'left';
 
-		console.log('2');
 		$scope.answer2 		= $scope.pluckOne($scope.answers);
 		$scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
 		$scope.answer2.startTime = startTime;
-		$scope.answer2.placement = 'right';
-		console.log('3');
 
+		console.log('A2 startTime', startTime);
+		$scope.answer2.placement = 'right';
 
 		$scope.pair    		= [$scope.answer1, $scope.answer2];
 	}
@@ -134,7 +140,8 @@ function IpController($scope, Project, Global, $stateParams, Ip, $sce){
 		}
 		$scope.selection.losing_answer_id = answer_id;
 
-		$scope.selection.end_time = new Date().getTime();
+		$scope.selection.end_time = $scope.getStartTime();
+		console.log('selection: ', $scope.selection);
 
 		delete $scope.selection.$binding;
 	}
@@ -142,9 +149,11 @@ function IpController($scope, Project, Global, $stateParams, Ip, $sce){
 	$scope.repopulateQuestion = function(){
 		$('.votebox.answers').fadeOut(100, function(){
 			$scope.answer1 	= $scope.pluckOne($scope.answers);
+			$scope.answer1.startTime = $scope.getStartTime();
 			$scope.answer1.placement = 'left';
 
 			$scope.answer2 	= $scope.pluckOne($scope.answers);
+			$scope.answer2.startTime = $scope.getStartTime();
 			$scope.answer2.placement = 'right';
 
 			if(typeof $scope.answer1 !== 'undefined' && typeof $scope.answer1.text !== 'object') $scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);

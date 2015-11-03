@@ -13,9 +13,9 @@ var config 			  = require('meanio').loadConfig();
 var crypto 			  = require('crypto');
 var util          = require('util');
 
-function getHost(){
-  var host = (window.location.host.indexOf('dev') > -1 || window.location.host.indexOf('pear') > -1) ? 'http://intengopear.com' : 'http://ideas.intengoresearch.com';
-  console.log('host: ', host);
+function getHost(req){
+  var host = (req.hostname.indexOf('dev') > -1 || req.hostname.indexOf('pear') > -1) ? 'http://intengopear.com' : 'http://ideas.intengoresearch.com';
+  console.log('host: ' + host);
   return host;
 }
 
@@ -80,7 +80,7 @@ exports.index 	= function(req, res, next) {
       projectData.questions   = questions;
 
       projectData.iFrameData  = {
-        src: getHost() + '/#/ip',
+        src: getHost(req) + '/#/ip',
         survey_id: survey_id,
         question_id: question_id
       }
