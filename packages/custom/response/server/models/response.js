@@ -52,6 +52,10 @@ var ResponseSchema = new Schema({
 	placement: {
 		type: String,
 		required: false
+	},
+	created: {
+		type: Date, 
+		default: Date.now
 	}
 });
 
