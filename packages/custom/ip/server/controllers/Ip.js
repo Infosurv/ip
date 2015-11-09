@@ -217,6 +217,9 @@ exports.clearData       = function(req, res, next){
               'right' : 0,
               'left'  : 0
             },
+            {
+              multi: true
+            },
             function(err, data){
                 if (err) {
                   console.log('Data reset error: ');
