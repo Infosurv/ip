@@ -196,7 +196,43 @@ exports.exportVotes     = function(req, res, next){
 }
 
 exports.clearData       = function(req, res, next){
+  var survey_id = req.params.survey_id;
+  var questions;
+
   console.log('clearing data: ');
-  res.send('<h1>Im a success</h1>');
+
+  Question.find({'survey_id': survey_id}, function(err, _questions){
+        questions = _questions;
+
+        for(var i = 0; i < questions.length; i++){
+          var question = questions[i];
+          var qid      = question._id;
+
+          console.log('Attempting to update: ' + qid);
+          Answer.update({'question_id' : qid},
+            {
+              'wins'  : 0,
+              'losses': 0,
+              'ties'  : 0,
+              'right' : 0,
+              'left'  : 0
+            },
+            function(err, data){
+                if (err) {
+                  console.log('Data reset error: ');
+                  console.log(err);
+
+                } else if (! data){
+                  console.log('No data found.');
+                } else {
+                    console.log('successfully updated: ');
+                    console.log(util.inspect(data));
+                }
+            }
+          );
+        }
+
+        res.send('data cleared');
+    }); 
 } 
 
