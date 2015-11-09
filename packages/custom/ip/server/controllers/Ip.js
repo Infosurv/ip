@@ -208,11 +208,11 @@ exports.clearData       = function(req, res, next){
           var question = questions[i];
           var qid      = question._id;
 
-          console.log('Attempting to update: ' + qid);
+          console.log('Attempting to update question: ' + qid);
           Answer.update({'question_id' : qid},
             {
               'wins'  : 0,
-              'losses': 0,
+              'losses': '0',
               'ties'  : 0,
               'right' : 0,
               'left'  : 0
@@ -225,8 +225,7 @@ exports.clearData       = function(req, res, next){
                 } else if (! data){
                   console.log('No data found.');
                 } else {
-                    console.log('successfully updated: ');
-                    console.log(util.inspect(data));
+                    console.log('successfully updated: ' + data.nModified + ' items.');
                 }
             }
           );
