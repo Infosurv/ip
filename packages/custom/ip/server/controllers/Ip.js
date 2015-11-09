@@ -197,7 +197,7 @@ exports.exportVotes     = function(req, res, next){
 
 exports.clearData       = function(req, res, next){
   var survey_id = req.params.survey_id;
-  var questions;
+  var questions, errors = [];
 
   console.log('clearing data: ');
 
@@ -224,7 +224,7 @@ exports.clearData       = function(req, res, next){
                 if (err) {
                   console.log('Data reset error: ');
                   console.log(err);
-
+                  errors.push(err);
                 } else if (! data){
                   console.log('No data found.');
                 } else {
@@ -232,9 +232,15 @@ exports.clearData       = function(req, res, next){
                 }
             }
           );
+
+          Response.find({ question_id : qid }).remove().exec();
         }
 
-        res.send('data cleared');
+        if(errors.length == 0) {
+          res.send('data cleared');
+        } else {
+          res.send('data error');
+        }
     }); 
 } 
 
