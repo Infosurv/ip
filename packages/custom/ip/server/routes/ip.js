@@ -13,6 +13,9 @@ module.exports = function(Ip, app, auth, database) {
   });
 
   //External Routes
+  app.route('/api/:survey_id/clearData')
+  .get(IpController.clearData);
+
   //Get specific data about a question
   app.route('/api/ip/ext/export/questions/:question_id')
   .get(IpController.exportResults);
