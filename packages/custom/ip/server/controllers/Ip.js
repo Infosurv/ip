@@ -196,11 +196,7 @@ exports.exportVotes     = function(req, res, next){
 }
 
 exports.clearData       = function(req, res, next){
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   console.log('clearing data: ');
   res.send('<h1>Im a success</h1>');
-
-  next();
 } 
 
