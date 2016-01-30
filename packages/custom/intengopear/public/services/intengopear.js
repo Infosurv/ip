@@ -37,7 +37,7 @@ angular.module('mean.intengopear').factory('Project', ['$resource', function($re
     }
   };
 
-  var ProjectResource   = $resource('http://dev.intengodev.com/api/pairwise/:survey_id/:uid', {survey_id:'@survey_id', uid:'@uid'},{ 
+  var ProjectResource   = $resource('http://intengodev.com/api/pairwise/:survey_id/:uid', {survey_id:'@survey_id', uid:'@uid'},{ 
     'get':    {method:'GET'},
     'save':   {method:'POST'},
     'query':  {method:'GET'},
