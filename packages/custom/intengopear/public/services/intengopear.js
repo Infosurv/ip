@@ -10,7 +10,13 @@ angular.module('mean.intengopear').factory('Intengopear', [function() {
   }
 ]);
 
-angular.module('mean.intengopear').factory('Project', ['$resource', function($resource){
+angular.module('mean.intengopear').factory('Project', ['$resource', '$httpProvider', function($resource, $httpProvider){
+  //Reset headers to avoid OPTIONS request (aka preflight)
+  $httpProvider.defaults.headers.common = {};
+  $httpProvider.defaults.headers.post = {};
+  $httpProvider.defaults.headers.put = {};
+  $httpProvider.defaults.headers.patch = {};
+
  var Project   = {
     'name' : 'ProjectService'
   };
