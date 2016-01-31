@@ -30,6 +30,7 @@ body { background-color: initial; }
 	background-color: #90ca55;
 }
 
+
 h2.vote-question.row { margin: 0 auto 20px; }
 ul.votebox { list-style: none; margin: 0 5px 0 0; }
 ul.votebox li { 
@@ -48,6 +49,7 @@ ul.votebox li a {
 	box-sizing: border-box;
 	padding: 40px 50px;
 	background: #399ec5;
+	white-space: initial;
 }
 
 ul.votebox li a img {
