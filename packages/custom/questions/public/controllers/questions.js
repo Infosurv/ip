@@ -27,14 +27,21 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
     }
 
 	Project.data.$promise.then(function(data){
+		//console.log('project data returned: ', data);
+
 		$scope.question    	= {};
 
 		//Retrieve the cached the survey name and id for reload
 	    survey_id 		= (localStorage.getItem('survey_id')   !== null && localStorage.getItem('survey_id')   !== 'undefined' && localStorage.getItem('survey_id').length > 0) ? localStorage.getItem('survey_id') : $stateParams.survey_id;
 	    survey_name 	= (localStorage.getItem('survey_name') !== null && localStorage.getItem('survey_name') !== 'undefined' && localStorage.getItem('survey_name').length > 0) ? localStorage.getItem('survey_name') : $scope.data.survey.name;
+	    
+		$scope.data.survey.id 	= survey_id;
+		$scope.survey_name  	= survey_name;
 
-		$scope.survey_name  = survey_name;
 		app.Project.Resources.Question.get({ survey_id: survey_id }).$promise.then(function(questions){
+		   // console.log('fetching question data: ', questions);
+		   // console.log('attatching to Project.data.survey', Project.data);
+
 		   $scope.questions = window.questions = Project.questions = questions;
 		   Project.data.survey.questions = $scope.questions;
 
@@ -125,6 +132,7 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 
 		window.questionTimer = window.setTimeout(function(){
 			var newQuestion;
+			//text not updating for description. $scope value is incorrect
 
 			if(typeof idx === 'undefined'){
 				newQuestion = findById(questions, $scope.stateParams.id);
@@ -145,6 +153,7 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 	//Internal methods not exposed to the DOM
 	function createQuestion($http, question, survey_id){
 		question.survey_id = survey_id;
+
 		var req = $http.post('/api/questions', question);
 		return req;
 	}

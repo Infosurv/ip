@@ -10,12 +10,8 @@ angular.module('mean.intengopear').factory('Intengopear', [function() {
   }
 ]);
 
-angular.module('mean.intengopear').factory('Project', ['$resource', '$httpProvider', function($resource, $httpProvider){
+angular.module('mean.intengopear').factory('Project', ['$resource', function($resource, $httpProvider){
   //Reset headers to avoid OPTIONS request (aka preflight)
-  $httpProvider.defaults.headers.common = {};
-  $httpProvider.defaults.headers.post = {};
-  $httpProvider.defaults.headers.put = {};
-  $httpProvider.defaults.headers.patch = {};
 
  var Project   = {
     'name' : 'ProjectService'
@@ -43,14 +39,13 @@ angular.module('mean.intengopear').factory('Project', ['$resource', '$httpProvid
     }
   };
 
-  var ProjectResource   = $resource('http://intengodev.com/api/pairwise/:survey_id/:uid', {survey_id:'@survey_id', uid:'@uid'},{ 
+  var ProjectResource   = $resource('http://www.intengodev.com/api/pairwise/:survey_id/:uid', {survey_id:'@survey_id', uid:'@uid'},{ 
     'get':    {method:'GET'},
     'save':   {method:'POST'},
     'query':  {method:'GET'},
     'remove': {method:'DELETE'},
     'delete': {method:'DELETE'} 
   });
-  
 
   var QuestionsResource = $resource('api/questions', {question_id: '@question_id' },{ 
     'get':    {method:'GET', isArray: true},
