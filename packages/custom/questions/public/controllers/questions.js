@@ -5,8 +5,8 @@ var Intengopear = angular.module('mean.intengopear');
 Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$http', QuestionController]);	
 
 function QuestionController($scope, $state, $stateParams, Global, Project, $http){
-	Global.survey_id = $stateParams.survey_id;
-	Project.init($scope, Global);
+	Global.survey_id 	= $stateParams.survey_id;
+	var projectPromise 	= Project.init($scope, Global);
     
 	var survey_name, survey_id = $stateParams.survey_id;
 	$scope.stateParams  = $stateParams;
@@ -27,23 +27,21 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
     	}
     }
 
-	Project.data.$promise.then(function(data){
-		//console.log('project data returned: ', data);
-
-		$scope.question    	= {};
+	projectPromise.then(function(data){
+		Project.data 			= data; 
+		$scope.question 		= {};
 
 		//Retrieve the cached the survey name and id for reload
-	    survey_id 		= (localStorage.getItem('survey_id')   !== null && localStorage.getItem('survey_id')   !== 'undefined' && localStorage.getItem('survey_id').length > 0) ? localStorage.getItem('survey_id') : $stateParams.survey_id;
-	    survey_name 	= (localStorage.getItem('survey_name') !== null && localStorage.getItem('survey_name') !== 'undefined' && localStorage.getItem('survey_name').length > 0) ? localStorage.getItem('survey_name') : $scope.data.survey.name;
+	    survey_id 				= (localStorage.getItem('survey_id')   !== null && localStorage.getItem('survey_id')   !== 'undefined' && localStorage.getItem('survey_id').length > 0) ? localStorage.getItem('survey_id') : $stateParams.survey_id;
+	    survey_name 			= (localStorage.getItem('survey_name') !== null && localStorage.getItem('survey_name') !== 'undefined' && localStorage.getItem('survey_name').length > 0) ? localStorage.getItem('survey_name') : data.survey.name;
 	    
-		$scope.data.survey.id 	= survey_id;
+		$scope.data.survey 		= data.survey;
 		$scope.survey_name  	= survey_name;
 
-		app.Project.Resources.Question.get({ survey_id: survey_id }).$promise.then(function(questions){
-		   // console.log('fetching question data: ', questions);
-		   // console.log('attatching to Project.data.survey', Project.data);
-
+		var questionPromise = app.Project.Resources.Question.get({ survey_id: survey_id }).$promise;
+		questionPromise.then(function(questions){
 		   $scope.questions = window.questions = Project.questions = questions;
+		   
 		   Project.data.survey.questions = $scope.questions;
 
 		    //Populates the values of the question to edit
@@ -67,6 +65,15 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 		$('#questions .selected').removeClass('selected');
 		$(evt.currentTarget).parent().parent().parent().addClass('selected');
 	}
+
+	$scope.displayMessage = function(status, message){
+		var klass = (status == 'success') ? 'alert-success' : 'alert-error';
+		$('#msg').removeAttr('class');
+		$('#msg').addClass(klass);
+
+		$('#msg p').text(message);
+		$('#msg').fadeIn(100);
+	};
 
 	//Publicly callable handlers from the dom
 	$scope.toggleQuestionForm = function($event){
@@ -128,9 +135,7 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 	};
 
 	$scope.update = function($event, idx){
-
 		if(typeof window.questionTimer !== 'undefined') {
-			debugger;
 			window.clearTimeout(window.questionTimer);
 		}
 		$scope.evt = $event;
@@ -148,11 +153,14 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 				// newQuestion.secondaryDelay = secondaryDelay;
 				// newQuestion.delay = delay;
 			} else {
-				debugger;
 				question = questions[idx];
 			}
 
-			return app.Project.Resources.Question.update(question);
+			var updatePromise = app.Project.Resources.Question.update(question).$promise;
+			updatePromise.then(function(question){
+				$scope.displayMessage('success', 'Your question has been updated!');
+			});
+
 		}, 1000);
 		//var req = $http.post('/api/questions/' + question._id, question);
 	}

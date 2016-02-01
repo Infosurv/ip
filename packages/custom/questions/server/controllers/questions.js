@@ -40,7 +40,7 @@ exports.update 		  	= function(req, res, next){
 	
 	Question.findOneAndUpdate(query, data, function(err, doc){
 		if (err) return res.send(500, { error: err });
-    	return res.send("succesfully saved");
+    	return res.send(data);
 	});
 };
 

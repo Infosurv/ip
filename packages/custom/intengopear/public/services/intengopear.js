@@ -16,15 +16,15 @@ angular.module('mean.intengopear').factory('Project', ['$resource', function($re
   };
 
   Project.init = function($scope, Global){
-    var survey_id = Project.getSurveyId(Global);
-    var uid       = 2;
+    var survey_id       = Project.getSurveyId(Global);
+    var uid             = 2;
 
     window.app          = (typeof window.app !== 'undefined') ? window.app : {};
     app.Project         = Project;
 
     app.$scope          = $scope;
     app.$scope.global   = Global;
-    app.$scope.data     = Project.data = Project.Resources.Project.get({survey_id: survey_id, uid: uid});
+    app.$scope.data     = Project.data = Project.Resources.Project.get({survey_id: survey_id, uid: uid}).$promise;
 
     window.findById = function(collection, id){
       var item;
@@ -35,6 +35,8 @@ angular.module('mean.intengopear').factory('Project', ['$resource', function($re
 
       return item;
     }
+
+    return app.$scope.data;
   };
 
   Project.getSurveyId = function(Global){
