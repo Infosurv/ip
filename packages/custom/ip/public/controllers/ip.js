@@ -35,7 +35,7 @@ function IpController($scope, Project, Global, $stateParams, Ip, $sce){
 	}
 
 	$scope.augmentScope = function(evt) {
-		if(event.origin.indexOf('intengo') < 0) return;
+		if(evt.origin.indexOf('intengo') < 0) return;
 		var user_id 	= evt.data.user_id;
 		var next_page 	= evt.data.next_page;
 		
