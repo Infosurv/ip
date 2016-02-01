@@ -67,7 +67,7 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 	}
 
 	$scope.displayMessage = function(status, message){
-		var klass = (status == 'success') ? 'alert-success' : 'alert-error';
+		var klass = (status == 'success') ? 'alert alert-success' : 'alert alert-error';
 		$('#msg').removeAttr('class');
 		$('#msg').addClass(klass);
 
