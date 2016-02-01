@@ -22,7 +22,8 @@ var QuestionSchema = new Schema({
 	},
 	indecision_options: {
 		type: String,
-		required: false
+		required: false,
+		default: ['I like both options the same', 'I dislike both options the same', 'I don\'t know enough about either option']
 	},
 	description: {
 		type: String,
@@ -30,11 +31,13 @@ var QuestionSchema = new Schema({
 	},
 	delay: {
 		type: Schema.Types.Mixed,
-		required: false
+		required: false,
+		default: 5000
 	},
 	secondaryDelay: {
 		type: Schema.Types.Mixed,
-		required: false
+		required: false,
+		default: 2500
 	},
 	styles: {
 		type: String,

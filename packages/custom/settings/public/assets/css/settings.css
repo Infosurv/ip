@@ -1,0 +1,12 @@
+a.settings { display: none; }
+a.settings {
+  position: absolute;
+  top: 1%;
+  right: 1%;
+  color: #333;
+  font-size: 14pt;
+}
+
+a.settings:hover {
+  color: #337ab7;
+}

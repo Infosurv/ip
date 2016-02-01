@@ -8,6 +8,7 @@ Intengopear.controller('IntengopearController', ['$rootScope', '$scope', 'Global
 
 //Controller Definitions
 function IntengopearController ($rootScope, $scope, Global, Project, $state, $stateParams, loggedin){
+	Global.survey_id = $stateParams.survey_id;
     Project.init($scope, Global);
     
     if(loggedin === "0") {

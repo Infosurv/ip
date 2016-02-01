@@ -5,6 +5,7 @@ var Intengopear = angular.module('mean.intengopear');
 Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$http', QuestionController]);	
 
 function QuestionController($scope, $state, $stateParams, Global, Project, $http){
+	Global.survey_id = $stateParams.survey_id;
 	Project.init($scope, Global);
     
 	var survey_name, survey_id = $stateParams.survey_id;
@@ -127,25 +128,31 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 	};
 
 	$scope.update = function($event, idx){
-		if(typeof window.questionTimer !== 'undefined') window.clearTimeout(window.questionTimer);
+
+		if(typeof window.questionTimer !== 'undefined') {
+			debugger;
+			window.clearTimeout(window.questionTimer);
+		}
 		$scope.evt = $event;
 
 		window.questionTimer = window.setTimeout(function(){
-			var newQuestion;
+			var question;
 			//text not updating for description. $scope value is incorrect
 
 			if(typeof idx === 'undefined'){
-				newQuestion = findById(questions, $scope.stateParams.id);
-				var delay 				= Number(newQuestion.delay);
-				var secondaryDelay 		= Number(newQuestion.secondaryDelay);
+				question = $scope.question;
+				// var delay 				= Number(newQuestion.delay);
+				// var secondaryDelay 		= Number(newQuestion.secondaryDelay);
+				// var indecision_options  = $scope.question.indecision_options;
 
-				newQuestion.secondaryDelay = secondaryDelay;
-				newQuestion.delay = delay;
+				// newQuestion.secondaryDelay = secondaryDelay;
+				// newQuestion.delay = delay;
 			} else {
-				newQuestion = questions[idx];
+				debugger;
+				question = questions[idx];
 			}
 
-			return app.Project.Resources.Question.update(newQuestion);
+			return app.Project.Resources.Question.update(question);
 		}, 1000);
 		//var req = $http.post('/api/questions/' + question._id, question);
 	}

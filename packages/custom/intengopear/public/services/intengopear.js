@@ -10,15 +10,13 @@ angular.module('mean.intengopear').factory('Intengopear', [function() {
   }
 ]);
 
-angular.module('mean.intengopear').factory('Project', ['$resource', function($resource, $httpProvider){
-  //Reset headers to avoid OPTIONS request (aka preflight)
-
+angular.module('mean.intengopear').factory('Project', ['$resource', function($resource){
  var Project   = {
     'name' : 'ProjectService'
   };
 
   Project.init = function($scope, Global){
-    var survey_id = 20;
+    var survey_id = Project.getSurveyId(Global);
     var uid       = 2;
 
     window.app          = (typeof window.app !== 'undefined') ? window.app : {};
@@ -38,6 +36,11 @@ angular.module('mean.intengopear').factory('Project', ['$resource', function($re
       return item;
     }
   };
+
+  Project.getSurveyId = function(Global){
+    if(typeof Global.survey_id == 'undefined' ) return 20; //Initial Load on the home screen since no project is selected
+    if(typeof Global.survey_id !== 'undefined') return Global.survey_id;
+  }
 
   var ProjectResource   = $resource('http://www.intengodev.com/api/pairwise/:survey_id/:uid', {survey_id:'@survey_id', uid:'@uid'},{ 
     'get':    {method:'GET'},
