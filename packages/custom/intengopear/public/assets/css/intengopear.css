@@ -207,3 +207,22 @@ footer p {
 #questions .question.selected .tools .fa-pencil, #questions .question.selected .tools .fa-code, #questions .question.selected .tools .fa-remove {
   color: #fff;
 }
+
+#nav {
+  position: absolute;
+  top: 1%;
+  right: 1%;
+  width: 5%;
+  padding: 0;
+}
+
+#nav li {
+  float: left;
+  margin: 0 10px 0 0;
+  list-style: none;
+}
+
+#nav li a {
+  color: #333;
+  font-size: 14pt;
+}

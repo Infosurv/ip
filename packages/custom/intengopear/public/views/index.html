@@ -1,14 +1,22 @@
-<div class="">
-  <a ui-sref='app settings' class="settings">
-  	<i class="fa fa-cog"></i>
-  </a>
+<div>
+  <ul id="nav">
+    <li>
+      <a ui-sref='app settings' class="settings">
+        <i class="fa fa-cog"></i>
+      </a>
+    </li>
+  </ul>
 
   <p class="alert alert-warning" ng-if="1 === 2">You must login to proceed.</p>
 
   <h1>Welcome to IntengoPear</h1>
   
+  <div class="form-group projectSearch">
+      <input type='text' class="form-control" placeholder='Search Projects...' ng-model='query' autofocus>
+    </div>
+
   <ul id="surveys" class="list-group">
-      <li class="clearfix list-group-item" ng-repeat="survey in data.surveys">
+      <li class="clearfix list-group-item" ng-repeat="survey in surveys | filter:query">
           <a data-surveyid="{{survey.id}}" ui-sref="questions({'survey_id': survey.id})">{{survey.name}}</a>
       </li>
   </ul>

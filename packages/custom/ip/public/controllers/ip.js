@@ -48,21 +48,21 @@ function IpController($scope, Project, Global, $stateParams, Ip, $sce){
 	}
 
 	$scope.init  	= function (){
-		console.log('IpController:init');
+		//console.log('IpController:init');
 
 		var startTime  		= $scope.getStartTime();
 		$scope.answer1 		= $scope.pluckOne($scope.answers);
 		$scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
 		$scope.answer1.startTime = startTime;
 		
-		console.log('A1 startTime', startTime);
+		//console.log('A1 startTime', startTime);
 		$scope.answer1.placement = 'left';
 
 		$scope.answer2 		= $scope.pluckOne($scope.answers);
 		$scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
 		$scope.answer2.startTime = startTime;
 
-		console.log('A2 startTime', startTime);
+		//console.log('A2 startTime', startTime);
 		$scope.answer2.placement = 'right';
 
 		$scope.pair    		= [$scope.answer1, $scope.answer2];
@@ -141,7 +141,7 @@ function IpController($scope, Project, Global, $stateParams, Ip, $sce){
 		$scope.selection.losing_answer_id = answer_id;
 
 		$scope.selection.end_time = $scope.getStartTime();
-		console.log('selection: ', $scope.selection);
+		//console.log('selection: ', $scope.selection);
 
 		delete $scope.selection.$binding;
 	}

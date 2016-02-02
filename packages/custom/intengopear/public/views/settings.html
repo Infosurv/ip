@@ -1,0 +1,19 @@
+<div>
+  <a ui-sref='home' class="home">
+  	<i class="fa fa-home"></i>
+  </a>
+
+  <p class="alert alert-warning" ng-if="1 === 2">You must login to proceed.</p>
+
+  <h2>Settings</h2>
+  <form action="">
+    <div class="form-group">
+      <label for="characterLimit">Character Limit</label>
+      <input type='text' placeholder='1000' class="form-control" ng-model='projectSettings.characterLimit'>
+    </div>
+    
+    <input type="submit" class="btn btn-primary" value='Update' ng-click="updateProjectSettings($event)">
+  </form>
+  <div ui-view></div>
+</div>
+

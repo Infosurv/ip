@@ -24,12 +24,21 @@ function IntengoPearModule($meanStateProvider, $httpProvider, jwtInterceptorProv
     };
 
     // states for my app
-    $meanStateProvider.state('home', {
-      url: '/home',
-      templateUrl: 'intengopear/views/index.html',
-      controller: 'IntengopearController',
-      resolve: {
-        loggedin: isLoggedIn
-      }
-    });
+    $meanStateProvider
+      .state('home', {
+        url: '/home',
+        templateUrl: 'intengopear/views/index.html',
+        controller: 'IntengopearController',
+        resolve: {
+          loggedin: isLoggedIn
+        }
+      })
+      .state('project settings', {
+        url: '/:survey_id',
+        templateUrl: 'intengopear/views/settings.html',
+        controller: 'IntengopearController',
+        resolve: {
+          loggedin: isLoggedIn
+        }
+      });     
 }
