@@ -33,7 +33,11 @@ function IntengoPearModule($meanStateProvider, $httpProvider, jwtInterceptorProv
           loggedin: isLoggedIn
         }
       })
-      .state('project settings', {
+      .state('project', {
+        abstract : true,
+        template : '<ui-view/>'
+      })
+      .state('project.settings', {
         url: '/:survey_id',
         templateUrl: 'intengopear/views/settings.html',
         controller: 'IntengopearController',

@@ -1,12 +1,22 @@
 <div>
-  <a ui-sref='home' class="home">
-  	<i class="fa fa-home"></i>
-  </a>
-
-  <p class="alert alert-warning" ng-if="1 === 2">You must login to proceed.</p>
+  <ul id="nav">
+    <li>
+      <a ui-sref='home' class="home">
+        <i class="fa fa-home"></i>
+      </a>
+    </li>
+  </ul>
 
   <h2>Settings</h2>
   <form action="">
+    <div class="form-group">
+      <label for="questionSizing">Question Sizing</label>
+      <ul class="nav nav-pills">
+        <li role="presentation" class="active"><a href="#" ng-click="toggleQuestionSizing($event)">Static</a></li>
+        <li role="presentation"><a href="#" ng-click="toggleQuestionSizing($event)">Dynamic</a></li>
+      </ul>
+    </div>
+
     <div class="form-group">
       <label for="characterLimit">Character Limit</label>
       <input type='text' placeholder='1000' class="form-control" ng-model='projectSettings.characterLimit'>

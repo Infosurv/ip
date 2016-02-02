@@ -14,6 +14,8 @@ function IntengopearController ($rootScope, $scope, Global, Project, $state, $st
         return;
     }
 
+    angular.element('input').focus();
+
 	Global.survey_id   = $stateParams.survey_id;
     var projectPromise = Project.init($scope, Global);
 
@@ -22,9 +24,19 @@ function IntengopearController ($rootScope, $scope, Global, Project, $state, $st
         app.$scope.surveys  = data.surveys;
     });
     
-    
-    $scope.updateProjectSettings = function(evt){
+    $scope.toggleQuestionSizing     = function(evt){
         evt.preventDefault();
+        var elem                    = angular.element(evt.target);
+        elem.parent().parent().find('.active').removeClass('active');
+        elem.parent().addClass('active');
+        var questionSizing          = elem.text().toLowerCase();
 
+        $scope.projectSettings      = (typeof $scope.projectSettings == 'object') ? $scope.projectSettings : {};
+        $scope.projectSettings.questionSizing = questionSizing;
+    }
+
+    $scope.updateProjectSettings    = function(evt){
+        evt.preventDefault();
+        debugger;
     }
 }

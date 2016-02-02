@@ -12,6 +12,7 @@ function IpAdminController($scope, Global, Project, Intengopear, $state){
 function IpController($scope, Project, Global, $stateParams, Ip, $sce){
 	var projectPromise = Project.init($scope, Global);
 
+	//Using postMessage to communicate with the intengo core app
 	window.addEventListener('message',function(evt){
 		 $scope.augmentScope(evt);
 	}, false);
@@ -171,8 +172,7 @@ function IpController($scope, Project, Global, $stateParams, Ip, $sce){
 		$event.preventDefault();
 		
 		if(typeof $scope.timers == 'undefined'){
-			var ttr = (($scope.question.delay * 60) * 1000); 		//Translate minutes to milliseconds
-			if(typeof app.dev == 'undefined' || app.dev == true) ttr = (1000 * 10);
+			var ttr = (($scope.question.delay * 60) * 1000); 		//In minutes: translates milliseconds to minutes
 			startPrimaryTimer(ttr);
 		}
 
