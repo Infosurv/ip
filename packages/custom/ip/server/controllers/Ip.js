@@ -204,13 +204,15 @@ exports.clearData       = function(req, res, next){
   Question.find({'survey_id': survey_id}, function(err, _questions){
         questions = _questions;
 
+        console.log('survey_id', survey_id);
+        Response.find({ survey_id : survey }).remove().exec();
+
         for(var i = 0; i < questions.length; i++){
           var question = questions[i];
           var qid      = question._id;
 
           console.log('Attempting to update question: ' + qid);
-          Answer.update({'question_id' : qid},
-            {
+          Answer.update({'question_id' : qid}, {
               'wins'  : 0,
               'losses': '0',
               'ties'  : 0,
@@ -232,8 +234,6 @@ exports.clearData       = function(req, res, next){
                 }
             }
           );
-
-          Response.find({ question_id : qid }).remove().exec();
         }
 
         if(errors.length == 0) {
