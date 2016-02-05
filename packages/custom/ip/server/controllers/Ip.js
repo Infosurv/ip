@@ -205,7 +205,7 @@ exports.clearData       = function(req, res, next){
         questions = _questions;
 
         console.log('survey_id', survey_id);
-        Response.find({ survey_id : survey }).remove().exec();
+        Response.find({ survey_id : survey_id }).remove().exec();
 
         for(var i = 0; i < questions.length; i++){
           var question = questions[i];
