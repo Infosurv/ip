@@ -19,7 +19,7 @@
 
     <div class="form-group">
       <label for="characterLimit">Character Limit</label>
-      <input type='text' placeholder='1000' class="form-control" ng-model='projectSettings.characterLimit'>
+      <input type='text' placeholder='1000' class="form-control" ng-model='characterLimit' value="{{scharacterLimit}}">
     </div>
     
     <input type="submit" class="btn btn-primary" value='Update' ng-click="updateProjectSettings($event)">

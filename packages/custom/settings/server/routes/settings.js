@@ -1,27 +1,26 @@
 'use strict';
 
+var util       = require('util');
+
 /* jshint -W098 */
 // The Package is past automatically as first parameter
-module.exports = function(Settings, app, auth, database) {
+module.exports = function(Settings, app, auth, database) { 
+  app.route('/api/settings/app')
+  .get(function(req, res){
+    var host;
 
-  app.get('/settings/example/anyone', function(req, res, next) {
-    res.send('Anyone can access this');
-  });
+    var settings  = {};
+          //host    = 'dbsettings';
+          host    = (typeof process.env.APPHOST !== 'undefined') ?  process.env.APPHOST : 'http://intengopear.com';
+    settings.host = host;
+    settings.type = 'app';
 
-  app.get('/settings/example/auth', auth.requiresLogin, function(req, res, next) {
-    res.send('Only authenticated users can access this');
-  });
+    res.status(200).json(settings);
+  })
+  .post(function(req, res){
+    var appHost     = req.body.appHost;
+    //Create a model and save this to the db
 
-  app.get('/settings/example/admin', auth.requiresAdmin, function(req, res, next) {
-    res.send('Only users with Admin role can access this');
-  });
-
-  app.get('/settings/example/render', function(req, res, next) {
-    Settings.render('index', {
-      package: 'settings'
-    }, function(err, html) {
-      //Rendering a view from the Package server/views
-      res.send(html);
-    });
+    res.status(200).send('updating setting');
   });
 };

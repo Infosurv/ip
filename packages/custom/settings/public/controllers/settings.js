@@ -6,8 +6,19 @@ angular.module('mean.settings').controller('SettingsController', ['$scope', 'Glo
 function settingsController($scope, Global, Settings){
 	$scope.global = Global;
 	
-	$scope.updateAppSettings = function(evt){
+	var settingsPromise = Settings.init();
+    settingsPromise.then(function(settings){
+    	$scope.appHost = settings.host;
+    	$scope.$applyAsync();
+    });
+
+	$scope.updateAppSettings 	= function(evt){
 		evt.preventDefault();
-		debugger;
+		var settings 			= {};
+		settings.appHost 		= $scope.appHost;
+
+		Settings.AppSettings.save(settings).$promise.then(function(resp){
+			console.log(resp);
+		});
 	}
 }

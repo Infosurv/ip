@@ -61,7 +61,7 @@ angular.module('mean.intengopear').factory('Project', ['$resource', function($re
     'delete': {method:'DELETE'} 
   });
 
-  var AnswerResource = $resource('api/answers', {question_id: '@question_id' },{ 
+  var AnswerResource    = $resource('api/answers', {question_id: '@question_id' },{ 
     'get':    {method:'GET', isArray: true},
     'update': {method: 'PUT'},
     'save':   {method:'POST'},

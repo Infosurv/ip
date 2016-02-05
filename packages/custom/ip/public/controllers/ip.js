@@ -2,14 +2,16 @@
 
 var Intengopear = angular.module('mean.intengopear');
 
-Intengopear.controller('IpController', ['$scope', 'Project', 'Global', '$stateParams', 'Ip', '$sce', IpController ]);	
+Intengopear.controller('IpController', ['$scope', 'Project', 'Settings', 'Global', '$stateParams', 'Ip', '$sce', IpController ]);	
 Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	
 
 function IpAdminController($scope, Global, Project, Intengopear, $state){
 	$scope.global 		= Global;
 }
 
-function IpController($scope, Project, Global, $stateParams, Ip, $sce){
+function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce){
+	if(typeof $stateParams.survey_id == 'undefined') return;
+	
 	var projectPromise = Project.init($scope, Global);
 
 	//Using postMessage to communicate with the intengo core app
