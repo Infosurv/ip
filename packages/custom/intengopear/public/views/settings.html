@@ -6,24 +6,26 @@
       </a>
     </li>
   </ul>
+  
+  <p ng-class="{'alert alert-success': settings.status == 'success', 'alert alert-danger': settings.status == 'error', hidden: settings.status == 'hidden'}">You must login to proceed.</p>
 
   <h2>Settings</h2>
   <form action="">
     <div class="form-group">
       <label for="questionSizing">Question Sizing</label>
       <ul class="nav nav-pills">
-        <li role="presentation" class="active"><a href="#" ng-click="toggleQuestionSizing($event)">Static</a></li>
-        <li role="presentation"><a href="#" ng-click="toggleQuestionSizing($event)">Dynamic</a></li>
+        <li role="presentation" ng-class="{active: settings.questionSizing == 'static'}"><a href="#" ng-click="toggleQuestionSizing($event)">Static</a></li>
+        <li role="presentation" ng-class="{active: settings.questionSizing == 'dynamic'}"><a href="#" ng-click="toggleQuestionSizing($event)">Dynamic</a></li>
       </ul>
     </div>
 
     <div class="form-group">
       <label for="characterLimit">Character Limit</label>
-      <input type='text' placeholder='1000' class="form-control" ng-model='characterLimit' value="{{scharacterLimit}}">
+      <input type='text' placeholder='1000' class="form-control" ng-model='settings.characterLimit' value="{{scharacterLimit}}">
     </div>
     
     <input type="submit" class="btn btn-primary" value='Update' ng-click="updateProjectSettings($event)">
   </form>
-  <div ui-view></div>
+  
 </div>
 

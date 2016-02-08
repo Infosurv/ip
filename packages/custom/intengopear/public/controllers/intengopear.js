@@ -9,17 +9,22 @@ Intengopear.controller('IntengopearController', ['$rootScope', '$scope', 'Global
 
 //Controller Definitions
 function IntengopearController ($rootScope, $scope, Global, Project, Settings, $state, $stateParams, loggedin){
-    $scope.settings     = {};
-    $scope.settings.app = {};
+    $scope.settings         = {};
+    $scope.settings.status  = 'hidden';
+    
+    var sid                 = $stateParams.survey_id;
+    $scope.survey_id        = sid;
 
     if(loggedin === "0") {
         window.location.href = 'http://intengopear.com/#/auth/login';
         return;
     }
 
-    var settingsPromise = Settings.init();
+    var settingsPromise = Settings.init(sid);
     settingsPromise.then(function(settings){
-        $scope.settings.app.characterLimit = 2000;
+        var settings    = settings[0];
+        $scope.settings = settings;
+        $scope.settings.status  = 'hidden';
 
         angular.element('input').focus();
 
@@ -39,13 +44,36 @@ function IntengopearController ($rootScope, $scope, Global, Project, Settings, $
         elem.parent().parent().find('.active').removeClass('active');
         elem.parent().addClass('active');
         var questionSizing          = elem.text().toLowerCase();
-
-        $scope.projectSettings      = (typeof $scope.projectSettings == 'object') ? $scope.projectSettings : {};
-        $scope.projectSettings.questionSizing = questionSizing;
+        
+        $scope.settings.questionSizing = questionSizing;
     }
 
     $scope.updateProjectSettings    = function(evt){
         evt.preventDefault();
-        debugger;
+        var settings                = (typeof $scope.settings[0] == 'undefined') ? $scope.settings : $scope.settings[0];
+        var sid                     = $scope.survey_id;
+        settings.survey_id          = sid;
+
+        if(typeof $scope.settings.characterLimit !== 'undefined') settings.characterLimit = $scope.settings.characterLimit;
+        
+        if(typeof settings._id == 'undefined'){
+            console.log('saving');
+            Settings.ProjectSettings.save({survey_id: sid}, settings).$promise.then(function(resp){
+                $scope.settings = resp;
+                
+                angular.element('.hidden').text('Your settings have been saved.');
+                $scope.settings.status = 'success';
+
+                console.log(resp);
+            });
+        } else {
+            console.log('updating');
+            Settings.ProjectSettings.update({survey_id: sid}, settings).$promise.then(function(resp){
+                $scope.settings = resp;
+                
+                Settings.updateUIStatus(resp.$promise.$$state, $scope);                
+                console.log(resp);
+            });
+        }
     }
 }

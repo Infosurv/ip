@@ -1,12 +1,22 @@
+<ul id="nav">
+	<li>
+	  <a ui-sref='home' class="home">
+	    <i class="fa fa-home"></i>
+	  </a>
+	</li>
+</ul>
+
 <div class="" data-ng-controller="SettingsController">
-  <h2>Settings</h2>
-  <form action="">
-    <div class="form-group">
-      <label for="exampleInputEmail1">Intengo Host</label>
-      <input type='text' placeholder='intengodev.com, intengoresearch.com ...' class="form-control" ng-model='appHost'>
-    </div>
-    
-    <input type="submit" class="btn btn-primary" value='Update' ng-click="updateAppSettings($event)">
-  </form>
+	<p ng-class="{'alert alert-success': settings.status == 'success', 'alert alert-danger': settings.status == 'error', hidden: settings.status == 'hidden'}">You must login to proceed.</p>
+	
+	<h2>Settings</h2>
+	
+	
+	<div class="form-group">
+	  <label for="exampleInputEmail1">Intengo Host</label>
+	  <input type='text' placeholder='intengodev.com, intengoresearch.com ...' class="form-control" ng-model='settings.appHost'>
+	</div>
+
+	<input type="submit" class="btn btn-primary" value='Update' ng-click="updateAppSettings($event)">
 </div>
 
