@@ -30,6 +30,11 @@ var SettingSchema = new Schema({
 		type: String,
 		required: true,
 		default: 'static'
+	},
+	minHeight: {
+		type: Number,
+		required: false,
+		default: 430
 	}
 }, { strict: false });
 

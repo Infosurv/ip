@@ -41,9 +41,13 @@ function IntengopearController ($rootScope, $scope, Global, Project, Settings, $
     $scope.toggleQuestionSizing     = function(evt){
         evt.preventDefault();
         var elem                    = angular.element(evt.target);
+        var activeElem              = elem.parent().parent().find('.active a')[0];
+        var questionSizing          = elem.text().toLowerCase();
+
         elem.parent().parent().find('.active').removeClass('active');
         elem.parent().addClass('active');
-        var questionSizing          = elem.text().toLowerCase();
+
+        if(activeElem != evt.target) angular.element('.staticValues').slideToggle(100);
         
         $scope.settings.questionSizing = questionSizing;
     }
@@ -71,7 +75,7 @@ function IntengopearController ($rootScope, $scope, Global, Project, Settings, $
             Settings.ProjectSettings.update({survey_id: sid}, settings).$promise.then(function(resp){
                 $scope.settings = resp;
                 
-                Settings.updateUIStatus(resp.$promise.$$state, $scope);                
+                Settings.updateUIStatus(resp.$promise.$$state, $scope);
                 console.log(resp);
             });
         }
