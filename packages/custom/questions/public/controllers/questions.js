@@ -2,38 +2,35 @@
 
 var Intengopear = angular.module('mean.intengopear');
 
-Intengopear.controller('QuestionController', ['$scope', '$state', '$stateParams', 'Global', 'Project', '$http', QuestionController]);	
+Intengopear.controller('QuestionController', ['$scope', '$rootScope', '$state', '$stateParams', 'Global', 'Project', 'Settings', '$http', QuestionController]);	
 
-function QuestionController($scope, $state, $stateParams, Global, Project, $http){
-	Global.survey_id 	= $stateParams.survey_id;
-	var projectPromise 	= Project.init($scope, Global);
-    
-	var survey_name, survey_id = $stateParams.survey_id;
-	$scope.stateParams  = $stateParams;
-	Project.data 		= app.Project.data;
-    $scope.data 		= Project.data;
-    $scope.question_id  = $stateParams.id;
+function QuestionController($scope, $rootScope, $state, $stateParams, Global, Project, Settings, $http){
+	var survey_name, survey_id;
+	$rootScope.survey_id 	= survey_id = $stateParams.survey_id;
+	$scope.stateParams  	= $stateParams;
 
-    if(typeof survey_id !== 'undefined') localStorage.setItem('survey_id', survey_id);
-    if(window.location.href.indexOf('new') >= 0){ 
-    	var open = window.location.href.split('?')[1];
-    	if(open == 'new=true') {
-    		jQuery('document').ready(function(){
-    			window.setTimeout(function(){
-		    		var $elem = jQuery('#addQuestion');
-		    		$elem.click();
-	    		}, 1000);
-    		});
-    	}
-    }
-
+	var projectPromise 		= Project.init($rootScope, Global, Settings);
 	projectPromise.then(function(data){
-		Project.data 			= data; 
+	    $scope.question_id  	= $stateParams.id;
+
+	    if(typeof survey_id !== 'undefined') localStorage.setItem('survey_id', survey_id);
+	    if(window.location.href.indexOf('new') >= 0){ 
+	    	var open = window.location.href.split('?')[1];
+	    	if(open == 'new=true') {
+	    		jQuery('document').ready(function(){
+	    			window.setTimeout(function(){
+			    		var $elem = jQuery('#addQuestion');
+			    		$elem.click();
+		    		}, 1000);
+	    		});
+	    	}
+	    }
+
 		$scope.question 		= {};
 
 		//Retrieve the cached the survey name and id for reload
 	    survey_id 				= (localStorage.getItem('survey_id')   !== null && localStorage.getItem('survey_id')   !== 'undefined' && localStorage.getItem('survey_id').length > 0) ? localStorage.getItem('survey_id') : $stateParams.survey_id;
-	    survey_name 			= (localStorage.getItem('survey_name') !== null && localStorage.getItem('survey_name') !== 'undefined' && localStorage.getItem('survey_name').length > 0) ? localStorage.getItem('survey_name') : data.survey.name;
+	    survey_name 			= (localStorage.getItem('survey_name') !== null && localStorage.getItem('survey_name') !== 'undefined' && localStorage.getItem('survey_name').length > 0) ? localStorage.getItem('survey_name') : $scope.data.survey.name;
 	    
 		$scope.data.survey 		= data.survey;
 		$scope.survey_name  	= survey_name;
@@ -42,7 +39,7 @@ function QuestionController($scope, $state, $stateParams, Global, Project, $http
 		questionPromise.then(function(questions){
 		   $scope.questions = window.questions = Project.questions = questions;
 		   
-		   Project.data.survey.questions = $scope.questions;
+		   $scope.data.survey.questions = $scope.questions;
 
 		    //Populates the values of the question to edit
 			$scope.$watch('stateParams.id', function(newValue, oldValue){

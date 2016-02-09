@@ -5,38 +5,19 @@ var Intengopear = angular.module('mean.intengopear');
 var data;
 
 //Assign the controllers to the main module
-Intengopear.controller('IntengopearController', ['$rootScope', '$scope', 'Global', 'Project', 'Settings', '$state', '$stateParams', 'loggedin', IntengopearController]);	
+Intengopear.controller('IntengopearController', ['$rootScope', '$scope', 'Global', 'Project', '$state', '$stateParams', 'loggedin', IntengopearController]);	
 
 //Controller Definitions
-function IntengopearController ($rootScope, $scope, Global, Project, Settings, $state, $stateParams, loggedin){
-    $scope.settings         = {};
-    $scope.settings.status  = 'hidden';
+function IntengopearController ($rootScope, $scope, Global, Project, $state, $stateParams, loggedin){
+    $rootScope.settings         = {};
+    $rootScope.settings.status  = 'hidden';
+    $rootScope.stateParams      = $stateParams;
     
-    var sid                 = $stateParams.survey_id;
-    $scope.survey_id        = sid;
+    var sid                     = $stateParams.survey_id;
+    $rootScope.survey_id        = sid;
 
-    if(loggedin === "0") {
-        window.location.href = 'http://intengopear.com/#/auth/login';
-        return;
-    }
-
-    var settingsPromise = Settings.init(sid);
-    settingsPromise.then(function(settings){
-        var settings    = settings[0];
-        $scope.settings = settings;
-        $scope.settings.status  = 'hidden';
-
-        angular.element('input').focus();
-
-        Global.survey_id   = $stateParams.survey_id;
-        var projectPromise = Project.init($scope, Global);
-
-        //Main Routine
-        projectPromise.then(function(data){
-            app.$scope.surveys  = data.surveys;
-            $scope.$applyAsync();
-        });
-    });
+    //Main Routine
+    Project.init($rootScope, Global);
     
     $scope.toggleQuestionSizing     = function(evt){
         evt.preventDefault();

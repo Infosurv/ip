@@ -12,20 +12,12 @@ function IpAdminController($scope, Global, Project, Intengopear, $state){
 function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce){
 	if(typeof $stateParams.survey_id == 'undefined') return;
 	
-	var projectPromise = Project.init($scope, Global);
+	var projectPromise = Project.init($scope, Global, Settings);
 
 	//Using postMessage to communicate with the intengo core app
 	window.addEventListener('message',function(evt){
 		 $scope.augmentScope(evt);
 	}, false);
-
-	var IpResource  	= Ip.http;
-	var ipResource  	= IpResource.query({ survey_id: $stateParams.survey_id, question_id:$stateParams.question_id }).$promise;
-	var Project 		= app.Project;
-	$scope.animationSpeed = 350;
-
-	$scope.App 		= {};
-	$scope.Ip 		= IpResource;
 
 	$scope.pluckOne = function(collection){
 		var answer; 
@@ -261,6 +253,14 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 
 		});
 	}
+
+	var IpResource  	= Ip.http;
+	var ipResource  	= IpResource.query({ survey_id: $stateParams.survey_id, question_id:$stateParams.question_id }).$promise;
+	var Project 		= app.Project;
+	$scope.animationSpeed = 350;
+
+	$scope.App 		= {};
+	$scope.Ip 		= IpResource;
 
 	projectPromise.then(function(data){
 		//Get the values from the url first if present, else get it from localStorage,
