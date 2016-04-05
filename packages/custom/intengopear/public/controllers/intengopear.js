@@ -5,10 +5,10 @@ var Intengopear = angular.module('mean.intengopear');
 var data;
 
 //Assign the controllers to the main module
-Intengopear.controller('IntengopearController', ['$rootScope', '$scope', 'Global', 'Project', '$state', '$stateParams', 'loggedin', IntengopearController]);	
+Intengopear.controller('IntengopearController', ['$rootScope', '$scope', 'Global', 'Project', 'Settings', '$state', '$stateParams', 'loggedin', IntengopearController]);	
 
 //Controller Definitions
-function IntengopearController ($rootScope, $scope, Global, Project, $state, $stateParams, loggedin){
+function IntengopearController ($rootScope, $scope, Global, Project, Settings, $state, $stateParams, loggedin){
     $rootScope.settings         = {};
     $rootScope.settings.status  = 'hidden';
     $rootScope.stateParams      = $stateParams;
@@ -25,10 +25,10 @@ function IntengopearController ($rootScope, $scope, Global, Project, $state, $st
         var activeElem              = elem.parent().parent().find('.active a')[0];
         var questionSizing          = elem.text().toLowerCase();
 
-        elem.parent().parent().find('.active').removeClass('active');
-        elem.parent().addClass('active');
+        // elem.parent().parent().find('.active').removeClass('active');
+        // elem.parent().addClass('active');
 
-        if(activeElem != evt.target) angular.element('.staticValues').slideToggle(100);
+        // if(activeElem != evt.target) angular.element('.staticValues').slideToggle(100);
         
         $scope.settings.questionSizing = questionSizing;
     }

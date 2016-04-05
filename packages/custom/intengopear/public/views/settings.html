@@ -19,7 +19,7 @@
       </ul>
     </div>
     
-    <div class="staticValues">
+    <div class="staticValues" ng-if="settings.questionSizing == 'static'">
       <div class="form-group">
         <label for="characterLimit">Character Limit</label>
         <input type='text' placeholder='1000' class="form-control" ng-model='settings.characterLimit'>

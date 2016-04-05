@@ -2,8 +2,8 @@
 
 var Intengopear = angular.module('mean.intengopear');
 
-Intengopear.controller('IpController', ['$scope', 'Project', 'Settings', 'Global', '$stateParams', 'Ip', '$sce', IpController ]);	
-Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController ]);	
+Intengopear.controller('IpController', ['$scope', 'Project', 'Settings', 'Global', '$stateParams', 'Ip', '$sce', IpController]);	
+Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController]);	
 
 function IpAdminController($scope, Global, Project, Intengopear, $state){
 	$scope.global 		= Global;
@@ -11,6 +11,7 @@ function IpAdminController($scope, Global, Project, Intengopear, $state){
 
 function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce){
 	if(typeof $stateParams.survey_id == 'undefined') return;
+	$scope.survey_id = $stateParams.survey_id;
 	
 	var projectPromise = Project.init($scope, Global, Settings);
 
@@ -263,6 +264,15 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 	$scope.Ip 		= IpResource;
 
 	projectPromise.then(function(data){
+		debugger;
+		var btnStyle;
+		if($scope.settings.questionSizing == 'static'){
+			btnStyle = {'min-height': $scope.settings.minHeight + 'px'};
+		} else {
+			btnStyle = {};
+		}
+		$scope.btnStyle = btnStyle;
+
 		//Get the values from the url first if present, else get it from localStorage,
 	    var survey_id 	= (localStorage.getItem('survey_id')) ? localStorage.getItem('survey_id') : survey_id;
 	    var question_id = (localStorage.getItem('question_id')) ? localStorage.getItem('question_id') : question_id;
