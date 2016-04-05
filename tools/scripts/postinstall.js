@@ -168,7 +168,7 @@ function packagesNpmInstall(source) {
 
 
 
-shell.exec('bower install', function(code) {
+shell.exec('bower update', function(code) {
   console.log('    Updating Bower dependencies');
 });
 
