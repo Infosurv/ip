@@ -59,7 +59,7 @@ function AnswerController($scope, $stateParams, $http, Global){
 		$event.preventDefault();
 
 		var values 			= $($event.currentTarget).parent().find('textarea').val().split('\n');
-		$scope.survey_id	= app.Project.data.survey.id;
+		$scope.survey_id	= $scope.data.survey.id;
 		$scope.question_id	= $scope.stateParams.id;
 		var Answer 			= self.Answer;
 		var data 			= [];
