@@ -31,7 +31,7 @@ body { background-color: initial; }
 }
 
 
-h2.vote-question.row { margin: 0 auto 20px; }
+h2.vote-question.row { margin: 0 auto 20px; text-align: center; }
 ul.votebox { list-style: none; margin: 0 5px 0 0; }
 ul.votebox li { 
 	list-style: none;

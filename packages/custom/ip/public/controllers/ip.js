@@ -165,7 +165,8 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 	//Capture's record the value and then transition to next state of question
 	$scope.captureAnswerSelection     = function($event){
 		$event.preventDefault();
-		
+		$($event.target).blur();
+
 		if(typeof $scope.timers == 'undefined'){
 			var ttr = (($scope.question.delay * 60) * 1000); 		//In minutes: translates milliseconds to minutes
 			startPrimaryTimer(ttr);
@@ -264,7 +265,6 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 	$scope.Ip 		= IpResource;
 
 	projectPromise.then(function(data){
-		debugger;
 		var btnStyle;
 		if($scope.settings.questionSizing == 'static'){
 			btnStyle = {'min-height': $scope.settings.minHeight + 'px'};
