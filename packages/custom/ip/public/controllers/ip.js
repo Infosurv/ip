@@ -244,8 +244,9 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 			if(text == "this is fun! i’d like to see more") {
 				//$scope.repopulateQuestion();
 				var ttr = (($scope.question.secondaryDelay * 60) * 1000);
-				if(typeof app.dev == 'undefined' || app.dev == true) ttr = (1000 * 30);
+				//if(typeof app.dev == 'undefined' || app.dev == true) ttr = (1000 * 30);
 				//if(typeof $scope.timers.secondaryTimer == 'undefined') 
+				console.log('secondary ttr: ', ttr);
 				startSecondaryTimer(ttr);
 			}
 			if(text == "i don’t care for fun, let’s wrap this up") {
