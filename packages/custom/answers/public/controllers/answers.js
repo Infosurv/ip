@@ -71,7 +71,7 @@ function AnswerController($scope, $stateParams, $http, Global){
 		angular.forEach(values, function(val, key){
 			if(val.length === 0) return;
 			data.push(new Answer({
-				survey_id: app.Project.data.survey.id,
+				survey_id: $scope.data.survey.id,
 				text: val,
 				question_id: $scope.question_id
 			}));
