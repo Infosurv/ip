@@ -15,20 +15,26 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 	
 	var projectPromise = Project.init($scope, Global, Settings);
 
-	//Using postMessage to communicate with the intengo core app
-	window.addEventListener('message',function(evt){
-		 $scope.augmentScope(evt);
-	}, false);
+	function getRandomItem(collection){
+		var idx 	= Math.floor(Math.random() * collection.length);
+		
+		return idx;
+	}
 
 	$scope.pluckOne = function(collection){
 		var answer; 
-		var itemIdx = Math.floor(Math.random()*collection.length);
+		var itemIdx = getRandomItem(collection);
 
 		answer = collection[itemIdx];
 		//collection.splice(itemIdx, 1)
 		//$scope.collection = collection;
 		return answer;
 	}
+
+	//Using postMessage to communicate with the intengo core app
+	window.addEventListener('message',function(evt){
+		 $scope.augmentScope(evt);
+	}, false);
 
 	$scope.augmentScope = function(evt) {
 		if(evt.origin.indexOf('intengo') < 0) return;
@@ -44,8 +50,6 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 	}
 
 	$scope.init  	= function (){
-		//console.log('IpController:init');
-
 		var startTime  		= $scope.getStartTime();
 		$scope.answer1 		= $scope.pluckOne($scope.answers);
 		$scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
@@ -53,6 +57,7 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 		
 		//console.log('A1 startTime', startTime);
 		$scope.answer1.placement = 'left';
+		console.log('intial item id: ', $scope.answer1._id, ' placement: ', $scope.answer1.placement);
 
 		$scope.answer2 		= $scope.pluckOne($scope.answers);
 		$scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
@@ -60,6 +65,7 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 
 		//console.log('A2 startTime', startTime);
 		$scope.answer2.placement = 'right';
+		console.log('initial item id: ', $scope.answer2._id, ' placement: ', $scope.answer2.placement, "\n\n");
 
 		$scope.pair    		= [$scope.answer1, $scope.answer2];
 	}
@@ -112,45 +118,70 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 		}, 150);
 	}
 
-	$scope.recordSelection 	= function($event){
-		var target 			= $event.currentTarget;
-		var data 			= $(target).data();
-		$scope.selection    = $.extend({}, data);
+	//Capture's record the value and then transition to next state of question
+	$scope.captureAnswerSelection     = function($event){
+		$event.preventDefault();
 
-		//If placement isnt set then capture it manually 
-		if(typeof $scope.selection.placement == 'undefined'){
-			$scope.selection.placement = {};
-			$scope.selection.placement[$('.votebox.answers li:first a').data('answer_id')]   = 'left';
-			$scope.selection.placement[$('.votebox.answers li:eq("1") a').data('answer_id')] = 'right';
+		if(typeof $scope.timers == 'undefined'){
+			var ttr = (($scope.question.delay * 60) * 1000); 		//In minutes: translates milliseconds to minutes
+			startPrimaryTimer(ttr);
 		}
 
-		//Get the alternate li element
+		$scope.recordSelection($event);
+		console.log('selection after recordSelection: ', $scope.selection, "\n\n");
+		$($event.target).blur();
+
+		postSelection($scope.selection).then(function(resp){
+			delete $scope.selection;
+			if($scope.answers.length === 0){
+				window.parent.postMessage({'hash': $scope.next_page}, '*');
+				return;
+			} else {
+				$scope.repopulateQuestion();
+			}
+		});
+	}
+
+	$scope.recordSelection 	= function($event){
+		var newSelection;
+		var target 			= $event.currentTarget;
+
+		// var data 			= $(target).data();
+		var data 			= target.dataset;
+		newSelection    	= $.extend({}, data);
+
+		//Get the alternate li element - aka the losing id
 		var $next 			= $(target).parent().next();
 		var $link 			= $next.find('a');
-		var answer_id 		= $link.data('answer_id');
+		var answer_id 		= $link[0].dataset.answer_id;
 
 		if(typeof answer_id == 'undefined' || answer_id.length == 0) {
 			$next 			= $(target).parent().prev();
 			$link 			= $next.find('a');
-			answer_id 		= $link.data('answer_id');
+			answer_id 		= $link[0].dataset.answer_id;
 		}
-		$scope.selection.losing_answer_id = answer_id;
 
-		$scope.selection.end_time = $scope.getStartTime();
-		//console.log('selection: ', $scope.selection);
+		newSelection.losing_answer_id = answer_id;
+		newSelection.end_time = $scope.getStartTime();
+		console.log('recordedSelection in newSelection: ', newSelection);
 
-		delete $scope.selection.$binding;
+		$scope.selection 	= newSelection; 
 	}
 
-	$scope.repopulateQuestion = function(){
+	$scope.repopulateQuestion 	= function(){
 		$('.votebox.answers').fadeOut(100, function(){
-			$scope.answer1 	= $scope.pluckOne($scope.answers);
+			delete $scope.answer1;
+			delete $scope.answer2;
+
+			$scope.answer1 		= $scope.pluckOne($scope.answers);
 			$scope.answer1.startTime = $scope.getStartTime();
 			$scope.answer1.placement = 'left';
+			console.log('repopulated item1 id: ', $scope.answer1._id, ' placement: ', $scope.answer1.placement);
 
 			$scope.answer2 	= $scope.pluckOne($scope.answers);
 			$scope.answer2.startTime = $scope.getStartTime();
 			$scope.answer2.placement = 'right';
+			console.log('repopulated item2 id: ', $scope.answer2._id, ' placement: ', $scope.answer2.placement);
 
 			if(typeof $scope.answer1 !== 'undefined' && typeof $scope.answer1.text !== 'object') $scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
 			if(typeof $scope.answer2 !== 'undefined' && typeof $scope.answer2.text !== 'object') $scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
@@ -159,30 +190,6 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 			$scope.$apply();
 
 			$(this).fadeIn(100);
-		});
-	}
-
-	//Capture's record the value and then transition to next state of question
-	$scope.captureAnswerSelection     = function($event){
-		$event.preventDefault();
-		$($event.target).blur();
-
-		if(typeof $scope.timers == 'undefined'){
-			var ttr = (($scope.question.delay * 60) * 1000); 		//In minutes: translates milliseconds to minutes
-			startPrimaryTimer(ttr);
-		}
-
-		$scope.recordSelection($event);
-
-		postSelection($scope.selection).then(function(resp){
-			if($scope.answers.length === 0){
-				window.parent.postMessage({'hash': $scope.next_page}, '*');
-				//$scope.cancelTimers();
-				return;
-			} else {
-				// console.log('repopulating question', resp);
-				$scope.repopulateQuestion();
-			}
 		});
 	}
 
@@ -208,6 +215,7 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 	}
 
 	function postSelection(selection){
+		console.log('posting: ', selection, "\n\n");
 		return $scope.Ip.save(selection).$promise;
 	}
 
@@ -242,7 +250,6 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 
 		$scope.dismissModal(modal, function(){
 			if(text == "this is fun! i’d like to see more") {
-				//$scope.repopulateQuestion();
 				var ttr = (($scope.question.secondaryDelay * 60) * 1000);
 				//if(typeof app.dev == 'undefined' || app.dev == true) ttr = (1000 * 30);
 				//if(typeof $scope.timers.secondaryTimer == 'undefined') 

@@ -106,20 +106,27 @@ exports.find = function(req, res, next){
 
 exports.storeResponse   = function(req, res, next){
   //TODO: Run more manual tie checks in the morn
-
   var response          = new Response(req.body);
+
+  console.log("\n\n");
+  console.log('Request: ');
+
   var isTie             = (typeof req.body.indecision_option_id !== 'undefined');
   var wins_data, placement, losing_answer_id, losses_data;
   
   var params            = (! isTie) ? composeAnswerData(req) : composeTieData(req);
   console.log('params: ');
+  console.log(util.inspect(params));
 
   wins_data             = {$inc: params.query_obj};
   placement             = params.placement;
   
   console.log('Saving question response:');  
   console.log('Answer 1: ');
-  console.log("\n");
+  console.log('incrementing: ' + params.winning_answer_id);
+  console.log('with: ');
+  console.log(util.inspect(wins_data));
+  console.log("\n\n");
     
   //If there is no tie
   Answer.findOneAndUpdate({_id: params.winning_answer_id}, wins_data, function(err, answer){
@@ -143,6 +150,8 @@ exports.storeResponse   = function(req, res, next){
     }
 
     console.log('Answer 2: ');
+    console.log('incrementing: ' + losing_answer_id);
+    console.log(util.inspect(losses_data));
     console.log("\n");
     
     Answer.findOneAndUpdate({_id: losing_answer_id}, losses_data, function(err, losing_answer){
