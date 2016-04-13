@@ -150,6 +150,16 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 		var data 			= target.dataset;
 		newSelection    	= $.extend({}, data);
 
+		//If its an indecision option grab that stuff else grab the placements
+		debugger;
+		
+		//If placement isnt set then capture it manually - As in tie data
+		if(typeof newSelection.placement == 'undefined'){
+			newSelection.placement = {};
+			newSelection.placement[$('.votebox.answers li:first a').data('answer_id')]   = 'left';
+			newSelection.placement[$('.votebox.answers li:eq("1") a').data('answer_id')] = 'right';
+		}
+
 		//Get the alternate li element - aka the losing id
 		var $next 			= $(target).parent().next();
 		var $link 			= $next.find('a');

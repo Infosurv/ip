@@ -205,10 +205,11 @@ exports.exportVotes     = function(req, res, next){
 }
 
 exports.clearData       = function(req, res, next){
+  console.log('clearing data: ');
+  console.log(util.inspect(req.params));
+
   var survey_id = req.params.survey_id;
   var questions, errors = [];
-
-  console.log('clearing data: ');
 
   Question.find({'survey_id': survey_id}, function(err, _questions){
         questions = _questions;
