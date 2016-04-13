@@ -55,9 +55,9 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 		$scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
 		$scope.answer1.startTime = startTime;
 		
-		//console.log('A1 startTime', startTime);
+		console.log('A1 startTime', startTime);
 		$scope.answer1.placement = 'left';
-		console.log('intial item id: ', $scope.answer1._id, ' placement: ', $scope.answer1.placement);
+		// console.log('intial item id: ', $scope.answer1._id, ' placement: ', $scope.answer1.placement);
 
 		$scope.answer2 		= $scope.pluckOne($scope.answers);
 		$scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
@@ -65,7 +65,7 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 
 		//console.log('A2 startTime', startTime);
 		$scope.answer2.placement = 'right';
-		console.log('initial item id: ', $scope.answer2._id, ' placement: ', $scope.answer2.placement, "\n\n");
+		// console.log('initial item id: ', $scope.answer2._id, ' placement: ', $scope.answer2.placement, "\n\n");
 
 		$scope.pair    		= [$scope.answer1, $scope.answer2];
 	}
@@ -128,7 +128,7 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 		}
 
 		$scope.recordSelection($event);
-		console.log('selection after recordSelection: ', $scope.selection, "\n\n");
+		// console.log('selection after recordSelection: ', $scope.selection, "\n\n");
 		$($event.target).blur();
 
 		postSelection($scope.selection).then(function(resp){
@@ -150,9 +150,6 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 		var data 			= target.dataset;
 		newSelection    	= $.extend({}, data);
 
-		//If its an indecision option grab that stuff else grab the placements
-		debugger;
-		
 		//If placement isnt set then capture it manually - As in tie data
 		if(typeof newSelection.placement == 'undefined'){
 			newSelection.placement = {};
@@ -160,20 +157,23 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 			newSelection.placement[$('.votebox.answers li:eq("1") a').data('answer_id')] = 'right';
 		}
 
-		//Get the alternate li element - aka the losing id
-		var $next 			= $(target).parent().next();
-		var $link 			= $next.find('a');
-		var answer_id 		= $link[0].dataset.answer_id;
+		//If its an indecision option grab that stuff else grab the placements
+		if(typeof newSelection.indecision_option_id !== 'string') {
+			//Get the alternate li element - aka the losing id
+			var $next 			= $(target).parent().next();
+			var $link 			= $next.find('a');
+			var answer_id 		= $link[0].dataset.answer_id;
 
-		if(typeof answer_id == 'undefined' || answer_id.length == 0) {
-			$next 			= $(target).parent().prev();
-			$link 			= $next.find('a');
-			answer_id 		= $link[0].dataset.answer_id;
+			if(typeof answer_id == 'undefined' || answer_id.length == 0) {
+				$next 			= $(target).parent().prev();
+				$link 			= $next.find('a');
+				answer_id 		= $link[0].dataset.answer_id;
+			}
+
+			newSelection.losing_answer_id = answer_id;
+			newSelection.end_time = $scope.getStartTime();
+			// console.log('recordedSelection in newSelection: ', newSelection);
 		}
-
-		newSelection.losing_answer_id = answer_id;
-		newSelection.end_time = $scope.getStartTime();
-		console.log('recordedSelection in newSelection: ', newSelection);
 
 		$scope.selection 	= newSelection; 
 	}
@@ -186,12 +186,12 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 			$scope.answer1 		= $scope.pluckOne($scope.answers);
 			$scope.answer1.startTime = $scope.getStartTime();
 			$scope.answer1.placement = 'left';
-			console.log('repopulated item1 id: ', $scope.answer1._id, ' placement: ', $scope.answer1.placement);
+			// console.log('repopulated item1 id: ', $scope.answer1._id, ' placement: ', $scope.answer1.placement);
 
 			$scope.answer2 	= $scope.pluckOne($scope.answers);
 			$scope.answer2.startTime = $scope.getStartTime();
 			$scope.answer2.placement = 'right';
-			console.log('repopulated item2 id: ', $scope.answer2._id, ' placement: ', $scope.answer2.placement);
+			// console.log('repopulated item2 id: ', $scope.answer2._id, ' placement: ', $scope.answer2.placement);
 
 			if(typeof $scope.answer1 !== 'undefined' && typeof $scope.answer1.text !== 'object') $scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
 			if(typeof $scope.answer2 !== 'undefined' && typeof $scope.answer2.text !== 'object') $scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
@@ -225,7 +225,7 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 	}
 
 	function postSelection(selection){
-		console.log('posting: ', selection, "\n\n");
+		// console.log('posting: ', selection, "\n\n");
 		return $scope.Ip.save(selection).$promise;
 	}
 
@@ -263,11 +263,11 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 				var ttr = (($scope.question.secondaryDelay * 60) * 1000);
 				//if(typeof app.dev == 'undefined' || app.dev == true) ttr = (1000 * 30);
 				//if(typeof $scope.timers.secondaryTimer == 'undefined') 
-				console.log('secondary ttr: ', ttr);
+				// console.log('secondary ttr: ', ttr);
 				startSecondaryTimer(ttr);
 			}
 			if(text == "i don’t care for fun, let’s wrap this up") {
-				console.log('going to new location', $scope.next_page);
+				// console.log('going to new location', $scope.next_page);
 				window.parent.postMessage({'hash': $scope.next_page}, '*');
 			}
 
