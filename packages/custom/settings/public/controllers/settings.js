@@ -4,6 +4,8 @@
 angular.module('mean.settings').controller('SettingsController', ['$scope', 'Global', 'Settings', settingsController]);
 
 function settingsController($scope, Global, Settings){
+    console.log('settingsController');
+    
 	$scope.global           = Global;
     $scope.settings         = {};
     $scope.settings.status  = 'hidden';

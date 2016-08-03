@@ -9,6 +9,8 @@ Intengopear.controller('IntengopearController', ['$rootScope', '$scope', 'Global
 
 //Controller Definitions
 function IntengopearController ($rootScope, $scope, Global, Project, Settings, $state, $stateParams, loggedin){
+    console.log('IntengopearController');
+    
     $rootScope.settings         = {};
     $rootScope.settings.status  = 'hidden';
     $rootScope.stateParams      = $stateParams;

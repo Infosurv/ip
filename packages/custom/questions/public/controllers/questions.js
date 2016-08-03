@@ -5,6 +5,8 @@ var Intengopear = angular.module('mean.intengopear');
 Intengopear.controller('QuestionController', ['$scope', '$rootScope', '$state', '$stateParams', 'Global', 'Project', 'Settings', '$http', QuestionController]);	
 
 function QuestionController($scope, $rootScope, $state, $stateParams, Global, Project, Settings, $http){
+	console.log('QuestionController');
+	
 	var survey_name, survey_id;
 	$rootScope.survey_id 	= survey_id = $stateParams.survey_id;
 	$scope.stateParams  	= $stateParams;

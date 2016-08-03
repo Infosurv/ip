@@ -2,18 +2,23 @@
 
 var Intengopear = angular.module('mean.intengopear');
 
-Intengopear.controller('IpController', ['$scope', 'Project', 'Settings', 'Global', '$stateParams', 'Ip', '$sce', IpController]);	
+Intengopear.controller('IpController', ['$scope', 'Settings', 'Project', 'Global', '$stateParams', 'Ip', '$sce', IpController]);	
 Intengopear.controller('IpAdminController', ['$scope', 'Global', 'Project', 'Intengopear', '$state', IpAdminController]);	
 
 function IpAdminController($scope, Global, Project, Intengopear, $state){
 	$scope.global 		= Global;
 }
 
-function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce){
+function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce){
+	console.log('IpController');
+
 	if(typeof $stateParams.survey_id == 'undefined') return;
 	$scope.survey_id = $stateParams.survey_id;
 	
-	var projectPromise = Project.init($scope, Global, Settings);
+	//Using postMessage to communicate with the intengo core app
+	window.addEventListener('message',function(evt){
+		 $scope.augmentScope(evt);
+	}, false);
 
 	function getRandomItem(collection){
 		var idx 	= Math.floor(Math.random() * collection.length);
@@ -30,11 +35,6 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 		//$scope.collection = collection;
 		return answer;
 	}
-
-	//Using postMessage to communicate with the intengo core app
-	window.addEventListener('message',function(evt){
-		 $scope.augmentScope(evt);
-	}, false);
 
 	$scope.augmentScope = function(evt) {
 		if(evt.origin.indexOf('intengo') < 0) return;
@@ -253,6 +253,25 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 		}, timeToRun);
 	}
 
+	function pollForAssetLoad(asset, tryInterval, callback){
+		console.log('asset: ', asset);
+		console.log(typeof eval(asset));
+
+		var notLoaded = (typeof eval(asset) == 'undefined');
+		console.log('notLoaded: ', notLoaded);
+
+		if(! notLoaded) { 
+			callback();
+		} else {
+			window.setTimeout(function(){
+				console.log('recursively polling');
+				console.log('with callback: ', callback);
+				
+				pollForAssetLoad('app.Project.Resources', 500, callback);
+			}, tryInterval);
+		}
+	}
+
 	$scope.advance = function($event){
 		$event.preventDefault();
 		var text   = $event.target.innerHTML.toLowerCase().trim();
@@ -274,46 +293,50 @@ function IpController($scope, Project, Settings, Global, $stateParams, Ip, $sce)
 		});
 	}
 
-	var IpResource  	= Ip.http;
-	var ipResource  	= IpResource.query({ survey_id: $stateParams.survey_id, question_id:$stateParams.question_id }).$promise;
-	var Project 		= app.Project;
-	$scope.animationSpeed = 350;
+	var IpResource  		= Ip.http;
+	var ipResource  		= IpResource.query({ survey_id: $stateParams.survey_id, question_id:$stateParams.question_id }).$promise;
+	var Project 			= app.Project;
 
-	$scope.App 		= {};
-	$scope.Ip 		= IpResource;
+	$scope.animationSpeed 	= 350;
 
-	projectPromise.then(function(data){
-		var btnStyle;
-		if($scope.settings.questionSizing == 'static'){
-			btnStyle = {'min-height': $scope.settings.minHeight + 'px'};
-		} else {
-			btnStyle = {};
-		}
-		$scope.btnStyle = btnStyle;
+	$scope.App 				= {};
+	$scope.Ip 				= IpResource;
 
-		//Get the values from the url first if present, else get it from localStorage,
-	    var survey_id 	= (localStorage.getItem('survey_id')) ? localStorage.getItem('survey_id') : survey_id;
-	    var question_id = (localStorage.getItem('question_id')) ? localStorage.getItem('question_id') : question_id;
+	pollForAssetLoad('app.Project.Resources', 500, function(){
+		var projectPromise 	= Project.init($scope, Global, Settings);
+		projectPromise.then(function(data){
+			var btnStyle;
+			if($scope.settings.questionSizing == 'static'){
+				btnStyle = {'min-height': $scope.settings.minHeight + 'px'};
+			} else {
+				btnStyle = {};
+			}
+			$scope.btnStyle = btnStyle;
 
-	 	$scope.App.data			= data;
-	 	$scope.App.data.$promise.then(function(resp){
-	 		resp.questions		= Project.Resources.Question.get({question_id: question_id});
-			resp.answers		= Project.Resources.Answer.get({question_id: question_id});
-			resp.question_id 	= question_id; 
-	 	});
+			//Get the values from the url first if present, else get it from localStorage,
+		    var survey_id 	= (localStorage.getItem('survey_id')) ? localStorage.getItem('survey_id') : survey_id;
+		    var question_id = (localStorage.getItem('question_id')) ? localStorage.getItem('question_id') : question_id;
 
-	 	var IpResource = Ip.http;
-		var ipResource = IpResource.query({ survey_id: $stateParams.survey_id, question_id:$stateParams.question_id }).$promise;
-		
-		//Onclick getRandom answers and pop the selection off of the scope's answers
-		ipResource.then(function(resp){
-			$scope.question = resp.question;
-			$scope.answers  = resp.answers;
-			$scope.init();
+		 	$scope.App.data			= data;
+		 	$scope.App.data.$promise.then(function(resp){
+		 		resp.questions		= Project.Resources.Question.get({question_id: question_id});
+				resp.answers		= Project.Resources.Answer.get({question_id: question_id});
+				resp.question_id 	= question_id; 
+		 	});
 
-			$scope.indecision_options = (typeof $scope.question.indecision_options !== 'undefined') ? $scope.question.indecision_options.split("\n") : [];
+		 	var IpResource = Ip.http;
+			var ipResource = IpResource.query({ survey_id: $stateParams.survey_id, question_id:$stateParams.question_id }).$promise;
+			
+			//Onclick getRandom answers and pop the selection off of the scope's answers
+			ipResource.then(function(resp){
+				$scope.question = resp.question;
+				$scope.answers  = resp.answers;
+				$scope.init();
+
+				$scope.indecision_options = (typeof $scope.question.indecision_options !== 'undefined') ? $scope.question.indecision_options.split("\n") : [];
+			});
+
+			window.App 		= $scope.App;
 		});
-
-		window.App 		= $scope.App;
 	});
 }

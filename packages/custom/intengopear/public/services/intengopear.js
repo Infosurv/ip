@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('mean.intengopear').factory('Intengopear', [Intengopear]);
-angular.module('mean.intengopear').factory('Project', ['$resource', '$q', 'Settings', ProjectService]);
 angular.module('mean.intengopear').factory('Settings', ['$resource', Settings]);
+angular.module('mean.intengopear').factory('Project', ['$resource', '$q', 'Settings', ProjectService]);
 
 function Intengopear(){
   return {
@@ -69,14 +69,19 @@ function ProjectService($resource, $q, Settings){
     'name' : 'ProjectService'
   };
 
+  console.log('ProjectService Injected');
+
   //Fetch the App Settings
   Settings.init(0).then(function(settings){
+    console.log('Settings.init : fetching global project settings');
+
     ProjectResource     = $resource(app.Project.getAppHost(settings) + ':survey_id/:uid', {survey_id:'@survey_id', uid:'@uid'},{ 
-      'get':    {method:'GET'},
-      'save':   {method:'POST'},
-      'query':  {method:'GET'},
-      'remove': {method:'DELETE'},
-      'delete': {method:'DELETE'} 
+      'get':      {method:'GET'},
+      'save':     {method:'POST'},
+      'query':    {method:'GET'},
+      'options':  {method:'GET'},
+      'remove':   {method:'DELETE'},
+      'delete':   {method:'DELETE'} 
     });
 
     QuestionsResource   = $resource('api/questions', {question_id: '@question_id' },{ 
@@ -104,20 +109,14 @@ function ProjectService($resource, $q, Settings){
     }
   });
 
-  window.findById         = function(collection, id){
-    var item;
-
-    angular.forEach(collection, function(elem, idx){
-      if(id === elem._id) item = collection[idx];
-    });
-
-    return item;
-  }
-
   app.Project.init        = function($rootScope, Global){
+    console.log('app.Project.init');
+
     var survey_id         = app.Project.getSurveyId($rootScope);
     
     Settings.init(survey_id).then(function(settings){
+        console.log('app.Project.init Settings.init fetching data for project: ', survey_id);
+
         var settings        = settings[0];
         $rootScope.settings = settings;
         app.settings        = settings;
@@ -128,7 +127,7 @@ function ProjectService($resource, $q, Settings){
         angular.element('input').focus();
 
         var uid             = 2;
-      
+        
         var projectPromise  = app.Project.Resources.Project.get({survey_id: survey_id, uid: uid}).$promise;
         projectPromise.then(function(resp){
           $rootScope.data       = resp;
@@ -150,5 +149,15 @@ function ProjectService($resource, $q, Settings){
     return (typeof settings.appHost !== 'undefined') ? settings.appHost + '/api/pairwise/' : 'http://www.intengodev.com/api/pairwise/';
   };
 
+  window.findById         = function(collection, id){
+    var item;
+
+    angular.forEach(collection, function(elem, idx){
+      if(id === elem._id) item = collection[idx];
+    });
+
+    return item;
+  }
+  
   return app.Project;
 }
