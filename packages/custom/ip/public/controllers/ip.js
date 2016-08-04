@@ -134,7 +134,7 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 		postSelection($scope.selection).then(function(resp){
 			delete $scope.selection;
 			if($scope.answers.length === 0){
-				window.parent.postMessage({'hash': $scope.next_page}, '*');
+				window.parent.postMessage($scope.next_page, '*');
 				return;
 			} else {
 				$scope.repopulateQuestion();
@@ -281,6 +281,7 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 			if(text == "i don’t care for fun, let’s wrap this up") {
 				// console.log('going to new location', $scope.next_page);
 				console.log('nextPage being passed: ', $scope.next_page);
+				debugger;
 				window.parent.postMessage($scope.next_page, '*');
 			}
 
