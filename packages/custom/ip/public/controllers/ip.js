@@ -254,19 +254,12 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 	}
 
 	function pollForAssetLoad(asset, tryInterval, callback){
-		console.log('asset: ', asset);
-		console.log(typeof eval(asset));
-
 		var notLoaded = (typeof eval(asset) == 'undefined');
-		console.log('notLoaded: ', notLoaded);
 
 		if(! notLoaded) { 
 			callback();
 		} else {
 			window.setTimeout(function(){
-				console.log('recursively polling');
-				console.log('with callback: ', callback);
-				
 				pollForAssetLoad('app.Project.Resources', 500, callback);
 			}, tryInterval);
 		}
@@ -287,7 +280,7 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 			}
 			if(text == "i don’t care for fun, let’s wrap this up") {
 				// console.log('going to new location', $scope.next_page);
-				window.parent.postMessage({'hash': $scope.next_page}, '*');
+				window.parent.postMessage($scope.next_page, '*');
 			}
 
 		});
