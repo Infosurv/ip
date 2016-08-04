@@ -280,6 +280,7 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 			}
 			if(text == "i don’t care for fun, let’s wrap this up") {
 				// console.log('going to new location', $scope.next_page);
+				console.log('nextPage being passed: ', $scope.next_page);
 				window.parent.postMessage($scope.next_page, '*');
 			}
 
