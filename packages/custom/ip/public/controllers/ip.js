@@ -37,7 +37,10 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 	}
 
 	$scope.augmentScope = function(evt) {
+		debugger;
 		if(evt.origin.indexOf('intengo') < 0) return;
+		var dataString  = '';
+		
 		var user_id 	= evt.data.user_id;
 		var next_page 	= evt.data.next_page;
 		
