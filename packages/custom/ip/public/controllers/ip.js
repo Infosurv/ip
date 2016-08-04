@@ -36,13 +36,12 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 		return answer;
 	}
 
-	$scope.augmentScope = function(evt) {
-		debugger;
+	$scope.augmentScope  = function(evt) {
 		if(evt.origin.indexOf('intengo') < 0) return;
-		var dataString  = '';
-		
-		var user_id 	= evt.data.user_id;
-		var next_page 	= evt.data.next_page;
+		var data 		 = JSON.parse(evt.data);
+
+		var user_id 	 = data.user_id;
+		var next_page 	 = data.next_page;
 		
 		$scope.user_id 	 = user_id;
 		$scope.next_page = next_page;
@@ -283,8 +282,6 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 			}
 			if(text == "i don’t care for fun, let’s wrap this up") {
 				// console.log('going to new location', $scope.next_page);
-				console.log('nextPage being passed: ', $scope.next_page);
-				debugger;
 				window.parent.postMessage($scope.next_page, '*');
 			}
 
