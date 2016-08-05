@@ -50,7 +50,7 @@ var ResponseSchema = new Schema({
 		required: false
 	},
 	placement: {
-		type: String,
+		type: Mixed,
 		required: false
 	},
 	created: {
