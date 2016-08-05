@@ -156,7 +156,7 @@ exports.storeResponse   = function(req, res, next){
     
     Answer.findOneAndUpdate({_id: losing_answer_id}, losses_data, function(err, losing_answer){
       if (err) return res.send(500, { error: err });  
-      
+      debugger;
       response.save(function(err){
         if(err){
           console.log(err);
