@@ -54,7 +54,6 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 	$scope.init  	= function (){
 		var startTime  		= $scope.getStartTime();
 		$scope.answer1 		= $scope.pluckOne($scope.answers);
-		$scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
 		$scope.answer1.startTime = startTime;
 		
 		console.log('A1 startTime', startTime);
@@ -62,12 +61,17 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 		// console.log('intial item id: ', $scope.answer1._id, ' placement: ', $scope.answer1.placement);
 
 		$scope.answer2 		= $scope.pluckOne($scope.answers);
-		$scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
 		$scope.answer2.startTime = startTime;
 
 		//console.log('A2 startTime', startTime);
 		$scope.answer2.placement = 'right';
+
+		//Compare to make sure the 2 answers are different
+		debugger;
+
 		// console.log('initial item id: ', $scope.answer2._id, ' placement: ', $scope.answer2.placement, "\n\n");
+		$scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
+		$scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
 
 		$scope.pair    		= [$scope.answer1, $scope.answer2];
 	}
