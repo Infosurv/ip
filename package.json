@@ -37,7 +37,7 @@
     "forever": "latest",
     "gridfs-stream": "latest",
     "gulp": "latest",
-    "jsonwebtoken": "latest",
+    "jsonwebtoken": "^5.0.0",
     "lodash": "latest",
     "mean-cli": "latest",
     "meanio": "peb7268/custom-meanio",
