@@ -67,7 +67,7 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 		$scope.answer2.placement = 'right';
 
 		//Compare to make sure the 2 answers are different
-		debugger;
+		if($scope.answer1.text.toLowerCase() == $scope.answer2.text.toLowerCase()) $scope.answer2 = $scope.pluckOne($scope.answers);
 
 		// console.log('initial item id: ', $scope.answer2._id, ' placement: ', $scope.answer2.placement, "\n\n");
 		$scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
