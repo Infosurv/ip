@@ -37,7 +37,6 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 	}
 
 	$scope.augmentScope  = function(evt) {
-		debugger;
 		if(evt.origin.indexOf('intengo') < 0) return;
 		var data 		 = JSON.parse(evt.data);
 
@@ -48,7 +47,8 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 		$scope.next_page = next_page;
 
 		console.log('user_id: ' + $scope.user_id);
-		debugger;
+		$scope.apply();
+		console.log('$scope.apply called');
 	}
 
 	$scope.getStartTime = function(){
