@@ -169,7 +169,7 @@ exports.storeResponse   = function(req, res, next){
           console.log(err);
           return res.status(500).send('Oops, response creation error.');
         }
-
+         
         console.log('Response Saved: ');
         console.log(util.inspect(response));
         console.log("\n");
