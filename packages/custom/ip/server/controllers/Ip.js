@@ -133,7 +133,10 @@ exports.storeResponse   = function(req, res, next){
     losing_answer_id  = (typeof req.body.losing_answer_id !== 'undefined') ? req.body.losing_answer_id : req.body.answer2_id;
     var placement     = params.placement;
     
-    if (err) return res.send(500, { error: err });  
+    if (err) {
+      console.log('error saving Answer 1');
+      return res.send(500, { error: err });  
+    }
 
     var query_obj, losses_data;
     if(! params.isTie) {
@@ -155,15 +158,22 @@ exports.storeResponse   = function(req, res, next){
     console.log("\n");
     
     Answer.findOneAndUpdate({_id: losing_answer_id}, losses_data, function(err, losing_answer){
-      if (err) return res.send(500, { error: err });  
+      if (err) {
+        console.log('error saving Answer 2');
+        return res.send(500, { error: err });  
+      }
       
-      console.log(response)
       response.save(function(err){
         if(err){
+          console.log('error saving response: ');
           console.log(err);
           return res.status(500).send('Oops, response creation error.');
         }
-        
+
+        console.log('Response Saved: ');
+        console.log(util.inspect(response));
+        console.log("\n");
+
         return res.status(200).json(response);
       });    
     });
