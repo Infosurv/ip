@@ -47,8 +47,8 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 		$scope.next_page = next_page;
 
 		console.log('user_id: ' + $scope.user_id);
-		$scope.apply();
-		console.log('$scope.apply called');
+		$scope.$apply();
+		console.log('$scope.$apply called'); 
 	}
 
 	$scope.getStartTime = function(){
