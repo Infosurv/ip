@@ -153,7 +153,7 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 		var target 			= $event.currentTarget;
 
 		// var data 			= $(target).data();
-		var data 			= target.dataset;
+		var data 			= (typeof target.dataset !== 'undefined') ? target.dataset : $(target).data();
 		newSelection    	= $.extend({}, data);
 
 		//If placement isnt set then capture it manually - As in tie data
@@ -163,17 +163,20 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 			newSelection.placement[$('.votebox.answers li:eq("1") a').data('answer_id')] = 'right';
 		}
 
+
+
 		//If its an indecision option grab that stuff else grab the placements
 		if(typeof newSelection.indecision_option_id !== 'string') {
 			//Get the alternate li element - aka the losing id
 			var $next 			= $(target).parent().next();
 			var $link 			= $next.find('a');
-			var answer_id 		= $link[0].dataset.answer_id;
+
+			var answer_id 		= (typeof $link[0].dataset !== 'undefined') ? $link[0].dataset.answer_id : $link.data('answer_id');
 
 			if(typeof answer_id == 'undefined' || answer_id.length == 0) {
 				$next 			= $(target).parent().prev();
 				$link 			= $next.find('a');
-				answer_id 		= $link[0].dataset.answer_id;
+				answer_id 		= (typeof $link[0].dataset !== 'undefined') ? $link[0].dataset.answer_id : $link.data('answer_id');
 			}
 
 			newSelection.losing_answer_id = answer_id;
