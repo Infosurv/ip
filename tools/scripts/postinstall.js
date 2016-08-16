@@ -174,7 +174,7 @@ shell.exec('bower update', function(code) {
 
 
 packagesNpmInstall('packages/contrib');
-packagesNpmInstall('packages/custom');
+//packagesNpmInstall('packages/custom');
 packagesNpmInstall('packages/core');
 
 // Load mean.json
