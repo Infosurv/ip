@@ -26,7 +26,7 @@ function resolvePlacement(req){
   if(! isTie) placement = req.body.placement;
   if(typeof placement == 'undefined') placement = 'right';
   
-  console.log('placement resolved to: ' + placement);
+  //console.log('placement resolved to: ' + placement);
 
   return placement;
 }
@@ -115,8 +115,8 @@ exports.storeResponse   = function(req, res, next){
   var wins_data, placement, losing_answer_id, losses_data;
   
   var params            = (! isTie) ? composeAnswerData(req) : composeTieData(req);
-  console.log('params: ');
-  console.log(util.inspect(params));
+  //console.log('params: ');
+  //console.log(util.inspect(params));
 
   wins_data             = {$inc: params.query_obj};
   placement             = params.placement;
