@@ -5,7 +5,7 @@ var Intengopear = angular.module('mean.intengopear');
 Intengopear.controller('AnswerController', ['$scope', '$stateParams', '$http', 'Global', AnswerController ]);
 
 function AnswerController($scope, $stateParams, $http, Global){
-	console.log('AnswerController');
+	//console.log('AnswerController');
 
 	var $ 				= window.jQuery;
 	var self 			= this;

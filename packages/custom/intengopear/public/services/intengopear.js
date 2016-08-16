@@ -69,11 +69,11 @@ function ProjectService($resource, $q, Settings){
     'name' : 'ProjectService'
   };
 
-  console.log('ProjectService Injected');
+  //console.log('ProjectService Injected');
 
   //Fetch the App Settings
   Settings.init(0).then(function(settings){
-    console.log('Settings.init : fetching global project settings');
+    //console.log('Settings.init : fetching global project settings');
 
     ProjectResource     = $resource(app.Project.getAppHost(settings) + ':survey_id/:uid', {survey_id:'@survey_id', uid:'@uid'},{ 
       'get':      {method:'GET'},
@@ -110,12 +110,12 @@ function ProjectService($resource, $q, Settings){
   });
 
   app.Project.init        = function($rootScope, Global){
-    console.log('app.Project.init');
+    //console.log('app.Project.init');
 
     var survey_id         = app.Project.getSurveyId($rootScope);
     
     Settings.init(survey_id).then(function(settings){
-        console.log('app.Project.init Settings.init fetching data for project: ', survey_id);
+        //console.log('app.Project.init Settings.init fetching data for project: ', survey_id);
 
         var settings        = settings[0];
         $rootScope.settings = settings;

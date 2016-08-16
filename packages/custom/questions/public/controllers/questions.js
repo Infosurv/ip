@@ -5,7 +5,7 @@ var Intengopear = angular.module('mean.intengopear');
 Intengopear.controller('QuestionController', ['$scope', '$rootScope', '$state', '$stateParams', 'Global', 'Project', 'Settings', '$http', QuestionController]);	
 
 function QuestionController($scope, $rootScope, $state, $stateParams, Global, Project, Settings, $http){
-	console.log('QuestionController');
+	//console.log('QuestionController');
 	
 	var survey_name, survey_id;
 	$rootScope.survey_id 	= survey_id = $stateParams.survey_id;
@@ -125,7 +125,7 @@ function QuestionController($scope, $rootScope, $state, $stateParams, Global, Pr
 	};
 
 	$scope.deleteQuestion = function($event, question_id){
-		console.log('deleteQuestion');
+		//console.log('deleteQuestion');
 		$event.preventDefault();
 
 		$http.delete('/api/questions/'+ question_id).then(function(){

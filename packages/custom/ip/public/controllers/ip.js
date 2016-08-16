@@ -10,7 +10,7 @@ function IpAdminController($scope, Global, Project, Intengopear, $state){
 }
 
 function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce){
-	console.log('IpController');
+	//console.log('IpController');
 
 	if(typeof $stateParams.survey_id == 'undefined') return;
 	$scope.survey_id = $stateParams.survey_id;
@@ -56,7 +56,7 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 		$scope.answer1 		= $scope.pluckOne($scope.answers);
 		$scope.answer1.startTime = startTime;
 		
-		console.log('A1 startTime', startTime);
+		//console.log('A1 startTime', startTime);
 		$scope.answer1.placement = 'left';
 		// console.log('intial item id: ', $scope.answer1._id, ' placement: ', $scope.answer1.placement);
 

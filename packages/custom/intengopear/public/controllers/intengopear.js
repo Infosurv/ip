@@ -9,7 +9,7 @@ Intengopear.controller('IntengopearController', ['$rootScope', '$scope', 'Global
 
 //Controller Definitions
 function IntengopearController ($rootScope, $scope, Global, Project, Settings, $state, $stateParams, loggedin){
-    console.log('IntengopearController');
+    //console.log('IntengopearController');
     
     $rootScope.settings         = {};
     $rootScope.settings.status  = 'hidden';
@@ -44,22 +44,22 @@ function IntengopearController ($rootScope, $scope, Global, Project, Settings, $
         if(typeof $scope.settings.characterLimit !== 'undefined') settings.characterLimit = $scope.settings.characterLimit;
         
         if(typeof settings._id == 'undefined'){
-            console.log('saving');
+            //console.log('saving');
             Settings.ProjectSettings.save({survey_id: sid}, settings).$promise.then(function(resp){
                 $scope.settings = resp;
                 
                 angular.element('.hidden').text('Your settings have been saved.');
                 $scope.settings.status = 'success';
 
-                console.log(resp);
+                //console.log(resp);
             });
         } else {
-            console.log('updating');
+            //console.log('updating');
             Settings.ProjectSettings.update({survey_id: sid}, settings).$promise.then(function(resp){
                 $scope.settings = resp;
                 
                 Settings.updateUIStatus(resp.$promise.$$state, $scope);
-                console.log(resp);
+                //console.log(resp);
             });
         }
     }

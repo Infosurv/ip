@@ -20,7 +20,7 @@ angular.module('mean.ip').factory('Ip', ['$resource', '$stateParams', function($
 		postDataPacket: function($event){
 			var dataPacket = this.recordSelection($event);
 			this.http.post(getHost() + '/api/ip', dataPacket).success(function(resp, status, headers, config){
-				console.log('success: ', resp);
+				//console.log('success: ', resp);
 			}).error(function(resp, status, headers, config){
 				console.error('error: ', resp);
 			});
