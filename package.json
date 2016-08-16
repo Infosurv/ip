@@ -44,7 +44,6 @@
     "mongoose": "latest",
     "morgan": "latest",
     "ms": "latest",
-    "newrelic": "https://registry.npmjs.org/newrelic/-/newrelic-1.22.0.tgz",
     "nodemailer": "latest",
     "npm": "^2.1.0",
     "passport-facebook": "latest",
