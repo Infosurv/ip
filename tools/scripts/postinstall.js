@@ -147,7 +147,7 @@ function packagesNpmInstall(source) {
       files.forEach(function(file) {
         var pkgPath = path.join(packages, file);
 
-        packagesMeanJson(pkgPath);
+        //packagesMeanJson(pkgPath);
 
         loadPackageJson(path.join(pkgPath, 'package.json'), function(err, data) {
           if (err || !data.mean) return;
@@ -174,7 +174,7 @@ shell.exec('bower update', function(code) {
 
 
 packagesNpmInstall('packages/contrib');
-//packagesNpmInstall('packages/custom');
+packagesNpmInstall('packages/custom');
 packagesNpmInstall('packages/core');
 
 // Load mean.json
