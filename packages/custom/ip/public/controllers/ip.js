@@ -205,6 +205,8 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 			$scope.answer2.placement = 'right';
 			// console.log('repopulated item2 id: ', $scope.answer2._id, ' placement: ', $scope.answer2.placement);
 
+			if($scope.answer1.text.toLowerCase() == $scope.answer2.text.toLowerCase()) $scope.answer2 = $scope.pluckOne($scope.answers);
+			
 			if(typeof $scope.answer1 !== 'undefined' && typeof $scope.answer1.text !== 'object') $scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
 			if(typeof $scope.answer2 !== 'undefined' && typeof $scope.answer2.text !== 'object') $scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
 
