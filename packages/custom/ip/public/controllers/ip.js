@@ -70,7 +70,9 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 		$scope.answer2.placement = 'right';
 
 		//Compare to make sure the 2 answers are different
-		if($scope.answer1.text.toLowerCase() == $scope.answer2.text.toLowerCase()) $scope.answer2 = $scope.pluckOne($scope.answers);
+		if($scope.answer1.text.toLowerCase() == $scope.answer2.text.toLowerCase()){
+			$scope.answer2 = $scope.pluckOne($scope.answers);
+		}
 
 		// console.log('initial item id: ', $scope.answer2._id, ' placement: ', $scope.answer2.placement, "\n\n");
 		$scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
@@ -195,17 +197,23 @@ function IpController($scope, Settings, Project, Global, $stateParams, Ip, $sce)
 			delete $scope.answer1;
 			delete $scope.answer2;
 
-			$scope.answer1 		= $scope.pluckOne($scope.answers);
+			$scope.answer1 			 = $scope.pluckOne($scope.answers);
+			$scope.answer1.text 	 = $scope.answer1.text.toString();
 			$scope.answer1.startTime = $scope.getStartTime();
 			$scope.answer1.placement = 'left';
 			// console.log('repopulated item1 id: ', $scope.answer1._id, ' placement: ', $scope.answer1.placement);
 
-			$scope.answer2 	= $scope.pluckOne($scope.answers);
+			$scope.answer2 			 = $scope.pluckOne($scope.answers);
+			$scope.answer2.text 	 = $scope.answer2.text.toString();
 			$scope.answer2.startTime = $scope.getStartTime();
 			$scope.answer2.placement = 'right';
 			// console.log('repopulated item2 id: ', $scope.answer2._id, ' placement: ', $scope.answer2.placement);
 
-			if($scope.answer1.text.toLowerCase() == $scope.answer2.text.toLowerCase()) $scope.answer2 = $scope.pluckOne($scope.answers);
+
+			if($scope.answer1.text.toLowerCase() == $scope.answer2.text.toLowerCase()){ 
+				$scope.answer2 = $scope.pluckOne($scope.answers);
+				$scope.answer2.text = $scope.answer2.text.toString();
+			}
 			
 			if(typeof $scope.answer1 !== 'undefined' && typeof $scope.answer1.text !== 'object') $scope.answer1.text = $sce.trustAsHtml($scope.answer1.text);
 			if(typeof $scope.answer2 !== 'undefined' && typeof $scope.answer2.text !== 'object') $scope.answer2.text = $sce.trustAsHtml($scope.answer2.text);
