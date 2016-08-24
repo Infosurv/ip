@@ -1,6 +1,5 @@
 <div class="pairwise-wrapper" ng-controller="IpController" style="{{question.styles}}">
-	<!-- ng-if="user_id" -->
-	<div>
+	<div ng-if="user_id">
 		<h2 class="vote-question row">{{ question.description }}</h2>
 		<ul class="votebox answers row-fluid">
 			<li class="leftside" ng-if='pair.length > 0' ng-repeat="item in pair track by $index">
@@ -45,8 +44,8 @@
 		</div>
 	</div>
 
-	<!-- <div ng-if="! user_id">
+	<div ng-if="! user_id">
 		<h2>Oops, looks like there was an error. Please refresh.</h2>
 		<p>If problem still persists please contact us at <a href="mailto:support@gointengo.com">support@gointengo.com</a></p>
-	</div> -->
+	</div>
 </div>
