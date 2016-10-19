@@ -6,10 +6,11 @@ Intengopear.controller('QuestionController', ['$scope', '$rootScope', '$state', 
 
 function QuestionController($scope, $rootScope, $state, $stateParams, Global, Project, Settings, $http){
 	//console.log('QuestionController');
-	
 	var survey_name, survey_id;
+	window.$scope 			= $scope;
 	$rootScope.survey_id 	= survey_id = $stateParams.survey_id;
 	$scope.stateParams  	= $stateParams;
+	$scope.state 			= $state;
 
 	var projectPromise 		= Project.init($rootScope, Global, Settings);
 	projectPromise.then(function(data){
@@ -121,7 +122,10 @@ function QuestionController($scope, $rootScope, $state, $stateParams, Global, Pr
 		});
 		$('#questions').append(li);
 
-		createQuestion($http, $scope.newQuestion, $scope.data.survey.id);
+		var req = createQuestion($http, $scope.newQuestion, $scope.data.survey.id);
+		req.success(function(resp){
+			$scope.state.go('questions.edit', {'id': resp._id});
+		});
 	};
 
 	$scope.deleteQuestion = function($event, question_id){

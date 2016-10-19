@@ -19,7 +19,7 @@
 			</a>
 		</h1>
 		
-		<ul id="questions" class="list-group" ng-if="questions.length > 0">
+		<ul id="questions" class="list-group">
 			<li ng-repeat="question in questions" class="clearfix list-group-item question" ng-class="question._id === question_id ? 'selected' : 'testfalse'">
 			  <input class="question" type="text" data-questionid="{{ question.id }}" ng-model="questions[$index].description" ng-change="update($event, $index)"></input>
 			  <ul class="tools clearfix">
