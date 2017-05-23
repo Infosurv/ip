@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "connect-modrewrite": "latest",
+    "mean-seo": "latest",
     "assetmanager": "latest",
     "async": "latest",
     "body-parser": "latest",
