@@ -11,8 +11,8 @@
     "url": "https://github.com/linnovate/mean.git"
   },
   "engines": {
-    "node" : "0.12.2",
-    "npm"  : "2.9.1"
+    "node": "0.12.2",
+    "npm": "2.9.1"
   },
   "scripts": {
     "start": "APPHOST='http://www.intengodev.com' NODE_ENV='dev' node server",
@@ -22,14 +22,14 @@
     "postinstall": "node tools/scripts/postinstall.js"
   },
   "dependencies": {
-    "connect-modrewrite": "latest",
     "assetmanager": "latest",
     "async": "latest",
     "body-parser": "latest",
-    "bower": "^1.5.2",
+    "bower": "https://registry.npmjs.org/bower/-/bower-1.5.2.tgz",
     "bson": "^0.4.15",
     "compression": "latest",
     "connect-flash": "latest",
+    "connect-modrewrite": "latest",
     "connect-timeout": "^1.7.0",
     "consolidate": "latest",
     "cookie-parser": "latest",
@@ -40,8 +40,8 @@
     "gulp": "latest",
     "jsonwebtoken": "5.0.0",
     "lodash": "latest",
-    "mean-seo": "0.0.8",
     "mean-cli": "0.10.14",
+    "mean-seo": "0.0.8",
     "meanio": "peb7268/custom-meanio",
     "mongoose": "latest",
     "morgan": "latest",
