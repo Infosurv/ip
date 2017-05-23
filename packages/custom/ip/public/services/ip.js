@@ -2,7 +2,7 @@
 
 angular.module('mean.ip').factory('Ip', ['$resource', '$stateParams', function($resource, $stateParams) {
 	function getHost(){
-		var host = (window.location.host.indexOf('dev') > -1 || window.location.host.indexOf('pear') > -1) ? 'https://intengopear.com' : 'https://ideas.intengoresearch.com';
+		var host = (window.location.host.indexOf('dev') > -1 || window.location.host.indexOf('pear') > -1) ? 'http://intengopear.com' : 'https://ideas.intengoresearch.com';
 	  	return host;
 	}
 
