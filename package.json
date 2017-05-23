@@ -25,7 +25,7 @@
     "assetmanager": "latest",
     "async": "latest",
     "body-parser": "latest",
-    "bower": "https://registry.npmjs.org/bower/-/bower-1.5.2.tgz",
+    "bower": "latest",
     "bson": "^0.4.15",
     "compression": "latest",
     "connect-flash": "latest",
